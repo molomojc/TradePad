@@ -16,10 +16,10 @@ export default function Footer() {
         </span>
       </div>
       <div className="flex flex-wrap justify-center gap-x-6 gap-y-3">
-        <a className="text-[13px] text-on-surface-variant hover:text-primary transition-colors" href="#terms">Terms of Service</a>
-        <a className="text-[13px] text-on-surface-variant hover:text-primary transition-colors" href="#privacy">Privacy Policy</a>
-        <a className="text-[13px] text-on-surface-variant hover:text-primary transition-colors" href="#risk">Risk Disclosure</a>
-        <a className="text-[13px] text-on-surface-variant hover:text-primary transition-colors" href="#docs">Documentation</a>
+        <Link className="text-[13px] text-on-surface-variant hover:text-primary transition-colors" to="/terms">Terms of Service</Link>
+        <Link className="text-[13px] text-on-surface-variant hover:text-primary transition-colors" to="/privacy">Privacy Policy</Link>
+        <Link className="text-[13px] text-on-surface-variant hover:text-primary transition-colors" to="/risk">Risk Disclosure</Link>
+        <Link className="text-[13px] text-on-surface-variant hover:text-primary transition-colors" to="/docs">Documentation</Link>
       </div>
     </footer>
   );

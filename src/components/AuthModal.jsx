@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/useAuthStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -12,6 +12,7 @@ import {
 
 export default function AuthModal() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isOpen, view, closeAuthModal, switchView } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,7 +30,10 @@ export default function AuthModal() {
         const { error: signInError } = await signInWithPassword(email, password);
         if (signInError) throw signInError;
         const { profile } = await fetchCurrentUserProfile();
-        navigate(profile?.role === 'admin' ? '/dashboard/admin' : '/dashboard/user', { replace: true });
+        
+        // Redirect to their target page if they were redirected to login, otherwise default to home dashboard
+        const destination = location.state?.from || (profile?.role === 'admin' ? '/dashboard/admin' : '/dashboard/user');
+        navigate(destination, { replace: true });
       } else {
         const { data, error: signUpError } = await signUpWithPassword(email, password);
         if (signUpError) throw signUpError;
@@ -43,7 +47,8 @@ export default function AuthModal() {
           });
         }
 
-        navigate('/dashboard/user', { replace: true });
+        const destination = location.state?.from || '/dashboard/user';
+        navigate(destination, { replace: true });
       }
 
       closeAuthModal();

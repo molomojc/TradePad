@@ -62,9 +62,10 @@ export default function ProtectedRoute({ requireRole, children }) {
   }
 
   if (!state.allowed) {
+    const redirectTo = (state.role && requireRole === 'admin') ? '/dashboard/user' : '/';
     return (
       <Navigate
-        to="/"
+        to={redirectTo}
         replace
         state={{
           from: location.pathname,

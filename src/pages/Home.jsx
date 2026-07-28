@@ -1,16 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/useAuthStore';
 import { supabase, hasSupabaseConfig } from '../lib/supabase'; // Adjust import path as needed
 
 export default function Home({ setActiveTab }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const openAuthModal = useAuthStore(state => state.openAuthModal);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalLaunches, setTotalLaunches] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
+
+  // Trigger login modal if user was redirected from a protected route
+  useEffect(() => {
+    if (location.state?.accessDenied && location.state?.reason === 'auth-required') {
+      openAuthModal('login');
+      // Clear navigation state to avoid re-triggering on history navigations
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, openAuthModal, navigate]);
 
   // Fetch platform metrics and total launches
   useEffect(() => {

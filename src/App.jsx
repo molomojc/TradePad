@@ -15,6 +15,10 @@ import Home from './pages/Home';
 import Launch from './pages/Launch';
 import Premium from './pages/Premium';
 import Transparency from './pages/Transparency';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/DataPolicy';
+import RiskDisclosure from './pages/RiskDisclosure';
+import Documentation from './pages/Documentation';
 
 // User Dashboard Pages
 import DashboardHome from './pages/user/DashboardHome';
@@ -51,12 +55,15 @@ function App() {
 
       <Routes>
 
-        {/* Public Website */}
         <Route path="/" element={<PublicLayout />}>
           <Route index element={<Home />} />
           <Route path="how-it-works" element={<Launch />} />
           <Route path="pricing" element={<Premium />} />
           <Route path="governance" element={<Transparency />} />
+          <Route path="terms" element={<ProtectedRoute><TermsOfService /></ProtectedRoute>} />
+          <Route path="privacy" element={<ProtectedRoute><PrivacyPolicy /></ProtectedRoute>} />
+          <Route path="risk" element={<ProtectedRoute><RiskDisclosure /></ProtectedRoute>} />
+          <Route path="docs" element={<ProtectedRoute><Documentation /></ProtectedRoute>} />
           <Route path="payment/success" element={<PaymentSuccess />} />
           <Route path="payment/cancelled" element={<PaymentCancelled />} />
         </Route>
