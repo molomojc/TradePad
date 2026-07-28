@@ -18,38 +18,6 @@ const itemVariants = {
   show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
 };
 
-// Used only when Supabase isn't configured (local dev without env vars),
-// so the page still has something to render instead of going blank.
-const FALLBACK_POSTS = [
-  {
-    id: 'fallback-1',
-    title: 'TradePad reaches 10,000 tracked launches',
-    slug: 'tradepad-10000-launches',
-    summary: 'A look back at how the public feed has grown since day one, and what changes are coming next.',
-    category: 'platform',
-    featured: true,
-    published_at: new Date().toISOString(),
-  },
-  {
-    id: 'fallback-2',
-    title: 'Conviction scoring gets a v2 model',
-    slug: 'conviction-scoring-v2',
-    summary: 'Premium research now weighs wallet clustering more heavily after backtesting against the last quarter.',
-    category: 'premium',
-    featured: false,
-    published_at: new Date(Date.now() - 86400000 * 3).toISOString(),
-  },
-  {
-    id: 'fallback-3',
-    title: 'Scheduled maintenance this weekend',
-    slug: 'scheduled-maintenance',
-    summary: 'The feed will briefly pause for a database migration. No launches will be missed — everything is queued.',
-    category: 'launch',
-    featured: false,
-    published_at: new Date(Date.now() - 86400000 * 6).toISOString(),
-  },
-];
-
 const CATEGORY_STYLES = {
   premium: 'bg-primary/15 text-primary',
   launch: 'bg-green-400/15 text-green-400',
@@ -86,7 +54,7 @@ export default function News() {
       setError(null);
 
       if (!hasSupabaseConfig || !supabase) {
-        setPosts(FALLBACK_POSTS);
+        setPosts([]);
         setLoading(false);
         return;
       }

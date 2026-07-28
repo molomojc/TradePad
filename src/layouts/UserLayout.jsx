@@ -11,8 +11,22 @@ export default function UserLayout() {
 
   useEffect(() => {
     let mounted = true;
-    fetchCurrentUserProfile().then(({ profile: nextProfile }) => { if (mounted) setProfile(nextProfile); });
-    return () => { mounted = false; };
+    fetchCurrentUserProfile().then(({ profile: nextProfile }) => { 
+      if (mounted) {
+        setProfile(nextProfile);
+        if (nextProfile) {
+          import('../lib/tracking').then(({ startTrackingSession }) => {
+            startTrackingSession(nextProfile.id, nextProfile.email);
+          });
+        }
+      } 
+    });
+    return () => { 
+      mounted = false; 
+      import('../lib/tracking').then(({ stopTrackingSession }) => {
+        stopTrackingSession();
+      });
+    };
   }, []);
 
   const displayName = profile?.full_name || profile?.email || (hasSupabaseConfig ? 'Account' : 'Jacob Miller');

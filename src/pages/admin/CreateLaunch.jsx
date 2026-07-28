@@ -43,6 +43,12 @@ export default function CreateLaunch() {
     strengths: '',
     risks: '',
     catalysts: '',
+    mint_address: '',
+    pair_address: '',
+    creator_wallet: '',
+    launch_price: '',
+    launch_market_cap: '',
+    launch_liquidity: '',
   });
 
   const [allocationRows, setAllocationRows] = useState([
@@ -110,6 +116,15 @@ export default function CreateLaunch() {
           contract_address: form.contract_address || null,
           logo_url: form.logo_url || null,
           created_by: userId,
+          mint_address: form.mint_address || null,
+          pair_address: form.pair_address || null,
+          creator_wallet: form.creator_wallet || null,
+          launch_price: form.launch_price ? Number(form.launch_price) : null,
+          launch_market_cap: form.launch_market_cap ? Number(form.launch_market_cap) : null,
+          launch_liquidity: form.launch_liquidity ? Number(form.launch_liquidity) : null,
+          website: form.website_url || null,
+          twitter: form.x_url || null,
+          telegram: form.telegram_url || null,
         })
         .select()
         .single();
@@ -224,7 +239,15 @@ export default function CreateLaunch() {
           {activeTab === 'tokenomics' && (
             <div className="space-y-6 animate-in fade-in">
               <h2 className="text-xl font-bold text-white border-b border-white/5 pb-4">Tokenomics & Allocations</h2>
-              <Field label="TOTAL SUPPLY" value={form.total_supply} onChange={(value) => updateField('total_supply', value)} placeholder="1000000000" />
+              <div className="grid grid-cols-2 gap-6">
+                <Field label="TOTAL SUPPLY" value={form.total_supply} onChange={(value) => updateField('total_supply', value)} placeholder="1000000000" />
+                <Field label="CREATOR WALLET" value={form.creator_wallet} onChange={(value) => updateField('creator_wallet', value)} placeholder="Solana wallet address" />
+              </div>
+              <div className="grid grid-cols-3 gap-6">
+                <Field label="LAUNCH PRICE (USD)" type="number" value={form.launch_price} onChange={(value) => updateField('launch_price', value)} placeholder="0.0001" />
+                <Field label="LAUNCH MARKET CAP (USD)" type="number" value={form.launch_market_cap} onChange={(value) => updateField('launch_market_cap', value)} placeholder="50000" />
+                <Field label="LAUNCH LIQUIDITY (USD)" type="number" value={form.launch_liquidity} onChange={(value) => updateField('launch_liquidity', value)} placeholder="10000" />
+              </div>
               <div className="space-y-4 pt-4">
                 <label className="font-label-mono text-[11px] text-on-surface-variant block">ALLOCATIONS (%)</label>
                 {allocationRows.map((row, index) => (
@@ -268,11 +291,19 @@ export default function CreateLaunch() {
           {activeTab === 'media' && (
             <div className="space-y-6 animate-in fade-in">
               <h2 className="text-xl font-bold text-white border-b border-white/5 pb-4">Media & Links</h2>
-              <Field label="WEBSITE" value={form.website_url} onChange={(value) => updateField('website_url', value)} />
-              <Field label="X / TWITTER" value={form.x_url} onChange={(value) => updateField('x_url', value)} />
-              <Field label="TELEGRAM" value={form.telegram_url} onChange={(value) => updateField('telegram_url', value)} />
-              <Field label="CONTRACT ADDRESS" value={form.contract_address} onChange={(value) => updateField('contract_address', value)} />
-              <Field label="LOGO URL" value={form.logo_url} onChange={(value) => updateField('logo_url', value)} />
+              <div className="grid grid-cols-2 gap-6">
+                <Field label="WEBSITE" value={form.website_url} onChange={(value) => updateField('website_url', value)} />
+                <Field label="X / TWITTER" value={form.x_url} onChange={(value) => updateField('x_url', value)} />
+              </div>
+              <div className="grid grid-cols-2 gap-6">
+                <Field label="TELEGRAM" value={form.telegram_url} onChange={(value) => updateField('telegram_url', value)} />
+                <Field label="LOGO URL" value={form.logo_url} onChange={(value) => updateField('logo_url', value)} />
+              </div>
+              <div className="grid grid-cols-3 gap-6">
+                <Field label="CONTRACT ADDRESS" value={form.contract_address} onChange={(value) => updateField('contract_address', value)} />
+                <Field label="DEXSCREENER MINT ADDRESS" value={form.mint_address} onChange={(value) => updateField('mint_address', value)} placeholder="Token mint address" />
+                <Field label="DEXSCREENER PAIR ADDRESS" value={form.pair_address} onChange={(value) => updateField('pair_address', value)} placeholder="LP pair address (optional)" />
+              </div>
             </div>
           )}
 

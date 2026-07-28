@@ -63,7 +63,7 @@ export default function Sidebar({ type = 'user', open = false, onClose, isPremiu
             isPremium ? (
               <div className="mb-3 rounded-xl border border-primary/20 bg-primary/5 p-4 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-full blur-xl pointer-events-none"></div>
-                <div className="flex items-center gap-2 text-xs font-label-mono font-bold text-white relative z-10">
+                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-white relative z-10">
                   <span className="material-symbols-outlined text-[17px] text-primary">workspace_premium</span> 
                   Premium Member
                 </div>
@@ -71,12 +71,12 @@ export default function Sidebar({ type = 'user', open = false, onClose, isPremiu
               </div>
             ) : (
               <div className="mb-3 rounded-xl border border-white/5 bg-white/5 p-4 hover:border-white/10 transition-colors">
-                <div className="flex items-center gap-2 text-xs font-label-mono font-bold text-white">
+                <div className="flex items-center gap-2 text-xs font-mono font-bold text-white">
                   <span className="material-symbols-outlined text-[17px] text-white/40">explore</span> 
                   Free Account
                 </div>
                 <p className="mt-2 text-[11px] leading-relaxed text-on-surface-variant mb-3">Upgrade to unlock early launch details.</p>
-                <Link to="/dashboard/user/premium" onClick={onClose} className="block w-full py-2 text-center rounded-lg bg-primary text-black text-[10px] font-label-mono font-bold tracking-wide hover:scale-105 transition-transform shadow-[0_0_10px_rgba(0,240,255,0.2)]">
+                <Link to="/dashboard/user/premium" onClick={onClose} className="block w-full py-2 text-center rounded-lg bg-primary text-black text-[10px] font-mono font-bold tracking-wide hover:scale-105 transition-transform shadow-[0_0_10px_rgba(0,240,255,0.2)]">
                   UPGRADE NOW
                 </Link>
               </div>

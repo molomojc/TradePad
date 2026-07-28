@@ -25,11 +25,7 @@ function useCountdown(targetDate) {
   return timeLeft;
 }
 
-const fallbackNews = [
-  { id: '1', title: 'New staking tiers are now live', category: 'Platform', published_at: new Date().toISOString(), slug: 'tradepad-10000-launches' },
-  { id: '2', title: 'Independent security audit completed', category: 'Security', published_at: new Date(Date.now() - 86400000).toISOString(), slug: 'conviction-scoring-v2' },
-  { id: '3', title: 'Community AMA scheduled for tomorrow', category: 'Community', published_at: new Date(Date.now() - 172800000).toISOString(), slug: 'scheduled-maintenance' },
-];
+// No fallback news
 
 export default function DashboardHome() {
   const [userData, setUserData] = useState(null);
@@ -55,17 +51,17 @@ export default function DashboardHome() {
           setNextLaunch(upcoming?.[0] || null);
           setPreviousLaunch(completed?.[0] || null);
           const { data } = await supabase.from('news_posts').select('*').not('published_at', 'is', null).order('published_at', { ascending: false }).limit(3);
-          setNews(data?.length ? data : fallbackNews);
+          setNews(data?.length ? data : []);
         } else {
-          setUserData({ name: 'Jacob' });
-          setProfile({ access_tier: 'premium', is_premium: true });
-          setNextLaunch({ id: 'sample-next-launch', title: 'Aether Protocol', launch_at: new Date(Date.now() + 93720000).toISOString(), joined_count: 284, target_raise: '$750,000' });
-          setPreviousLaunch({ id: 'archive-1', name: 'Old Wave', symbol: 'OWV', status: 'archived', launch_at: '2026-06-18T12:00:00.000Z', market_cap: '$1.2M', liquidity: '$180K', holder_count: '2,410' });
-          setNews(fallbackNews);
+          setUserData(null);
+          setProfile(null);
+          setNextLaunch(null);
+          setPreviousLaunch(null);
+          setNews([]);
         }
       } catch (error) {
         console.error(error);
-        setNews(fallbackNews);
+        setNews([]);
       } finally {
         setLoading(false);
       }
@@ -94,13 +90,13 @@ export default function DashboardHome() {
     <PageTransition className="mx-auto w-full max-w-[1440px] space-y-6 pb-10">
       <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-8">
         <div>
-          <div className="mb-2 flex items-center gap-2 text-xs font-label-mono text-on-surface-variant uppercase tracking-wider">
+          <div className="mb-2 flex items-center gap-2 text-xs font-mono text-on-surface-variant uppercase tracking-wider">
             <span>Workspace</span><span>/</span><span className="text-white">Overview</span>
           </div>
-          <h1 className="text-3xl font-display-lg font-bold text-white sm:text-4xl mt-2 mb-2">Good evening, {firstName}</h1>
+          <h1 className="text-3xl font-display font-bold text-white sm:text-4xl mt-2 mb-2">Good evening, {firstName}</h1>
           <p className="text-on-surface-variant max-w-md">Discover the next generation of premium, vetted community memecoin launches.</p>
         </div>
-        <div className="flex items-center gap-2 self-start rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-label-mono text-white sm:self-auto shadow-lg">
+        <div className="flex items-center gap-2 self-start rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-mono text-white sm:self-auto shadow-lg">
           <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,.6)] animate-pulse" />
           All systems operational
         </div>
@@ -113,12 +109,12 @@ export default function DashboardHome() {
           <div className="flex flex-col gap-4 border-b border-white/[0.07] px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
             <div className="relative z-10">
               <div className="mb-2 flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-primary/30 bg-primary/10 text-primary text-[10px] font-label-mono font-bold tracking-wider uppercase">
+                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-primary/30 bg-primary/10 text-primary text-[10px] font-mono font-bold tracking-wider uppercase">
                   <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" /> Upcoming
                 </span>
-                {isPremium && <span className="inline-flex items-center px-2 py-1 rounded border border-purple-500/30 bg-purple-500/10 text-purple-400 text-[10px] font-label-mono font-bold tracking-wider uppercase">Premium access</span>}
+                {isPremium && <span className="inline-flex items-center px-2 py-1 rounded border border-purple-500/30 bg-purple-500/10 text-purple-400 text-[10px] font-mono font-bold tracking-wider uppercase">Premium access</span>}
               </div>
-              <h2 className="text-2xl font-bold text-white font-display-lg">{isLaunchDay ? launchName : 'Next launch'}</h2>
+              <h2 className="text-2xl font-bold text-white font-display">{isLaunchDay ? launchName : 'Next launch'}</h2>
             </div>
             <Link to="/dashboard/user/upcoming" className="secondary-button shrink-0 relative z-10 text-xs">View details <span className="material-symbols-outlined text-[16px]">arrow_outward</span></Link>
           </div>
@@ -136,7 +132,7 @@ export default function DashboardHome() {
                         ['Days', countdown.days], ['Hours', countdown.hrs], ['Minutes', countdown.min], ['Seconds', countdown.sec],
                       ].map(([label, value]) => (
                         <div key={label} className="min-w-0 flex-1 sm:flex-none">
-                          <div className="text-3xl md:text-4xl font-label-mono font-bold text-white">{value}</div>
+                          <div className="text-3xl md:text-4xl font-mono font-bold text-white">{value}</div>
                           <div className="mt-2 text-center text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">{label}</div>
                         </div>
                       ))}
@@ -160,9 +156,9 @@ export default function DashboardHome() {
               <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 relative z-10">
                 <span className="material-symbols-outlined text-3xl text-primary drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]">lock</span>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 relative z-10 font-display-lg">Unlock upcoming launches</h3>
+              <h3 className="text-xl font-bold text-white mb-2 relative z-10 font-display">Unlock upcoming launches</h3>
               <p className="max-w-md text-sm text-on-surface-variant leading-relaxed mb-8 relative z-10">Upgrade to Premium for live launch details, priority windows, and allocation access before the public.</p>
-              <Link to="/dashboard/user/premium" className="bg-primary text-black px-8 py-3 rounded-xl font-label-mono font-bold text-sm shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:scale-105 transition-transform relative z-10">
+              <Link to="/dashboard/user/premium" className="bg-primary text-black px-8 py-3 rounded-xl font-mono font-bold text-sm shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:scale-105 transition-transform relative z-10">
                 Explore Premium
               </Link>
             </div>
@@ -173,8 +169,8 @@ export default function DashboardHome() {
           <div className="absolute bottom-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-[40px] pointer-events-none"></div>
           <div className="flex items-start justify-between gap-4 border-b border-white/[0.07] px-6 py-6 relative z-10">
             <div>
-              <p className="font-label-mono text-[10px] text-on-surface-variant uppercase tracking-wider mb-2">Launch archive</p>
-              <h2 className="text-xl font-bold text-white font-display-lg">Previous launch</h2>
+              <p className="font-mono text-[10px] text-on-surface-variant uppercase tracking-wider mb-2">Launch archive</p>
+              <h2 className="text-xl font-bold text-white font-display">Previous launch</h2>
             </div>
             <Link to="/dashboard/user/previous" className="text-on-surface-variant hover:text-white transition-colors flex items-center gap-1 text-sm font-semibold">View all <span className="material-symbols-outlined text-[16px]">arrow_forward</span></Link>
           </div>
@@ -188,7 +184,7 @@ export default function DashboardHome() {
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2 mb-1">
                     <h3 className="truncate text-xl font-bold text-white">{previousLaunch.name || previousLaunch.title}</h3>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded border border-white/20 bg-white/10 text-white text-[9px] font-label-mono font-bold tracking-wider uppercase">{previousLaunch.status || 'Completed'}</span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded border border-white/20 bg-white/10 text-white text-[9px] font-mono font-bold tracking-wider uppercase">{previousLaunch.status || 'Completed'}</span>
                   </div>
                   <p className="flex items-center gap-1.5 text-xs text-on-surface-variant">
                     <span className="material-symbols-outlined text-[15px]">calendar_month</span>
@@ -231,8 +227,8 @@ export default function DashboardHome() {
       <section className="glass-card rounded-3xl p-6 md:p-8 border-white/5">
         <div className="flex items-end justify-between border-b border-white/10 pb-4 mb-4">
           <div>
-            <p className="font-label-mono text-[10px] text-on-surface-variant uppercase tracking-wider mb-2">Platform updates</p>
-            <h2 className="text-xl font-bold text-white font-display-lg">Latest news</h2>
+            <p className="font-mono text-[10px] text-on-surface-variant uppercase tracking-wider mb-2">Platform updates</p>
+            <h2 className="text-xl font-bold text-white font-display">Latest news</h2>
           </div>
           <Link to="/dashboard/user/news" className="text-on-surface-variant hover:text-white transition-colors flex items-center gap-1 text-sm font-semibold">View all <span className="material-symbols-outlined text-[16px]">arrow_forward</span></Link>
         </div>
@@ -243,7 +239,7 @@ export default function DashboardHome() {
                 <div className="mb-2 flex items-center gap-2">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-primary">{item.category || 'Update'}</span>
                   <span className="text-[10px] text-white/20">•</span>
-                  <span className="text-[10px] font-label-mono text-on-surface-variant">{item.published_at ? new Date(item.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Recent'}</span>
+                  <span className="text-[10px] font-mono text-on-surface-variant">{item.published_at ? new Date(item.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Recent'}</span>
                 </div>
                 <p className="truncate text-base font-medium text-white/90 transition-colors group-hover:text-white">{item.title}</p>
               </div>

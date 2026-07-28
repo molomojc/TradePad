@@ -80,7 +80,7 @@ export default function UpcomingLaunches() {
     <PageTransition className="max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-4xl font-headline-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-red to-primary tracking-tight mb-2">Upcoming Launches</h1>
+          <h1 className="text-4xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-red to-primary tracking-tight mb-2">Upcoming Launches</h1>
           <p className="text-on-surface-variant text-sm">
             {isPremium
               ? 'Premium members see the next launch, the timer, and the live join count without the coin being revealed.'
@@ -111,7 +111,7 @@ export default function UpcomingLaunches() {
           <p className="text-on-surface-variant max-w-2xl mx-auto mb-6">
             Free members only see the public archive. Premium members see the next launch card with the countdown and joined count, but not the coin identity.
           </p>
-          <Link to="/dashboard/user/previous" className="inline-flex bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-3 rounded-xl font-label-mono text-sm transition-colors mt-2">
+          <Link to="/dashboard/user/previous" className="inline-flex bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-3 rounded-xl font-mono text-sm transition-colors mt-2">
             Browse Past Coins
           </Link>
         </div>
@@ -121,17 +121,17 @@ export default function UpcomingLaunches() {
             <div className="glass-card p-8 rounded-[2rem] border border-neon-red/20 hover:border-neon-red/40 bg-[#0a0a0a]/50 mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-lg shadow-neon-red/5 hover:shadow-neon-red/10 transition-all duration-500 relative overflow-hidden group hover:-translate-y-1">
               <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-neon-red/10 blur-[100px] rounded-full group-hover:bg-neon-red/20 transition-colors pointer-events-none"></div>
               <div>
-                <span className="bg-neon-red/10 border border-neon-red/30 text-neon-red px-3 py-1 rounded-full font-label-mono text-[10px] uppercase tracking-widest">{hiddenLaunch.title}</span>
-                <h2 className="text-3xl text-on-surface font-headline-md font-bold mt-4 mb-2">Join the next launch</h2>
+                <span className="bg-neon-red/10 border border-neon-red/30 text-neon-red px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-widest">{hiddenLaunch.title}</span>
+                <h2 className="text-3xl text-on-surface font-display font-bold mt-4 mb-2">Join the next launch</h2>
                 <p className="text-on-surface-variant max-w-2xl">{hiddenLaunch.subtitle}</p>
               </div>
               <div className="grid grid-cols-2 gap-4 min-w-[280px]">
                 <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                  <p className="font-label-mono text-[10px] text-on-surface-variant mb-1">COUNTDOWN</p>
+                  <p className="font-mono text-[10px] text-on-surface-variant mb-1">COUNTDOWN</p>
                   <p className="text-primary text-lg font-bold">{hiddenLaunch.countdown}</p>
                 </div>
                 <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                  <p className="font-label-mono text-[10px] text-on-surface-variant mb-1">JOINED</p>
+                  <p className="font-mono text-[10px] text-on-surface-variant mb-1">JOINED</p>
                   <p className="text-white text-lg font-bold">{hiddenLaunch.joined_count}</p>
                 </div>
               </div>
@@ -157,13 +157,13 @@ export default function UpcomingLaunches() {
                     </div>
                   </div>
 
-                  <h3 className="font-display-lg text-xl text-white font-bold mb-1">Next Launch</h3>
+                  <h3 className="font-display text-xl text-white font-bold mb-1">Next Launch</h3>
                   <div className="flex flex-wrap items-center gap-2 mb-6">
-                    <span className="px-2 py-0.5 rounded-full font-label-mono text-[10px] font-bold bg-primary/20 text-primary">
+                    <span className="px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-primary/20 text-primary">
                       {launch.status}
                     </span>
-                    <span className="bg-white/5 text-on-surface-variant px-2 py-0.5 rounded font-label-mono text-[10px]">{launch.chain}</span>
-                    <span className={`px-2 py-0.5 rounded font-label-mono text-[10px] ${
+                    <span className="bg-white/5 text-on-surface-variant px-2 py-0.5 rounded font-mono text-[10px]">{launch.chain}</span>
+                    <span className={`px-2 py-0.5 rounded font-mono text-[10px] ${
                       launch.risk_level === 'high' ? 'bg-red-400/20 text-red-400'
                         : launch.risk_level === 'medium' ? 'bg-yellow-400/20 text-yellow-400'
                           : 'bg-green-400/20 text-green-400'
@@ -174,18 +174,23 @@ export default function UpcomingLaunches() {
                 </div>
 
                 <div className="border-t border-white/5 pt-4 mt-auto">
-                  <div className="flex justify-between items-center mb-4">
+                  {/* Redesigned 3-column stats displaying Joined Count for Premium members */}
+                  <div className="grid grid-cols-3 gap-2 items-center mb-4">
                     <div>
-                      <p className="font-label-mono text-[10px] text-on-surface-variant mb-0.5">LAUNCH DATE</p>
-                      <p className="text-sm text-white">{launch.launch_at ? new Date(launch.launch_at).toLocaleString() : 'TBA'}</p>
+                      <p className="font-mono text-[9px] text-on-surface-variant mb-0.5 uppercase">LAUNCH DATE</p>
+                      <p className="text-[11px] text-white font-medium">{launch.launch_at ? new Date(launch.launch_at).toLocaleDateString() : 'TBA'}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="font-mono text-[9px] text-on-surface-variant mb-0.5 uppercase">JOINED</p>
+                      <p className="text-sm text-primary font-bold">{launch.joined_count ?? 0}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-label-mono text-[10px] text-on-surface-variant mb-0.5">COUNTDOWN</p>
-                      <p className="text-sm text-white font-bold">{formatCountdown(launch.launch_at)}</p>
+                      <p className="font-mono text-[9px] text-on-surface-variant mb-0.5 uppercase">COUNTDOWN</p>
+                      <p className="text-[11px] text-white font-bold">{formatCountdown(launch.launch_at)}</p>
                     </div>
                   </div>
 
-                  <Link to={`/dashboard/user/launch/${launch.id}`} className="w-full block text-center bg-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-label-mono text-xs transition-colors border border-white/10 relative overflow-hidden group-hover:border-primary/30">
+                  <Link to={`/dashboard/user/launch/${launch.id}`} className="w-full block text-center bg-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-mono text-xs transition-colors border border-white/10 relative overflow-hidden group-hover:border-primary/30">
                     <span className="relative z-10">Join the Next Launch</span>
                   </Link>
                 </div>
@@ -198,7 +203,7 @@ export default function UpcomingLaunches() {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/5 rounded-full blur-[80px]"></div>
               <span className="material-symbols-outlined text-6xl mb-4 text-white/20 relative z-10 group-hover:scale-110 transition-transform duration-500">search_off</span>
               <h3 className="text-2xl font-bold text-white mb-2 relative z-10">No Launches Found</h3>
-              <p className="text-on-surface-variant relative z-10">We couldn't find any upcoming projects matching your criteria.</p>
+              <p className="text-on-surface-variant max-w-sm mx-auto">No upcoming launches matched your search query.</p>
             </motion.div>
           )}
         </>

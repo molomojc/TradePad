@@ -49,7 +49,7 @@ export default function TopNavBar() {
               <Link
                 key={item.id}
                 to={item.id}
-                className={`font-label-mono text-sm tracking-wide transition-colors ${
+                className={`font-mono text-sm tracking-wide transition-colors ${
                   location.pathname === item.id 
                     ? 'text-primary font-bold' 
                     : 'text-on-surface-variant hover:text-white'
@@ -97,8 +97,8 @@ export default function TopNavBar() {
                   className="absolute right-0 mt-4 w-[calc(100vw-2rem)] sm:w-80 bg-background/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50"
                 >
                   <div className="p-4 border-b border-white/10 flex justify-between items-center bg-white/5">
-                    <h3 className="font-display-lg font-bold text-white">Notifications</h3>
-                    <button className="text-primary font-label-mono text-[10px] hover:underline">MARK ALL READ</button>
+                    <h3 className="font-display font-bold text-white">Notifications</h3>
+                    <button className="text-primary font-mono text-[10px] hover:underline">MARK ALL READ</button>
                   </div>
                   
                   <div className="max-h-96 overflow-y-auto">
@@ -114,7 +114,7 @@ export default function TopNavBar() {
                           </div>
                           <div>
                             <p className="text-white text-sm mb-1">{notif.title}</p>
-                            <p className="text-on-surface-variant font-label-mono text-[10px]">{notif.time}</p>
+                            <p className="text-on-surface-variant font-mono text-[10px]">{notif.time}</p>
                           </div>
                         </div>
                       ))
@@ -128,7 +128,7 @@ export default function TopNavBar() {
                   </div>
                   
                   <div className="p-3 text-center border-t border-white/10 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer">
-                    <span className="text-primary font-label-mono text-[11px] font-bold">VIEW ALL NOTIFICATIONS</span>
+                    <span className="text-primary font-mono text-[11px] font-bold">VIEW ALL NOTIFICATIONS</span>
                   </div>
                 </motion.div>
               )}
@@ -142,14 +142,14 @@ export default function TopNavBar() {
             
             <button
               onClick={() => openAuthModal('login')}
-              className="hidden md:block font-label-mono text-sm text-on-surface-variant hover:text-white transition-colors"
+              className="hidden md:block font-mono text-sm text-on-surface-variant hover:text-white transition-colors"
             >
               Log In
             </button>
             
             <button
               onClick={() => openAuthModal('signup')}
-              className="px-4 md:px-6 py-2.5 rounded-full font-label-mono font-bold hover:opacity-90 active:scale-95 transition-all text-sm bg-primary text-black"
+              className="px-4 md:px-6 py-2.5 rounded-full font-mono font-bold hover:opacity-90 active:scale-95 transition-all text-sm bg-primary text-black"
               style={{
                 boxShadow: '0 0 15px rgba(198, 198, 198, 0.1)'
               }}

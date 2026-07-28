@@ -156,12 +156,12 @@ export default function Home({ setActiveTab }) {
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-10 items-center">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 font-label-mono text-primary bg-primary/10 px-3.5 py-1.5 rounded-full text-caption border border-primary/20 tracking-wider animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <span className="inline-flex items-center gap-2 font-mono text-primary bg-primary/10 px-3.5 py-1.5 rounded-full text-caption border border-primary/20 tracking-wider animate-in fade-in slide-in-from-bottom-2 duration-500">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
               THE NEXT LAUNCH STARTS HERE
             </span>
 
-            <h1 className="font-display-lg text-4xl md:text-6xl font-bold mt-8 mb-6 text-white leading-tight tracking-tight animate-in fade-in slide-in-from-bottom-3 duration-700">
+            <h1 className="font-display text-4xl md:text-6xl font-bold mt-8 mb-6 text-white leading-tight tracking-tight animate-in fade-in slide-in-from-bottom-3 duration-700">
               Premium, vetted
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-purple-400">
@@ -169,7 +169,7 @@ export default function Home({ setActiveTab }) {
               </span>
             </h1>
 
-            <div className="font-body-lg text-on-surface-variant max-w-xl mb-8 leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 space-y-4">
+            <div className="font-sans text-on-surface-variant max-w-xl mb-8 leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 space-y-4">
               <p>
                 TradePad is a launch platform built for fair, transparent Solana token launches.
               </p>
@@ -181,19 +181,19 @@ export default function Home({ setActiveTab }) {
             <div className="flex flex-wrap gap-4 animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200">
               <button
                 onClick={handleViewLaunch}
-                className="bg-primary text-black hover:bg-primary-fixed active:scale-95 transition-all px-8 py-3.5 rounded-full font-label-mono font-bold text-sm shadow-[0_0_20px_rgba(0,240,255,0.3)] inline-block"
+                className="bg-primary text-black hover:bg-primary-fixed active:scale-95 transition-all px-8 py-3.5 rounded-full font-mono font-bold text-sm shadow-[0_0_20px_rgba(0,240,255,0.3)] inline-block"
               >
                 View Upcoming Launch
               </button>
               <Link
                 to="/pricing"
-                className="bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all px-8 py-3.5 rounded-full font-label-mono font-bold text-sm text-white backdrop-blur-md inline-block"
+                className="bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all px-8 py-3.5 rounded-full font-mono font-bold text-sm text-white backdrop-blur-md inline-block"
               >
                 Become Premium
               </Link>
             </div>
 
-            <p className="font-label-mono text-on-surface-variant/70 text-[11px] mt-6 tracking-wider uppercase">
+            <p className="font-mono text-on-surface-variant/70 text-[11px] mt-6 tracking-wider uppercase">
               New launches every two weeks • No anonymous developers • No community listings
             </p>
           </div>
@@ -203,8 +203,8 @@ export default function Home({ setActiveTab }) {
       </section>
 
       {/* Centered video preview card */}
-      <section className="max-w-4xl mx-auto mb-16 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
-        <div className="relative rounded-[2rem] overflow-hidden border border-white/10 glass-card shadow-2xl">
+      <section className="py-4 animate-in fade-in slide-in-from-bottom-5 duration-700 delay-300">
+        <div className="glass-card rounded-[2rem] border-white/10 overflow-hidden relative shadow-2xl">
           <video
             ref={videoRef}
             src="/video.mp4"
@@ -217,7 +217,7 @@ export default function Home({ setActiveTab }) {
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none"></div>
 
-          <span className="absolute top-5 left-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 font-label-mono text-[10px] text-white tracking-wider uppercase">
+          <span className="absolute top-5 left-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 font-mono text-[10px] text-white tracking-wider uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
             HOW TRADEPAD WORKS
           </span>
@@ -257,7 +257,7 @@ export default function Home({ setActiveTab }) {
       {/* Why Choose TradePad Grid */}
       <section className="py-12 mb-10">
         <div className="flex items-center gap-4 mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-white font-display-lg">
+          <h2 className="text-2xl md:text-3xl font-bold text-white font-display">
             Why members choose TradePad
           </h2>
           <div className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent"></div>
@@ -281,7 +281,7 @@ export default function Home({ setActiveTab }) {
         <div className="glass-card rounded-[2rem] p-8 md:p-12 border-white/10 overflow-hidden relative animate-in fade-in slide-in-from-left-6 duration-700">
           <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5 blur-3xl"></div>
           
-          <h3 className="text-3xl font-display-lg font-bold text-white mb-4">
+          <h3 className="text-3xl font-display font-bold text-white mb-4">
             Explore the Platform
           </h3>
           <p className="text-on-surface-variant leading-relaxed mb-8 max-w-md">
@@ -299,11 +299,11 @@ export default function Home({ setActiveTab }) {
 
         <div className="glass-card rounded-[2rem] p-8 md:p-12 border-primary/20 overflow-hidden relative animate-in fade-in slide-in-from-right-6 duration-700 bg-gradient-to-br from-primary/5 to-transparent">
           <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-primary/15 blur-3xl"></div>
-          <span className="absolute top-8 right-8 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary font-label-mono text-[10px] tracking-wide whitespace-nowrap shadow-[0_0_15px_rgba(0,240,255,0.1)]">
+          <span className="absolute top-8 right-8 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary font-mono text-[10px] tracking-wide whitespace-nowrap shadow-[0_0_15px_rgba(0,240,255,0.1)]">
             PREMIUM ACCESS
           </span>
           
-          <h3 className="text-3xl font-display-lg font-bold text-white mb-4 max-w-[85%] mt-8 lg:mt-0">
+          <h3 className="text-3xl font-display font-bold text-white mb-4 max-w-[85%] mt-8 lg:mt-0">
             Know what's launching next
           </h3>
           <p className="text-on-surface-variant leading-relaxed mb-8 max-w-md">

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import PageTransition from '../../components/PageTransition';
 import { motion } from 'framer-motion';
+import { supabase, hasSupabaseConfig } from '../../lib/supabase';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -15,17 +17,99 @@ const itemVariants = {
   show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
 };
 
+function formatUsd(val) {
+  if (val == null || Number.isNaN(Number(val))) return '$0';
+  return `$${Number(val).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+}
+
+function formatNumber(val) {
+  if (val == null || Number.isNaN(Number(val))) return '0';
+  return Number(val).toLocaleString();
+}
+
 export default function MyAllocations() {
   const [allocations, setAllocations] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API fetch
     const fetchAllocations = async () => {
       setLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 600));
-      setAllocations([]);
-      setLoading(false);
+      const list = [];
+      try {
+        if (hasSupabaseConfig && supabase) {
+          // 1. Fetch joined launches from launch_participants
+          try {
+            const { data: participations, error: pError } = await supabase
+              .from('launch_participants')
+              .select('*, launches(*)')
+              .order('joined_at', { ascending: false });
+
+            if (pError) throw pError;
+
+            if (participations) {
+              list.push(...participations.map(item => ({
+                id: `participation-${item.id}`,
+                name: item.launches?.name || 'Unknown Launch',
+                symbol: item.launches?.symbol || 'TOKEN',
+                chain: item.launches?.chain || 'solana',
+                invested: 0,
+                allocatedTokens: 0,
+                status: 'Joined Launch',
+                progress: 0,
+                claimableVal: 0,
+                nextClaim: 'Awaiting Launch',
+                icon: (item.launches?.symbol || '•').slice(0, 2).toUpperCase()
+              })));
+            }
+          } catch (e) {
+            console.error('Error fetching launch participations:', e);
+          }
+
+          // 2. Fetch completed allocations from user_allocations
+          try {
+            const { data: userAllocs, error: uError } = await supabase
+              .from('user_allocations')
+              .select('*, launches(*)')
+              .order('created_at', { ascending: false });
+
+            if (uError) throw uError;
+
+            if (userAllocs) {
+              list.push(...userAllocs.map(item => {
+                const claimed = Number(item.tokens_claimed || 0);
+                const allocated = Number(item.tokens_allocated || 1);
+                const progress = Math.min(Math.round((claimed / allocated) * 100), 100);
+                const invested = Number(item.amount_invested_usd || 0);
+                const claimableVal = progress >= 100 ? 0 : invested * 2.1;
+
+                return {
+                  id: `allocation-${item.id}`,
+                  name: item.launches?.name || 'Unknown Launch',
+                  symbol: item.launches?.symbol || 'TOKEN',
+                  chain: item.launches?.chain || 'solana',
+                  invested,
+                  allocatedTokens: item.tokens_allocated,
+                  status: claimed >= allocated ? 'Claimed' : (progress > 0 ? 'Vesting' : 'Claimable'),
+                  progress,
+                  claimableVal,
+                  nextClaim: progress >= 100 ? 'Fully Vested' : 'Immediate',
+                  icon: (item.launches?.symbol || '•').slice(0, 2).toUpperCase()
+                };
+              }));
+            }
+          } catch (e) {
+            console.log('user_allocations table not configured or missing, skipping');
+          }
+
+          setAllocations(list);
+        } else {
+          setAllocations([]);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchAllocations();
@@ -37,19 +121,8 @@ export default function MyAllocations() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-4xl font-headline-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-red to-primary tracking-tight mb-2">My Allocations</h1>
+          <h1 className="text-4xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-red to-primary tracking-tight mb-2">My Allocations</h1>
           <p className="text-on-surface-variant text-sm">Track your investments, token allocations, and vesting schedules.</p>
-        </div>
-        <div className="glass-card px-8 py-4 rounded-2xl border-white/5 flex gap-8 items-center shadow-lg bg-[#0a0a0a]/50">
-          <div>
-            <p className="font-label-mono text-[10px] text-on-surface-variant mb-1">TOTAL INVESTED</p>
-            <p className="font-display-lg font-bold text-white text-xl">$1,950</p>
-          </div>
-          <div className="w-px h-8 bg-white/10"></div>
-          <div>
-            <p className="font-label-mono text-[10px] text-on-surface-variant mb-1">CLAIMABLE VALUE</p>
-            <p className="font-display-lg font-bold text-primary text-xl">$4,230</p>
-          </div>
         </div>
       </div>
 
@@ -77,32 +150,33 @@ export default function MyAllocations() {
                       {item.icon}
                     </div>
                     <div>
-                      <h3 className="font-display-lg text-lg text-white font-bold">{item.name}</h3>
-                      <span className="bg-white/5 text-on-surface-variant px-2 py-0.5 rounded font-label-mono text-[10px]">{item.chain}</span>
+                      <h3 className="font-display text-lg text-white font-bold">{item.name}</h3>
+                      <span className="bg-white/5 text-on-surface-variant px-2 py-0.5 rounded font-mono text-[10px] uppercase">{item.chain}</span>
                     </div>
                   </div>
 
                   {/* Stats */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full md:w-auto md:flex-1 md:justify-end">
                     <div>
-                      <p className="font-label-mono text-[10px] text-on-surface-variant mb-1">INVESTED</p>
-                      <p className="text-white font-bold">{item.invested}</p>
+                      <p className="font-mono text-[10px] text-on-surface-variant mb-1">INVESTED</p>
+                      <p className="text-white font-bold">{formatUsd(item.invested)}</p>
                     </div>
                     <div>
-                      <p className="font-label-mono text-[10px] text-on-surface-variant mb-1">ALLOCATION</p>
-                      <p className="text-white font-bold text-sm">{item.allocatedTokens}</p>
+                      <p className="font-mono text-[10px] text-on-surface-variant mb-1">ALLOCATION</p>
+                      <p className="text-white font-bold text-sm">{formatNumber(item.allocatedTokens)} {item.symbol}</p>
                     </div>
                     <div className="col-span-2 md:col-span-1">
-                      <p className="font-label-mono text-[10px] text-on-surface-variant mb-1">STATUS</p>
-                      <span className={`px-2 py-1 rounded font-label-mono text-[10px] font-bold ${
+                      <p className="font-mono text-[10px] text-on-surface-variant mb-1">STATUS</p>
+                      <span className={`px-2 py-1 rounded font-mono text-[10px] font-bold ${
                         item.status === 'Claimable' ? 'bg-green-400/20 text-green-400' :
-                        item.status === 'Vesting' ? 'bg-blue-400/20 text-blue-400' : 'bg-white/10 text-on-surface-variant'
+                        item.status === 'Vesting' ? 'bg-blue-400/20 text-blue-400' :
+                        item.status === 'Joined Launch' ? 'bg-primary/20 text-primary' : 'bg-white/10 text-on-surface-variant'
                       }`}>
                         {item.status}
                       </span>
                     </div>
                     <div className="col-span-2 md:col-span-1">
-                      <p className="font-label-mono text-[10px] text-on-surface-variant mb-1">NEXT CLAIM</p>
+                      <p className="font-mono text-[10px] text-on-surface-variant mb-1">NEXT CLAIM</p>
                       <p className={`font-bold text-sm ${item.status === 'Claimable' ? 'text-primary' : 'text-white'}`}>{item.nextClaim}</p>
                     </div>
                   </div>
@@ -113,13 +187,13 @@ export default function MyAllocations() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       disabled={item.status !== 'Claimable'}
-                      className={`w-full md:w-32 py-3 rounded-xl font-label-mono font-bold text-xs transition-all ${
+                      className={`w-full md:w-32 py-3 rounded-xl font-mono font-bold text-xs transition-all ${
                         item.status === 'Claimable' 
                           ? 'bg-neon-red text-white shadow-[0_0_15px_rgba(255,46,46,0.2)] hover:shadow-[0_0_25px_rgba(255,46,46,0.5)]' 
                           : 'bg-white/5 text-on-surface-variant cursor-not-allowed border border-white/5'
                       }`}
                     >
-                      {item.status === 'Claimable' ? 'Claim Tokens' : 'Locked'}
+                      {item.status === 'Joined Launch' ? 'Awaiting Pool' : (item.status === 'Claimable' ? 'Claim Tokens' : 'Locked')}
                     </motion.button>
                   </div>
 
@@ -127,7 +201,7 @@ export default function MyAllocations() {
 
                 {/* Progress Bar */}
                 <div className="mt-6 pt-4 border-t border-white/5">
-                  <div className="flex justify-between font-label-mono text-[10px] text-on-surface-variant mb-2">
+                  <div className="flex justify-between font-mono text-[10px] text-on-surface-variant mb-2">
                     <span>Vesting Progress</span>
                     <span>{item.progress}%</span>
                   </div>
@@ -149,13 +223,13 @@ export default function MyAllocations() {
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card p-12 border-white/5 rounded-3xl text-center relative overflow-hidden group">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 rounded-full blur-[80px] group-hover:bg-primary/20 transition-colors"></div>
               <span className="material-symbols-outlined text-6xl text-primary/50 mb-4 block relative z-10 animate-bounce">rocket_launch</span>
-              <h3 className="text-3xl font-display-lg font-bold text-white mb-2 relative z-10">Your Portfolio is Empty</h3>
+              <h3 className="text-3xl font-display font-bold text-white mb-2 relative z-10">Your Portfolio is Empty</h3>
               <p className="text-on-surface-variant max-w-sm mx-auto mb-6 relative z-10">
                 You haven't participated in any launches yet. Explore upcoming projects and secure your first allocation!
               </p>
-              <button className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-xl font-label-mono text-sm transition-colors border border-white/10 relative z-10">
+              <Link to="/dashboard/user/upcoming" className="inline-block bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-mono text-sm transition-colors border border-white/10 relative z-10">
                 Explore Launches
-              </button>
+              </Link>
             </motion.div>
           )}
         </>

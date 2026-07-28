@@ -5,96 +5,6 @@ import Panel from '../../components/Panel';
 import { motion } from 'framer-motion';
 import { supabase, hasSupabaseConfig } from '../../lib/supabase';
 
-// Fallback posts for when Supabase isn't configured
-const FALLBACK_POSTS = {
-  'tradepad-10000-launches': {
-    id: 'fallback-1',
-    title: 'TradePad reaches 10,000 tracked launches',
-    slug: 'tradepad-10000-launches',
-    summary: 'A look back at how the public feed has grown since day one, and what changes are coming next.',
-    body: `We're thrilled to announce that TradePad has officially tracked over 10,000 launches across all supported chains. This milestone represents months of dedication from our team and the incredible support from our community.
-
-## The Journey So Far
-
-When we first launched TradePad, our goal was simple: create the most comprehensive launch tracking platform in the crypto space. We started with just Solana support and a handful of users. Today, we support multiple chains including Ethereum, BSC, Polygon, and Base.
-
-## What's Next
-
-With this milestone, we're doubling down on our commitment to providing the best possible experience. Coming soon:
-- Real-time alert system for high-conviction launches
-- Advanced portfolio tracking
-- Social features to share discoveries with the community
-
-Thank you for being part of this journey. The best is yet to come!`,
-    category: 'platform',
-    featured: true,
-    published_at: new Date().toISOString(),
-    created_by: null,
-    author: null
-  },
-  'conviction-scoring-v2': {
-    id: 'fallback-2',
-    title: 'Conviction scoring gets a v2 model',
-    slug: 'conviction-scoring-v2',
-    summary: 'Premium research now weighs wallet clustering more heavily after backtesting against the last quarter.',
-    body: `We're excited to announce the release of Conviction Scoring v2, a major upgrade to our proprietary scoring system that helps traders identify the most promising launches.
-
-## What's New in v2
-
-The new model incorporates several key improvements:
-
-### 1. Enhanced Wallet Clustering Analysis
-Our algorithms now analyze wallet behavior patterns with greater depth, identifying clusters of high-quality investors earlier in the launch process.
-
-### 2. Predictive Momentum Indicators
-We've added new momentum indicators that help predict a launch's trajectory based on early adoption patterns.
-
-### 3. Improved Accuracy
-Backtesting against Q3 data shows a 37% improvement in prediction accuracy for early-stage launches.
-
-## Premium Access
-
-Conviction Scoring v2 is available exclusively to Premium users. Upgrade today to get early access to high-conviction opportunities.`,
-    category: 'premium',
-    featured: false,
-    published_at: new Date(Date.now() - 86400000 * 3).toISOString(),
-    created_by: null,
-    author: null
-  },
-  'scheduled-maintenance': {
-    id: 'fallback-3',
-    title: 'Scheduled maintenance this weekend',
-    slug: 'scheduled-maintenance',
-    summary: 'The feed will briefly pause for a database migration. No launches will be missed — everything is queued.',
-    body: `We'll be performing scheduled maintenance this weekend to upgrade our database infrastructure. Here's everything you need to know:
-
-## Maintenance Window
-- Start: Saturday, 2:00 AM UTC
-- End: Sunday, 6:00 AM UTC
-
-## What to Expect
-- The launch feed will be paused during the maintenance window
-- All pending launches are queued and will be processed automatically
-- Your account data and preferences are safe
-
-## Why We're Doing This
-This migration is crucial for:
-- Improving feed responsiveness
-- Supporting our growing user base
-- Enabling new features in the pipeline
-
-## After Maintenance
-Everything will resume normally. You won't need to take any action. The queued launches will be processed in order, so you won't miss a thing.
-
-Thank you for your patience and understanding!`,
-    category: 'launch',
-    featured: false,
-    published_at: new Date(Date.now() - 86400000 * 6).toISOString(),
-    created_by: null,
-    author: null
-  }
-};
-
 const CATEGORY_STYLES = {
   premium: 'bg-primary/15 text-primary',
   launch: 'bg-green-400/15 text-green-400',
@@ -409,20 +319,8 @@ function NewsPostDetail() {
       setLoading(true);
       setError(null);
 
-      // Check if Supabase is configured
       if (!hasSupabaseConfig || !supabase) {
-        console.log('Supabase not configured, using fallback post');
-        const fallbackPost = FALLBACK_POSTS[slug];
-        if (fallbackPost) {
-          setPost(fallbackPost);
-          // Get related posts
-          const related = Object.values(FALLBACK_POSTS)
-            .filter(p => p.slug !== slug)
-            .slice(0, 2);
-          setRelatedPosts(related);
-        } else {
-          setError('Post not found');
-        }
+        setError('Post not found');
         setLoading(false);
         return;
       }
