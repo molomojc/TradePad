@@ -109,13 +109,13 @@ export async function fetchSubscriptionStatus() {
 
 export async function signInWithOAuth(provider) {
   if (!supabase) {
-    throw new Error('Supabase is not configured');
+    throw new Error("Supabase is not configured");
   }
 
   return supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: window.location.origin,
+      redirectTo: `${window.location.origin}/dashboard/user`,
     },
   });
 }
