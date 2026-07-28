@@ -80,7 +80,7 @@ export default function UpcomingLaunches() {
     <PageTransition className="max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-display-lg font-bold text-white mb-2">Upcoming Launches</h1>
+          <h1 className="text-4xl font-headline-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-red to-primary tracking-tight mb-2">Upcoming Launches</h1>
           <p className="text-on-surface-variant text-sm">
             {isPremium
               ? 'Premium members see the next launch, the timer, and the live join count without the coin being revealed.'
@@ -104,23 +104,25 @@ export default function UpcomingLaunches() {
           <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
         </div>
       ) : !isPremium ? (
-        <div className="glass-card p-8 rounded-3xl border-white/5 bg-gradient-to-br from-white/5 to-transparent text-center">
+        <div className="glass-card p-10 rounded-[2rem] border-white/5 hover:border-white/10 transition-all duration-300 shadow-xl bg-[#0a0a0a]/50 text-center relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] group-hover:bg-primary/10 transition-colors pointer-events-none"></div>
           <span className="material-symbols-outlined text-5xl text-primary mb-4">workspace_premium</span>
           <h3 className="text-2xl text-white font-bold mb-2">Premium launches are locked</h3>
           <p className="text-on-surface-variant max-w-2xl mx-auto mb-6">
             Free members only see the public archive. Premium members see the next launch card with the countdown and joined count, but not the coin identity.
           </p>
-          <Link to="/dashboard/user/previous" className="inline-flex bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-xl font-label-mono text-xs">
+          <Link to="/dashboard/user/previous" className="inline-flex bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-3 rounded-xl font-label-mono text-sm transition-colors mt-2">
             Browse Past Coins
           </Link>
         </div>
       ) : (
         <>
           {hiddenLaunch && (
-            <div className="glass-card p-6 rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 to-transparent mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="glass-card p-8 rounded-[2rem] border border-neon-red/20 hover:border-neon-red/40 bg-[#0a0a0a]/50 mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-lg shadow-neon-red/5 hover:shadow-neon-red/10 transition-all duration-500 relative overflow-hidden group hover:-translate-y-1">
+              <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-neon-red/10 blur-[100px] rounded-full group-hover:bg-neon-red/20 transition-colors pointer-events-none"></div>
               <div>
-                <span className="bg-primary/20 text-primary px-3 py-1 rounded-full font-label-mono text-[10px] font-bold">{hiddenLaunch.title}</span>
-                <h2 className="text-2xl text-white font-bold mt-4 mb-2">Join the next launch</h2>
+                <span className="bg-neon-red/10 border border-neon-red/30 text-neon-red px-3 py-1 rounded-full font-label-mono text-[10px] uppercase tracking-widest">{hiddenLaunch.title}</span>
+                <h2 className="text-3xl text-on-surface font-headline-md font-bold mt-4 mb-2">Join the next launch</h2>
                 <p className="text-on-surface-variant max-w-2xl">{hiddenLaunch.subtitle}</p>
               </div>
               <div className="grid grid-cols-2 gap-4 min-w-[280px]">
@@ -136,9 +138,9 @@ export default function UpcomingLaunches() {
             </div>
           )}
 
-          <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {filtered.map((launch) => (
-              <motion.div key={launch.id} variants={itemVariants} className="glass-card p-6 rounded-3xl border-white/5 hover:border-white/10 transition-colors flex flex-col justify-between relative group">
+              <motion.div key={launch.id} variants={itemVariants} className="glass-card p-6 rounded-2xl border-white/5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-primary/10 flex flex-col justify-between relative group bg-[#0a0a0a]/40 overflow-hidden">
                 <button
                   onClick={(event) => toggleWatchlist(event, launch.id)}
                   className="absolute top-6 right-6 z-10 w-8 h-8 rounded-full bg-background/50 backdrop-blur-md flex items-center justify-center border border-white/10 hover:bg-white/10 transition-colors"
@@ -183,7 +185,7 @@ export default function UpcomingLaunches() {
                     </div>
                   </div>
 
-                  <Link to={`/dashboard/user/launch/${launch.id}`} className="w-full block text-center bg-white/5 hover:bg-white/10 text-white py-2.5 rounded-xl font-label-mono text-xs transition-colors border border-white/10 relative overflow-hidden">
+                  <Link to={`/dashboard/user/launch/${launch.id}`} className="w-full block text-center bg-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-label-mono text-xs transition-colors border border-white/10 relative overflow-hidden group-hover:border-primary/30">
                     <span className="relative z-10">Join the Next Launch</span>
                   </Link>
                 </div>

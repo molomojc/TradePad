@@ -51,7 +51,7 @@ export default function PreviousLaunches() {
       {/* Header & Search */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-display-lg font-bold text-white mb-2">Previous Launches</h1>
+          <h1 className="text-4xl font-headline-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-red to-primary tracking-tight mb-2">Previous Launches</h1>
           <p className="text-on-surface-variant text-sm">Explore our archive of past launches and their performance.</p>
         </div>
         
@@ -78,10 +78,11 @@ export default function PreviousLaunches() {
             variants={containerVariants}
             initial="hidden"
             animate="show"
-            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
           >
             {filtered.map(launch => (
-              <motion.div key={launch.id} variants={itemVariants} className="glass-card p-6 rounded-3xl border-white/5 hover:border-white/10 transition-colors flex flex-col justify-between">
+              <motion.div key={launch.id} variants={itemVariants} className="glass-card p-8 rounded-[2rem] border-white/5 hover:border-neon-red/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-neon-red/10 flex flex-col justify-between bg-[#0a0a0a]/40 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-neon-red/5 rounded-full blur-[50px] group-hover:bg-neon-red/10 transition-colors pointer-events-none"></div>
                 <div>
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-4">
@@ -124,8 +125,8 @@ export default function PreviousLaunches() {
                   </div>
                 </div>
                 
-                <Link to={`/dashboard/user/launch/${launch.id}`} className="w-full block text-center bg-white/5 hover:bg-white/10 text-white py-2.5 rounded-xl font-label-mono text-xs transition-colors border border-white/10 mt-4">
-                  View Post-Launch Report
+                <Link to={`/dashboard/user/launch/${launch.id}`} className="w-full flex justify-center items-center gap-2 bg-white/5 hover:bg-white/10 text-on-surface py-3 rounded-xl font-label-mono text-xs transition-colors border border-white/10 hover:border-white/30 mt-6 group-hover:border-neon-red/30 relative z-10">
+                  View Post-Launch Report <span className="material-symbols-outlined text-[16px]">open_in_new</span>
                 </Link>
               </motion.div>
             ))}

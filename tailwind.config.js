@@ -47,7 +47,8 @@ export default {
         "on-secondary-container": "#bab8b7",
         "on-secondary": "#313030",
         "on-secondary-fixed-variant": "#474646",
-        "primary-fixed": "var(--color-primary-fixed)"
+        "primary-fixed": "var(--color-primary-fixed)",
+        "neon-red": "#FF2E2E"
       },
       borderRadius: {
         "DEFAULT": "0.25rem",

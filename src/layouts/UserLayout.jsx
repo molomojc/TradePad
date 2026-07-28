@@ -20,13 +20,19 @@ export default function UserLayout() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex overflow-x-hidden">
+    <div className="min-h-screen bg-background text-on-background flex overflow-x-hidden relative">
+      {/* Global Ambient Background */}
+      <div className="fixed inset-0 cyber-grid opacity-10 pointer-events-none z-0"></div>
+      <div className="fixed top-[-20%] left-[-10%] w-[800px] h-[800px] bg-neon-red/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
+      <div className="fixed bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
       {/* Sidebar fixed on the left */}
-      <Sidebar type="user" open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="relative z-50">
+        <Sidebar type="user" open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      </div>
 
       {/* Main Content Area next to Sidebar */}
-      <main className="flex-1 flex flex-col min-h-screen relative md:ml-64">
-        <header className="h-20 border-b border-white/10 bg-background/80 backdrop-blur-xl sticky top-0 z-40 flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 flex flex-col min-h-screen relative md:ml-64 z-10">
+        <header className="h-20 border-b border-white/5 bg-background/80 backdrop-blur-xl sticky top-0 z-40 flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"

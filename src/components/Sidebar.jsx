@@ -11,7 +11,6 @@ export default function Sidebar({ type = 'user', open = false, onClose }) {
     { name: 'My Allocations', path: '/dashboard/user/allocations', icon: 'account_balance_wallet' },
     { name: 'Premium', path: '/dashboard/user/premium', icon: 'star' },
     { name: 'News', path: '/dashboard/user/news', icon: 'newspaper' },
-    { name: 'Profile', path: '/dashboard/user/profile', icon: 'person' },
     { name: 'Settings', path: '/dashboard/user/settings', icon: 'settings' },
   ];
 
@@ -82,15 +81,27 @@ export default function Sidebar({ type = 'user', open = false, onClose }) {
               end={link.end}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl font-label-mono text-[13px] transition-all duration-200 ${
+                `flex items-center gap-3 px-4 py-3 rounded-xl font-label-mono text-[13px] transition-all duration-300 relative group overflow-hidden ${
                   isActive
-                    ? 'bg-primary text-black font-bold shadow-[0_0_15px_rgba(198,198,198,0.1)]'
-                    : 'text-on-surface-variant hover:text-white hover:bg-white/5'
+                    ? 'text-white font-bold bg-white/5 border border-white/10 shadow-[0_0_20px_rgba(255,46,46,0.1)]'
+                    : 'text-on-surface-variant hover:text-white hover:bg-white/5 hover:translate-x-1'
                 }`
               }
             >
-              <span className="material-symbols-outlined text-[20px]">{link.icon}</span>
-              {link.name}
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-neon-red shadow-[0_0_10px_rgba(255,46,46,0.8)]"></div>
+                  )}
+                  {isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-neon-red/10 to-transparent pointer-events-none"></div>
+                  )}
+                  <span className={`material-symbols-outlined text-[20px] relative z-10 transition-colors ${isActive ? 'text-neon-red' : 'group-hover:text-primary'}`}>
+                    {link.icon}
+                  </span>
+                  <span className="relative z-10">{link.name}</span>
+                </>
+              )}
             </NavLink>
           ))}
         </div>

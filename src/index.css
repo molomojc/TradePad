@@ -173,3 +173,8 @@ svg {
     border-bottom: 2px solid #4ade80;
     border-right: 2px solid #4ade80;
 }
+
+.countdown-box {
+    background: #1A1A1A;
+    box-shadow: 0 0 15px rgba(255, 46, 46, 0.1);
+}

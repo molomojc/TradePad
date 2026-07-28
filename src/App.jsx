@@ -23,11 +23,13 @@ import PreviousLaunches from './pages/user/PreviousLaunches';
 import MyAllocations from './pages/user/MyAllocations';
 import PremiumPage from './pages/user/PremiumPage';
 import News from './pages/user/News';
-import Profile from './pages/user/Profile';
 import Settings from './pages/user/Settings';
 import LaunchDetails from './pages/user/LaunchDetails';
 import PaymentSuccess from './pages/payment/Success';
 import PaymentCancelled from './pages/payment/Cancelled';
+import NewsPostDetail from './pages/user/NewsPostDetail'; // adjust path
+
+
 
 // Admin Dashboard Pages
 import AdminHome from './pages/admin/AdminHome';
@@ -68,7 +70,7 @@ function App() {
           <Route path="previous" element={<ProtectedRoute><PreviousLaunches /></ProtectedRoute>} />
           <Route path="premium" element={<ProtectedRoute><PremiumPage /></ProtectedRoute>} />
           <Route path="news" element={<ProtectedRoute><News /></ProtectedRoute>} />
-          <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="news/:slug" element={<ProtectedRoute><NewsPostDetail /></ProtectedRoute>} />
           <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         </Route>
 

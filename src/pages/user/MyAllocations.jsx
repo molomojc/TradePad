@@ -37,10 +37,10 @@ export default function MyAllocations() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-display-lg font-bold text-white mb-2">My Allocations</h1>
+          <h1 className="text-4xl font-headline-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-red to-primary tracking-tight mb-2">My Allocations</h1>
           <p className="text-on-surface-variant text-sm">Track your investments, token allocations, and vesting schedules.</p>
         </div>
-        <div className="glass-card px-6 py-3 rounded-2xl border-primary/20 flex gap-6 items-center">
+        <div className="glass-card px-8 py-4 rounded-2xl border-white/5 flex gap-8 items-center shadow-lg bg-[#0a0a0a]/50">
           <div>
             <p className="font-label-mono text-[10px] text-on-surface-variant mb-1">TOTAL INVESTED</p>
             <p className="font-display-lg font-bold text-white text-xl">$1,950</p>
@@ -67,8 +67,9 @@ export default function MyAllocations() {
             className="space-y-4"
           >
             {allocations.map(item => (
-              <motion.div key={item.id} variants={itemVariants} className="glass-card p-6 rounded-3xl border-white/5 hover:border-white/10 transition-colors">
-                <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
+              <motion.div key={item.id} variants={itemVariants} className="glass-card p-8 rounded-[2rem] border-white/5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-primary/10 bg-[#0a0a0a]/40 group relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-[50px] group-hover:bg-primary/10 transition-colors pointer-events-none"></div>
+                <div className="flex flex-col md:flex-row gap-6 items-center justify-between relative z-10">
                   
                   {/* Project Info */}
                   <div className="flex items-center gap-4 w-full md:w-auto">
@@ -112,10 +113,10 @@ export default function MyAllocations() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       disabled={item.status !== 'Claimable'}
-                      className={`w-full md:w-32 py-2.5 rounded-xl font-label-mono font-bold text-xs transition-all ${
+                      className={`w-full md:w-32 py-3 rounded-xl font-label-mono font-bold text-xs transition-all ${
                         item.status === 'Claimable' 
-                          ? 'bg-primary text-black shadow-[0_0_15px_rgba(198,198,198,0.2)]' 
-                          : 'bg-white/5 text-on-surface-variant cursor-not-allowed'
+                          ? 'bg-neon-red text-white shadow-[0_0_15px_rgba(255,46,46,0.2)] hover:shadow-[0_0_25px_rgba(255,46,46,0.5)]' 
+                          : 'bg-white/5 text-on-surface-variant cursor-not-allowed border border-white/5'
                       }`}
                     >
                       {item.status === 'Claimable' ? 'Claim Tokens' : 'Locked'}
@@ -148,7 +149,7 @@ export default function MyAllocations() {
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card p-12 border-white/5 rounded-3xl text-center relative overflow-hidden group">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 rounded-full blur-[80px] group-hover:bg-primary/20 transition-colors"></div>
               <span className="material-symbols-outlined text-6xl text-primary/50 mb-4 block relative z-10 animate-bounce">rocket_launch</span>
-              <h3 className="text-2xl font-display-lg font-bold text-white mb-2 relative z-10">Your Portfolio is Empty</h3>
+              <h3 className="text-3xl font-display-lg font-bold text-white mb-2 relative z-10">Your Portfolio is Empty</h3>
               <p className="text-on-surface-variant max-w-sm mx-auto mb-6 relative z-10">
                 You haven't participated in any launches yet. Explore upcoming projects and secure your first allocation!
               </p>
