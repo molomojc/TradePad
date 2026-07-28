@@ -105,9 +105,7 @@ export default function Premium() {
 
   return (
     <PageTransition className="px-6 md:px-margin-desktop py-24 min-h-screen relative animate-in fade-in duration-300 overflow-hidden">
-      <div className="glow-sphere w-[480px] h-[480px] bg-purple-500/10 -top-24 right-0"></div>
-      <div className="glow-sphere w-[420px] h-[420px] bg-primary/10 bottom-0 left-1/4"></div>
-
+    
       <div className="max-w-6xl mx-auto text-center">
         <span className="inline-flex items-center gap-2 font-label-mono text-purple-300 bg-purple-500/10 px-3 py-1 rounded-full text-caption border border-purple-500/20 tracking-wider">
           PREMIUM ACCESS

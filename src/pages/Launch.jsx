@@ -126,9 +126,7 @@ export default function HowItWorks() {
     <div className="px-6 md:px-margin-desktop py-24 min-h-screen text-left relative animate-in fade-in duration-500">
 
       {/* Background glowing bubbles */}
-      <div className="glow-sphere w-[500px] h-[500px] bg-primary/5 -top-32 right-10"></div>
-      <div className="glow-sphere w-[400px] h-[400px] bg-purple-500/5 bottom-10 left-10"></div>
-
+ 
       {/* Intro Header */}
       <Reveal>
         <section className="max-w-3xl mb-24">

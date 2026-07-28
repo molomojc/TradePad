@@ -160,9 +160,6 @@ export default function Home({ setActiveTab }) {
 
   return (
     <div className="animate-in fade-in duration-500 relative px-6 md:px-margin-desktop py-12 overflow-hidden">
-      <div className="glow-sphere w-[520px] h-[520px] bg-primary/10 -top-28 -left-24"></div>
-      <div className="glow-sphere w-[420px] h-[420px] bg-purple-500/10 top-24 right-0"></div>
-      <div className="glow-sphere w-[320px] h-[320px] bg-cyan-400/10 bottom-12 left-1/3"></div>
 
       <section
         className="relative py-20 md:py-28 px-6 md:px-12 rounded-[2rem] text-left border border-white/10 overflow-hidden bg-cover bg-center mb-16 shadow-2xl animate-in slide-in-from-bottom-6 duration-700"

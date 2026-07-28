@@ -11,79 +11,37 @@ export default function UserLayout() {
 
   useEffect(() => {
     let mounted = true;
-    fetchCurrentUserProfile().then(({ profile }) => {
-      if (mounted) setProfile(profile);
-    });
-    return () => {
-      mounted = false;
-    };
+    fetchCurrentUserProfile().then(({ profile: nextProfile }) => { if (mounted) setProfile(nextProfile); });
+    return () => { mounted = false; };
   }, []);
 
-  return (
-    <div className="min-h-screen bg-background text-on-background flex overflow-x-hidden relative">
-      {/* Global Ambient Background */}
-      <div className="fixed inset-0 cyber-grid opacity-10 pointer-events-none z-0"></div>
-      <div className="fixed top-[-20%] left-[-10%] w-[800px] h-[800px] bg-neon-red/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
-      <div className="fixed bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
-      {/* Sidebar fixed on the left */}
-      <div className="relative z-50">
-        <Sidebar type="user" open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      </div>
+  const displayName = profile?.full_name || profile?.email || (hasSupabaseConfig ? 'Account' : 'Jacob Miller');
 
-      {/* Main Content Area next to Sidebar */}
-      <main className="flex-1 flex flex-col min-h-screen relative md:ml-64 z-10">
-        <header className="h-20 border-b border-white/5 bg-background/80 backdrop-blur-xl sticky top-0 z-40 flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 min-w-0">
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(true)}
-              className="md:hidden w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white"
-              aria-label="Open navigation"
-            >
-              <span className="material-symbols-outlined text-[20px]">menu</span>
-            </button>
-            {/* Global Search */}
-            <div className="hidden sm:flex items-center bg-white/5 border border-white/10 rounded-full px-4 py-2 gap-3 focus-within:border-primary/50 transition-all w-full max-w-md">
-              <span className="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
-              <input
-                type="text"
-                placeholder="Search launches, tokens..."
-                className="bg-transparent border-none focus:ring-0 p-0 text-[14px] text-white placeholder:text-on-surface-variant/50 outline-none w-full min-w-0"
-              />
+  return (
+    <div className="relative flex min-h-screen overflow-x-hidden bg-background text-on-background">
+      <Sidebar type="user" open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="relative flex min-h-screen min-w-0 flex-1 flex-col md:ml-[260px]">
+        <header className="sticky top-0 z-30 flex h-20 items-center justify-between gap-4 border-b border-white/[0.07] bg-background/90 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
+          <div className="flex min-w-0 items-center gap-3">
+            <button type="button" onClick={() => setSidebarOpen(true)} className="header-icon-button md:hidden" aria-label="Open navigation"><span className="material-symbols-outlined text-[20px]">menu</span></button>
+            <div className="relative hidden w-[min(34vw,420px)] sm:block">
+              <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[19px] text-on-surface/30">search</span>
+              <input type="search" placeholder="Search launches, allocations, news..." className="dashboard-search" aria-label="Search workspace" />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 rounded border border-white/10 px-1.5 py-0.5 text-[9px] text-on-surface/25">⌘ K</span>
             </div>
           </div>
-
-          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-on-surface-variant hover:text-white hover:bg-white/10 transition-colors"
-              aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
-              title={isLight ? 'Dark mode' : 'Light mode'}
-            >
-              <span className="material-symbols-outlined text-[20px]">
-                {isLight ? 'dark_mode' : 'light_mode'}
-              </span>
+          <div className="flex shrink-0 items-center gap-2">
+            <button type="button" onClick={toggleTheme} className="header-icon-button" aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}><span className="material-symbols-outlined text-[19px]">{isLight ? 'dark_mode' : 'light_mode'}</span></button>
+            <button type="button" className="header-icon-button relative" aria-label="Notifications"><span className="material-symbols-outlined text-[19px]">notifications</span><span className="absolute right-2.5 top-2 h-1.5 w-1.5 rounded-full bg-neon-red ring-2 ring-background" /></button>
+            <div className="mx-1 hidden h-6 w-px bg-white/[0.08] sm:block" />
+            <button type="button" className="flex items-center gap-3 rounded-lg p-1.5 text-left transition-colors hover:bg-white/[0.04]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#3a3a3c] to-[#1a1a1c] text-xs font-semibold text-white ring-1 ring-white/10">{displayName.charAt(0).toUpperCase()}</div>
+              <div className="hidden max-w-36 sm:block"><p className="truncate text-xs font-semibold text-on-surface/85">{displayName}</p><p className="mt-0.5 text-[10px] text-on-surface/35">Premium account</p></div>
+              <span className="material-symbols-outlined hidden text-[16px] text-on-surface/30 sm:block">expand_more</span>
             </button>
-            <button className="material-symbols-outlined text-on-surface-variant hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors relative">
-              notifications
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full"></span>
-            </button>
-            <div className="flex items-center gap-3 pl-4 border-l border-white/10 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-purple-500 flex items-center justify-center font-bold text-black text-sm">
-                {(profile?.full_name || profile?.email || 'User').charAt(0).toUpperCase()}
-              </div>
-              <span className="font-label-mono text-sm text-white hidden md:block">
-                {profile?.full_name || profile?.email || (hasSupabaseConfig ? 'Guest' : 'Connect Supabase')}
-              </span>
-            </div>
           </div>
         </header>
-
-        {/* Page Content */}
-        <div className="flex-1 px-4 sm:px-6 lg:px-8 py-6 overflow-x-hidden">
-          <Outlet />
-        </div>
+        <div className="flex-1 px-4 py-7 sm:px-6 lg:px-8 lg:py-8"><Outlet /></div>
       </main>
     </div>
   );

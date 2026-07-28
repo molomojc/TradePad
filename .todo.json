@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Inspect previous-launch data and dashboard card",
+    "active_form": "Inspecting previous-launch data and dashboard card",
+    "status": "completed"
+  },
+  {
+    "content": "Replace portfolio growth with previous launch",
+    "active_form": "Replacing portfolio growth with previous launch",
+    "status": "completed"
+  },
+  {
+    "content": "Build and lint the updated dashboard",
+    "active_form": "Building and linting the updated dashboard",
+    "status": "completed"
+  }
+]
