@@ -83,7 +83,7 @@ export default function DashboardHome() {
     return (
       <PageTransition className="flex min-h-[65vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4 text-on-surface/50">
-          <div className="h-9 w-9 animate-spin rounded-full border-2 border-white/10 border-t-neon-red" />
+          <div className="h-9 w-9 animate-spin rounded-full border-2 border-white/10 border-t-primary" />
           <span className="dashboard-label">Loading workspace</span>
         </div>
       </PageTransition>
@@ -92,134 +92,162 @@ export default function DashboardHome() {
 
   return (
     <PageTransition className="mx-auto w-full max-w-[1440px] space-y-6 pb-10">
-      <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-8">
         <div>
-          <div className="mb-2 flex items-center gap-2 text-xs text-on-surface/45">
-            <span>Workspace</span><span>/</span><span className="text-on-surface/75">Overview</span>
+          <div className="mb-2 flex items-center gap-2 text-xs font-label-mono text-on-surface-variant uppercase tracking-wider">
+            <span>Workspace</span><span>/</span><span className="text-white">Overview</span>
           </div>
-          <h1 className="text-3xl font-semibold tracking-[-0.035em] text-on-surface sm:text-4xl">Good evening, {firstName}</h1>
-          <p className="mt-2 text-sm text-on-surface/50">Track the next coin release and stay up to date with launch news.</p>
+          <h1 className="text-3xl font-display-lg font-bold text-white sm:text-4xl mt-2 mb-2">Good evening, {firstName}</h1>
+          <p className="text-on-surface-variant max-w-md">Discover the next generation of premium, vetted community memecoin launches.</p>
         </div>
-        <div className="flex items-center gap-2 self-start rounded-lg border border-white/10 bg-white/[0.025] px-3 py-2 text-xs text-on-surface/55 sm:self-auto">
-          <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,.6)]" />
+        <div className="flex items-center gap-2 self-start rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-label-mono text-white sm:self-auto shadow-lg">
+          <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,.6)] animate-pulse" />
           All systems operational
         </div>
       </section>
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.65fr)_minmax(320px,.75fr)]">
-        <div className="dashboard-card overflow-hidden">
-          <div className="flex flex-col gap-4 border-b border-white/[0.07] px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
-            <div>
+        <div className="glass-card rounded-3xl overflow-hidden relative">
+          
+          {/* Card Header */}
+          <div className="flex flex-col gap-4 border-b border-white/[0.07] px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="relative z-10">
               <div className="mb-2 flex items-center gap-2">
-                <span className="dashboard-badge dashboard-badge-live"><span className="h-1.5 w-1.5 rounded-full bg-neon-red" /> Upcoming</span>
-                {isPremium && <span className="dashboard-badge">Premium access</span>}
+                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-primary/30 bg-primary/10 text-primary text-[10px] font-label-mono font-bold tracking-wider uppercase">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" /> Upcoming
+                </span>
+                {isPremium && <span className="inline-flex items-center px-2 py-1 rounded border border-purple-500/30 bg-purple-500/10 text-purple-400 text-[10px] font-label-mono font-bold tracking-wider uppercase">Premium access</span>}
               </div>
-              <h2 className="text-xl font-semibold tracking-tight text-on-surface">{isLaunchDay ? launchName : 'Next launch'}</h2>
+              <h2 className="text-2xl font-bold text-white font-display-lg">{isLaunchDay ? launchName : 'Next launch'}</h2>
             </div>
-            <Link to="/dashboard/user/upcoming" className="secondary-button">View details <span className="material-symbols-outlined text-[17px]">arrow_outward</span></Link>
+            <Link to="/dashboard/user/upcoming" className="secondary-button shrink-0 relative z-10 text-xs">View details <span className="material-symbols-outlined text-[16px]">arrow_outward</span></Link>
           </div>
 
           {isPremium && nextLaunch ? (
-            <div className="p-5 sm:p-7">
-              <div className="launch-panel relative overflow-hidden rounded-xl border border-white/[0.08] p-5 sm:p-7">
+            <div className="p-6 relative z-10">
+              <div className="launch-panel relative overflow-hidden rounded-2xl border border-white/10 p-6 bg-white/5 shadow-inner">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[50px] pointer-events-none"></div>
+                
                 <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
                   <div>
                     <p className="dashboard-label">{isLaunchDay ? 'Launching today' : 'Next launch in'}</p>
-                    <div className="mt-4 flex items-start gap-2 sm:gap-3">
+                    <div className="mt-4 flex items-start gap-3">
                       {[
                         ['Days', countdown.days], ['Hours', countdown.hrs], ['Minutes', countdown.min], ['Seconds', countdown.sec],
                       ].map(([label, value]) => (
                         <div key={label} className="min-w-0 flex-1 sm:flex-none">
-                          <div className="countdown-unit">{value}</div>
-                          <div className="mt-2 text-center text-[9px] font-semibold uppercase tracking-[0.15em] text-on-surface/35 sm:text-[10px]">{label}</div>
+                          <div className="text-3xl md:text-4xl font-label-mono font-bold text-white">{value}</div>
+                          <div className="mt-2 text-center text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">{label}</div>
                         </div>
                       ))}
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-6 border-t border-white/[0.08] pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
-                    <div><p className="dashboard-label">Participants</p><p className="mt-2 text-lg font-semibold">{nextLaunch.joined_count || 0}</p></div>
-                    <div><p className="dashboard-label">Target raise</p><p className="mt-2 text-lg font-semibold">{nextLaunch.target_raise || 'TBA'}</p></div>
+                    <div><p className="dashboard-label mb-2">Participants</p><p className="text-2xl font-bold text-white">{nextLaunch.joined_count || 0}</p></div>
+                    <div><p className="dashboard-label mb-2">Target raise</p><p className="text-2xl font-bold text-white">{nextLaunch.target_raise || 'TBA'}</p></div>
                   </div>
                 </div>
               </div>
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="flex items-center gap-2 text-xs text-on-surface/45"><span className="material-symbols-outlined text-[16px]">lock</span> Your priority allocation window is reserved.</p>
-                <Link to="/dashboard/user/upcoming" className="primary-button">Review launch <span className="material-symbols-outlined text-[17px]">arrow_forward</span></Link>
+              <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="flex items-center gap-2 text-sm text-on-surface-variant"><span className="material-symbols-outlined text-[18px] text-primary">lock</span> Your priority allocation window is reserved.</p>
+                <Link to="/dashboard/user/upcoming" className="primary-button text-xs">Review launch <span className="material-symbols-outlined text-[17px]">arrow_forward</span></Link>
               </div>
             </div>
           ) : (
-            <div className="flex min-h-64 flex-col items-center justify-center p-8 text-center">
-              <div className="metric-icon metric-icon-accent"><span className="material-symbols-outlined">lock</span></div>
-              <h3 className="mt-4 text-lg font-semibold">Unlock upcoming launches</h3>
-              <p className="mt-2 max-w-md text-sm text-on-surface/45">Upgrade to Premium for live launch details, priority windows, and allocation access.</p>
-              <Link to="/dashboard/user/premium" className="primary-button mt-5">Explore Premium</Link>
+            <div className="flex min-h-[300px] flex-col items-center justify-center p-8 text-center bg-gradient-to-b from-primary/5 to-transparent relative">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary/20 rounded-full blur-[60px] pointer-events-none"></div>
+              
+              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 relative z-10">
+                <span className="material-symbols-outlined text-3xl text-primary drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]">lock</span>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2 relative z-10 font-display-lg">Unlock upcoming launches</h3>
+              <p className="max-w-md text-sm text-on-surface-variant leading-relaxed mb-8 relative z-10">Upgrade to Premium for live launch details, priority windows, and allocation access before the public.</p>
+              <Link to="/dashboard/user/premium" className="bg-primary text-black px-8 py-3 rounded-xl font-label-mono font-bold text-sm shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:scale-105 transition-transform relative z-10">
+                Explore Premium
+              </Link>
             </div>
           )}
         </div>
 
-        <div className="dashboard-card flex flex-col overflow-hidden">
-          <div className="flex items-start justify-between gap-4 border-b border-white/[0.07] px-5 py-5 sm:px-7">
+        <div className="glass-card rounded-3xl flex flex-col overflow-hidden border-white/5 relative">
+          <div className="absolute bottom-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-[40px] pointer-events-none"></div>
+          <div className="flex items-start justify-between gap-4 border-b border-white/[0.07] px-6 py-6 relative z-10">
             <div>
-              <p className="dashboard-label">Launch archive</p>
-              <h2 className="mt-2 text-xl font-semibold">Previous launch</h2>
+              <p className="font-label-mono text-[10px] text-on-surface-variant uppercase tracking-wider mb-2">Launch archive</p>
+              <h2 className="text-xl font-bold text-white font-display-lg">Previous launch</h2>
             </div>
-            <Link to="/dashboard/user/previous" className="text-link">View all <span className="material-symbols-outlined text-[16px]">arrow_forward</span></Link>
+            <Link to="/dashboard/user/previous" className="text-on-surface-variant hover:text-white transition-colors flex items-center gap-1 text-sm font-semibold">View all <span className="material-symbols-outlined text-[16px]">arrow_forward</span></Link>
           </div>
 
           {previousLaunch ? (
-            <div className="flex flex-1 flex-col p-5 sm:p-7">
+            <div className="flex flex-1 flex-col p-6 relative z-10">
               <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-neon-red/20 bg-neon-red/[0.08] text-base font-bold text-neon-red">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-lg font-bold text-white shadow-inner">
                   {(previousLaunch.symbol || previousLaunch.name || 'L').slice(0, 3).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="truncate text-lg font-semibold text-on-surface">{previousLaunch.name || previousLaunch.title}</h3>
-                    <span className="dashboard-badge">{previousLaunch.status || 'Completed'}</span>
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <h3 className="truncate text-xl font-bold text-white">{previousLaunch.name || previousLaunch.title}</h3>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded border border-white/20 bg-white/10 text-white text-[9px] font-label-mono font-bold tracking-wider uppercase">{previousLaunch.status || 'Completed'}</span>
                   </div>
-                  <p className="mt-1.5 flex items-center gap-1.5 text-xs text-on-surface/40">
+                  <p className="flex items-center gap-1.5 text-xs text-on-surface-variant">
                     <span className="material-symbols-outlined text-[15px]">calendar_month</span>
                     Launched {previousLaunch.launch_at ? new Date(previousLaunch.launch_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'recently'}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-7 grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
-                  <p className="dashboard-label">Market cap</p>
-                  <p className="mt-2 text-base font-semibold text-on-surface">{previousLaunch.market_cap || 'Not reported'}</p>
+              <div className="mt-8 grid grid-cols-2 gap-4">
+                <div className="rounded-2xl border border-white/5 bg-white/5 p-5">
+                  <p className="dashboard-label mb-2">Market cap</p>
+                  <p className="text-lg font-bold text-white">{previousLaunch.market_cap || 'Not reported'}</p>
                 </div>
-                <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
-                  <p className="dashboard-label">Liquidity</p>
-                  <p className="mt-2 text-base font-semibold text-on-surface">{previousLaunch.liquidity || 'Not reported'}</p>
+                <div className="rounded-2xl border border-white/5 bg-white/5 p-5">
+                  <p className="dashboard-label mb-2">Liquidity</p>
+                  <p className="text-lg font-bold text-white">{previousLaunch.liquidity || 'Not reported'}</p>
                 </div>
               </div>
 
-              <div className="mt-5 flex items-center justify-between border-t border-white/[0.07] pt-5">
+              <div className="mt-auto pt-6 flex items-center justify-between">
                 <div>
-                  <p className="dashboard-label">Holders</p>
-                  <p className="mt-2 text-sm font-semibold text-on-surface">{previousLaunch.holder_count || 'Not reported'}</p>
+                  <p className="dashboard-label mb-1">Holders</p>
+                  <p className="text-base font-bold text-white">{previousLaunch.holder_count || 'Not reported'}</p>
                 </div>
-                <Link to={`/dashboard/user/launch/${previousLaunch.id}`} className="secondary-button">Launch report <span className="material-symbols-outlined text-[17px]">arrow_outward</span></Link>
+                <Link to={`/dashboard/user/launch/${previousLaunch.id}`} className="secondary-button text-xs">Launch report <span className="material-symbols-outlined text-[16px]">arrow_outward</span></Link>
               </div>
             </div>
           ) : (
-            <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
-              <div className="metric-icon"><span className="material-symbols-outlined">history</span></div>
-              <h3 className="mt-4 text-base font-semibold">No previous launch yet</h3>
-              <p className="mt-2 text-sm text-on-surface/40">The most recent completed coin launch will appear here.</p>
+            <div className="flex flex-1 flex-col items-center justify-center p-8 text-center relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                <span className="material-symbols-outlined text-white/40">history</span>
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">No previous launch yet</h3>
+              <p className="text-on-surface-variant text-sm mb-6 max-w-xs mx-auto">The most recent completed coin launch will appear here.</p>
             </div>
           )}
         </div>
       </section>
 
-      <section className="dashboard-card p-5 sm:p-7">
-        <div className="section-heading"><div><p className="dashboard-label">Market brief</p><h2 className="mt-2 text-xl font-semibold">Latest updates</h2></div><Link to="/dashboard/user/news" className="text-link">View all <span className="material-symbols-outlined text-[16px]">arrow_forward</span></Link></div>
-        <div className="mt-4 divide-y divide-white/[0.06]">
+      <section className="glass-card rounded-3xl p-6 md:p-8 border-white/5">
+        <div className="flex items-end justify-between border-b border-white/10 pb-4 mb-4">
+          <div>
+            <p className="font-label-mono text-[10px] text-on-surface-variant uppercase tracking-wider mb-2">Platform updates</p>
+            <h2 className="text-xl font-bold text-white font-display-lg">Latest news</h2>
+          </div>
+          <Link to="/dashboard/user/news" className="text-on-surface-variant hover:text-white transition-colors flex items-center gap-1 text-sm font-semibold">View all <span className="material-symbols-outlined text-[16px]">arrow_forward</span></Link>
+        </div>
+        <div className="divide-y divide-white/5">
           {news.map((item) => (
-            <Link key={item.id} to={`/dashboard/user/news/${item.slug}`} className="news-row group">
-              <div className="min-w-0"><div className="mb-1.5 flex items-center gap-2"><span className="text-[10px] font-semibold uppercase tracking-[0.13em] text-neon-red">{item.category || 'Update'}</span><span className="text-[10px] text-on-surface/30">•</span><span className="text-[10px] text-on-surface/35">{item.published_at ? new Date(item.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Recent'}</span></div><p className="truncate text-sm font-medium text-on-surface/80 transition-colors group-hover:text-on-surface">{item.title}</p></div>
-              <span className="material-symbols-outlined text-[17px] text-on-surface/25 transition-all group-hover:translate-x-1 group-hover:text-neon-red">arrow_forward</span>
+            <Link key={item.id} to={`/dashboard/user/news/${item.slug}`} className="flex items-center justify-between py-4 group hover:bg-white/[0.02] -mx-4 px-4 rounded-xl transition-colors">
+              <div className="min-w-0">
+                <div className="mb-2 flex items-center gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary">{item.category || 'Update'}</span>
+                  <span className="text-[10px] text-white/20">•</span>
+                  <span className="text-[10px] font-label-mono text-on-surface-variant">{item.published_at ? new Date(item.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Recent'}</span>
+                </div>
+                <p className="truncate text-base font-medium text-white/90 transition-colors group-hover:text-white">{item.title}</p>
+              </div>
+              <span className="material-symbols-outlined text-[20px] text-white/20 transition-all group-hover:translate-x-2 group-hover:text-primary">arrow_forward</span>
             </Link>
           ))}
         </div>

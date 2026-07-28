@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../lib/supabase'; // Adjust import path as needed
+import { Link, useNavigate } from 'react-router-dom';
+import useAuthStore from '../store/useAuthStore';
+import { supabase, hasSupabaseConfig } from '../lib/supabase'; // Adjust import path as needed
 
 export default function Home({ setActiveTab }) {
+  const navigate = useNavigate();
+  const openAuthModal = useAuthStore(state => state.openAuthModal);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalLaunches, setTotalLaunches] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const videoRef = useRef(null);
-  const autoPlayRef = useRef(null);
 
   // Fetch platform metrics and total launches
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!supabase) throw new Error('Supabase client not initialized');
+        
         // Get latest platform metrics
         const { data: metricsData, error: metricsError } = await supabase
           .from('platform_metrics')
@@ -52,14 +56,20 @@ export default function Home({ setActiveTab }) {
     fetchData();
   }, []);
 
-  // Auto-slide testimonials
-  useEffect(() => {
-    autoPlayRef.current = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-
-    return () => clearInterval(autoPlayRef.current);
-  }, []);
+  const handleViewLaunch = async (e) => {
+    e.preventDefault();
+    if (!hasSupabaseConfig) {
+      navigate('/dashboard/user/upcoming');
+      return;
+    }
+    
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      navigate('/dashboard/user/upcoming');
+    } else {
+      openAuthModal('login');
+    }
+  };
 
   const toggleMute = () => {
     setIsMuted((prev) => {
@@ -69,143 +79,122 @@ export default function Home({ setActiveTab }) {
     });
   };
 
-  const goToTestimonial = (index) => {
-    setCurrentTestimonial(index);
-    // Reset auto-play timer
-    clearInterval(autoPlayRef.current);
-    autoPlayRef.current = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-  };
-
-  const nextTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const prevTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
-
-  // Testimonials data
-  const testimonials = [
-    {
-      name: 'Alex Rivera',
-      role: 'Crypto Trader, 4 years experience',
-      content: 'TradePad completely changed how I approach new listings. Getting that 15-minute head start on premium has saved me from countless rug pulls and helped me catch genuine opportunities early.',
-      avatar: 'AR',
-      platform: 'Premium Member',
-    },
-    {
-      name: 'Sarah Chen',
-      role: 'DeFi Researcher',
-      content: 'The historical depth is unmatched. Being able to see how previous launches performed with full market context has made my research 10x more effective. This is the tool I wish I had years ago.',
-      avatar: 'SC',
-      platform: 'Free Member',
-    },
-    {
-      name: 'Marcus Thompson',
-      role: 'Crypto Hedge Fund Analyst',
-      content: "I've tried every launch tracker out there. TradePad's commitment to chronological ordering over opinion-based ranking is a game-changer. It's the only source I trust for unbiased launch data.",
-      avatar: 'MT',
-      platform: 'Premium Member',
-    },
-    {
-      name: 'Jessica Park',
-      role: 'Blockchain Developer',
-      content: 'The AI conviction scoring has been incredibly accurate for our team. We use it as a sanity check before deploying any capital into new projects. Saved us from at least 3 obvious scams last month alone.',
-      avatar: 'JP',
-      platform: 'Enterprise User',
-    },
-    {
-      name: 'David Kim',
-      role: 'Day Trader',
-      content: 'The speed of detection is insane. By the time other platforms show a launch, I\'ve already had 10 minutes to analyze and make a decision. TradePad is my secret weapon.',
-      avatar: 'DK',
-      platform: 'Premium Member',
-    },
-  ];
-
   // Static feature blocks
   const FEATURE_BLOCKS = [
     {
-      title: 'Free access',
-      description: 'See every public launch and the full historical archive — no subscription, no gimmicks.',
+      title: 'Verified Launches',
+      description: 'Every token is launched by the TradePad team. No public submissions, no anonymous developers, and no unverified projects.',
       accent: 'from-cyan-400/20 to-cyan-400/0',
+      icon: 'verified_user'
     },
     {
-      title: 'Premium research',
-      description: 'Get launches the moment they hit the feed, plus conviction scoring before the crowd arrives.',
+      title: 'Premium Early Access',
+      description: 'Premium members unlock the next launch before everyone else, including launch dates, countdown timers, project information, and member statistics.',
       accent: 'from-purple-400/20 to-purple-400/0',
+      icon: 'workspace_premium'
     },
     {
-      title: 'Historical depth',
-      description: 'Go back through every prior drop with performance snapshots and market context intact.',
+      title: 'Fair Launch Model',
+      description: 'Every launch follows the same transparent process. No hidden allocations, no insider groups, and no surprise listings.',
       accent: 'from-emerald-400/20 to-emerald-400/0',
+      icon: 'balance'
     },
   ];
 
   // Free tier features
   const freeTierItems = [
-    'Browse public listings',
-    'Search archived launches',
-    'Read platform notices',
+    'View completed launches',
+    'Browse project history',
+    'Follow platform announcements',
+    'Upgrade anytime',
   ];
 
   // Premium features
   const premiumItems = [
-    'Latest launch research',
-    'AI conviction scoring',
-    'Priority update stream',
+    'Upcoming launch details',
+    'Live launch countdown',
+    'Member participation tracker',
+    'Project roadmap',
+    'Token information',
+    'Instant launch notifications',
+  ];
+
+  const whyChooseCards = [
+    {
+      title: 'Transparent',
+      desc: 'Every launch is managed by our own team. No anonymous developers.',
+      icon: 'visibility'
+    },
+    {
+      title: 'Predictable',
+      desc: 'Launches happen on a consistent schedule so members always know when to prepare.',
+      icon: 'calendar_month'
+    },
+    {
+      title: 'Fair',
+      desc: 'Everyone gets the same launch information at the same time based on their membership level.',
+      icon: 'balance'
+    },
+    {
+      title: 'Trusted',
+      desc: 'Every project published on TradePad goes through an internal review before launch.',
+      icon: 'shield'
+    }
   ];
 
   return (
     <div className="animate-in fade-in duration-500 relative px-6 md:px-margin-desktop py-12 overflow-hidden">
 
+      {/* HERO SECTION */}
       <section
         className="relative py-20 md:py-28 px-6 md:px-12 rounded-[2rem] text-left border border-white/10 overflow-hidden bg-cover bg-center mb-16 shadow-2xl animate-in slide-in-from-bottom-6 duration-700"
         style={{
-          backgroundImage: `linear-gradient(to right, rgba(15, 15, 18, 0.97), rgba(15, 15, 18, 0.72)), url("/hero_background.png")`,
+          backgroundImage: `linear-gradient(to right, rgba(5, 5, 8, 0.97), rgba(5, 5, 8, 0.72)), url("/hero_background.png")`,
         }}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,255,0,0.08),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.10),transparent_30%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,240,255,0.08),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(181,51,255,0.10),transparent_30%)]"></div>
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-10 items-center">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 font-label-mono text-primary bg-primary/10 px-3.5 py-1.5 rounded-full text-caption border border-primary/20 tracking-wider animate-in fade-in slide-in-from-bottom-2 duration-500">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-              SPEED IS THE EDGE
+              THE NEXT LAUNCH STARTS HERE
             </span>
 
             <h1 className="font-display-lg text-4xl md:text-6xl font-bold mt-8 mb-6 text-white leading-tight tracking-tight animate-in fade-in slide-in-from-bottom-3 duration-700">
-              It's not about who's the best,
+              Premium, vetted
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-green-400">
-                it's who is first.
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-purple-400">
+                Solana token launches.
               </span>
             </h1>
 
-            <p className="font-body-lg text-on-surface-variant max-w-xl mb-8 leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-              TradePad tracks every new listing the second it appears and orders the feed by arrival time, not
-              opinion. Free members see the public queue. Premium members see it first.
-            </p>
+            <div className="font-body-lg text-on-surface-variant max-w-xl mb-8 leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 space-y-4">
+              <p>
+                TradePad is a launch platform built for fair, transparent Solana token launches.
+              </p>
+              <p>
+                Every project is created and verified by our team. Premium members receive early access to upcoming launches, countdown timers, project information, and launch notifications before they become public.
+              </p>
+            </div>
 
             <div className="flex flex-wrap gap-4 animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200">
               <button
-                onClick={() => setActiveTab?.('launch')}
-                className="bg-white text-black hover:bg-neutral-200 active:scale-95 transition-all px-8 py-3.5 rounded-full font-label-mono font-bold text-sm shadow-[0_10px_30px_rgba(255,255,255,0.10)]"
+                onClick={handleViewLaunch}
+                className="bg-primary text-black hover:bg-primary-fixed active:scale-95 transition-all px-8 py-3.5 rounded-full font-label-mono font-bold text-sm shadow-[0_0_20px_rgba(0,240,255,0.3)] inline-block"
               >
-                Browse Launches
+                View Upcoming Launch
               </button>
-              <button
-                onClick={() => setActiveTab?.('premium')}
-                className="bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all px-8 py-3.5 rounded-full font-label-mono font-bold text-sm text-white"
+              <Link
+                to="/pricing"
+                className="bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all px-8 py-3.5 rounded-full font-label-mono font-bold text-sm text-white backdrop-blur-md inline-block"
               >
-                View Premium
-              </button>
+                Become Premium
+              </Link>
             </div>
 
-            <p className="font-label-mono text-on-surface-variant/50 text-[11px] mt-6 tracking-wider uppercase">
-              New listings detected roughly every 90 seconds
+            <p className="font-label-mono text-on-surface-variant/70 text-[11px] mt-6 tracking-wider uppercase">
+              New launches every two weeks • No anonymous developers • No community listings
             </p>
           </div>
 
@@ -223,15 +212,14 @@ export default function Home({ setActiveTab }) {
             muted={isMuted}
             loop
             playsInline
-            className="w-full aspect-video object-cover"
+            className="w-full aspect-video object-cover bg-surface-dark"
           />
 
-          {/* subtle gradient so overlay controls stay legible on bright frames */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none"></div>
 
-          <span className="absolute top-5 left-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 font-label-mono text-[10px] text-white tracking-wider">
+          <span className="absolute top-5 left-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 font-label-mono text-[10px] text-white tracking-wider uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-            PLATFORM PREVIEW
+            HOW TRADEPAD WORKS
           </span>
 
           <button
@@ -246,166 +234,85 @@ export default function Home({ setActiveTab }) {
         </div>
       </section>
 
-      {/* Testimonials Carousel Section - White Theme */}
-      <section className="py-6 mb-6">
-        <div className="flex items-center gap-4 mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-white">
-            What our users say
-          </h2>
-          <div className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent"></div>
-          <span className="text-[11px] font-label-mono text-on-surface-variant/50 tracking-wider uppercase whitespace-nowrap">
-            {totalLaunches}+ launches tracked
-          </span>
-        </div>
-
-        {/* Carousel Container */}
-        <div className="relative glass-card rounded-3xl p-8 md:p-12 border-white/10 overflow-hidden bg-white/5 backdrop-blur-xl">
-          {/* White gradient accents */}
-          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/5 blur-3xl"></div>
-          <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-white/5 blur-3xl"></div>
-          
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevTestimonial}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white transition-all hover:scale-110"
-          >
-            <span className="material-symbols-outlined text-[20px]">chevron_left</span>
-          </button>
-          
-          <button
-            onClick={nextTestimonial}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white transition-all hover:scale-110"
-          >
-            <span className="material-symbols-outlined text-[20px]">chevron_right</span>
-          </button>
-
-          {/* Testimonials Slider */}
-          <div className="relative overflow-hidden">
-            <div 
-              className="flex transition-transform duration-700 ease-in-out"
-              style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
-            >
-              {testimonials.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="min-w-full px-8 py-4"
-                >
-                  <div className="max-w-3xl mx-auto text-center">
-                    {/* Quote Icon */}
-                    <div className="flex justify-center mb-4">
-                      <span className="material-symbols-outlined text-white/20 text-[48px]">
-                        format_quote
-                      </span>
-                    </div>
-                    
-                    {/* Content */}
-                    <p className="text-white text-lg md:text-xl leading-relaxed mb-6 font-light">
-                      "{testimonial.content}"
-                    </p>
-                    
-                    {/* Avatar & Info */}
-                    <div className="flex items-center justify-center gap-4">
-                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center font-bold text-white text-base border border-white/20">
-                        {testimonial.avatar}
-                      </div>
-                      <div className="text-left">
-                        <h4 className="text-white font-bold text-base">{testimonial.name}</h4>
-                        <p className="text-white/60 text-sm">{testimonial.role}</p>
-                        <span className="inline-block mt-1 text-[10px] font-label-mono text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
-                          {testimonial.platform}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Star Rating */}
-                    <div className="flex justify-center gap-1 mt-4">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i} className="material-symbols-outlined text-primary text-[18px]">
-                          star
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Dots Indicator */}
-          <div className="flex justify-center gap-2 mt-8">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToTestimonial(index)}
-                className={`transition-all duration-300 rounded-full ${
-                  currentTestimonial === index
-                    ? 'w-8 h-2 bg-white'
-                    : 'w-2 h-2 bg-white/30 hover:bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 py-6">
+      {/* Feature Cards */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 py-6 mb-10">
         {FEATURE_BLOCKS.map((block, index) => (
           <div
             key={block.title}
-            className="glass-card rounded-3xl p-6 border-white/10 relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500"
+            className="glass-card rounded-3xl p-8 border-white/10 relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 group"
             style={{ animationDelay: `${index * 120}ms` }}
           >
-            <div className={`absolute inset-0 bg-gradient-to-br ${block.accent} pointer-events-none`}></div>
+            <div className={`absolute inset-0 bg-gradient-to-br ${block.accent} pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-500`}></div>
             <div className="relative z-10">
-              <h3 className="text-white font-bold text-lg mb-3">{block.title}</h3>
+              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6 border border-white/10">
+                <span className="material-symbols-outlined text-primary text-2xl">{block.icon}</span>
+              </div>
+              <h3 className="text-white font-bold text-xl mb-3">{block.title}</h3>
               <p className="text-on-surface-variant text-[14px] leading-relaxed">{block.description}</p>
             </div>
           </div>
         ))}
       </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-4">
-        <div className="glass-card rounded-[2rem] p-8 border-white/10 overflow-hidden relative animate-in fade-in slide-in-from-left-6 duration-700">
-          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-primary/10 blur-3xl"></div>
-          <span className="text-[11px] font-label-mono text-primary tracking-wider uppercase block mb-3">
-            What free users get
-          </span>
-          <h3 className="text-2xl font-bold text-white mb-4">
-            Public launches, archives, and platform updates
+      {/* Why Choose TradePad Grid */}
+      <section className="py-12 mb-10">
+        <div className="flex items-center gap-4 mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-white font-display-lg">
+            Why members choose TradePad
+          </h2>
+          <div className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent"></div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {whyChooseCards.map((card, idx) => (
+            <div key={idx} className="glass-card p-8 rounded-3xl border-white/10 flex flex-col items-start hover:-translate-y-1 transition-transform duration-300">
+              <span className="material-symbols-outlined text-3xl text-primary mb-4 bg-primary/10 p-3 rounded-2xl border border-primary/20">
+                {card.icon}
+              </span>
+              <h3 className="text-white font-bold text-lg mb-2">{card.title}</h3>
+              <p className="text-on-surface-variant text-sm leading-relaxed">{card.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* How it Works - Free vs Premium */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-4 mb-10">
+        <div className="glass-card rounded-[2rem] p-8 md:p-12 border-white/10 overflow-hidden relative animate-in fade-in slide-in-from-left-6 duration-700">
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5 blur-3xl"></div>
+          
+          <h3 className="text-3xl font-display-lg font-bold text-white mb-4">
+            Explore the Platform
           </h3>
-          <p className="text-on-surface-variant leading-relaxed mb-6">
-            The free tier is built for discovery. Browse older coins, view public launch data, and follow the
-            platform as new entries are added — no subscription required.
+          <p className="text-on-surface-variant leading-relaxed mb-8 max-w-md">
+            Browse previous launches, learn about completed projects, and see how every launch performed after going live.
           </p>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {freeTierItems.map((item) => (
-              <div key={item} className="flex items-center gap-3 text-white text-sm">
-                <span className="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+              <div key={item} className="flex items-center gap-4 text-white text-sm font-medium">
+                <span className="material-symbols-outlined text-white/40 text-[20px]">check_circle</span>
                 {item}
               </div>
             ))}
           </div>
         </div>
 
-        <div className="glass-card rounded-[2rem] p-8 border-purple-500/20 overflow-hidden relative animate-in fade-in slide-in-from-right-6 duration-700">
-          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-purple-500/15 blur-3xl"></div>
-          <span className="absolute top-8 right-8 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 font-label-mono text-[10px] tracking-wide whitespace-nowrap">
-            ~15 MIN HEAD START
+        <div className="glass-card rounded-[2rem] p-8 md:p-12 border-primary/20 overflow-hidden relative animate-in fade-in slide-in-from-right-6 duration-700 bg-gradient-to-br from-primary/5 to-transparent">
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-primary/15 blur-3xl"></div>
+          <span className="absolute top-8 right-8 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary font-label-mono text-[10px] tracking-wide whitespace-nowrap shadow-[0_0_15px_rgba(0,240,255,0.1)]">
+            PREMIUM ACCESS
           </span>
-          <span className="text-[11px] font-label-mono text-purple-400 tracking-wider uppercase block mb-3">
-            What premium gets
-          </span>
-          <h3 className="text-2xl font-bold text-white mb-4 max-w-[85%]">
-            Latest data, conviction scores, and early signals
+          
+          <h3 className="text-3xl font-display-lg font-bold text-white mb-4 max-w-[85%] mt-8 lg:mt-0">
+            Know what's launching next
           </h3>
-          <p className="text-on-surface-variant leading-relaxed mb-6">
-            Premium members see launches as they're detected, with deeper analytics and a head start on the
-            information that matters before the crowd shows up.
+          <p className="text-on-surface-variant leading-relaxed mb-8 max-w-md">
+            Premium members receive exclusive access to upcoming launches before they are announced publicly, giving them time to research each project before launch day.
           </p>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {premiumItems.map((item) => (
-              <div key={item} className="flex items-center gap-3 text-white text-sm">
-                <span className="material-symbols-outlined text-purple-400 text-[18px]">star</span>
+              <div key={item} className="flex items-center gap-4 text-white text-sm font-medium">
+                <span className="material-symbols-outlined text-primary text-[20px] drop-shadow-[0_0_8px_rgba(0,240,255,0.4)]">star</span>
                 {item}
               </div>
             ))}
@@ -416,24 +323,24 @@ export default function Home({ setActiveTab }) {
       {/* Trust Badge Section */}
       <section className="py-6 mt-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
         <div className="glass-card rounded-3xl p-8 border-white/10 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-purple-500/5"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5"></div>
           <div className="relative z-10">
-            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 mb-4">
+            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 mb-6">
               <div className="flex items-center gap-3">
                 <span className="material-symbols-outlined text-primary text-[28px]">verified</span>
-                <span className="text-white font-bold">100% Transparency</span>
+                <span className="text-white font-bold text-lg">Verified Projects</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-cyan-400 text-[28px]">bolt</span>
-                <span className="text-white font-bold">Real-time Detection</span>
+                <span className="material-symbols-outlined text-primary text-[28px]">visibility</span>
+                <span className="text-white font-bold text-lg">Transparent Launch Process</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-emerald-400 text-[28px]">shield</span>
-                <span className="text-white font-bold">Community Trusted</span>
+                <span className="material-symbols-outlined text-primary text-[28px]">handshake</span>
+                <span className="text-white font-bold text-lg">Built for Long-Term Members</span>
               </div>
             </div>
-            <p className="text-on-surface-variant text-sm">
-              Join thousands of traders who rely on TradePad for unbiased, chronological launch data
+            <p className="text-on-surface-variant text-sm max-w-2xl mx-auto leading-relaxed">
+              TradePad is building a safer and more transparent way to discover new Solana launches. Every project is reviewed, scheduled, and launched through one trusted platform.
             </p>
           </div>
         </div>

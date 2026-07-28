@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
-export default function Sidebar({ type = 'user', open = false, onClose }) {
+export default function Sidebar({ type = 'user', open = false, onClose, isPremium = false }) {
   const navigate = useNavigate();
   const userLinks = [
     { name: 'Overview', path: '/dashboard/user', icon: 'space_dashboard', end: true },
@@ -59,7 +59,29 @@ export default function Sidebar({ type = 'user', open = false, onClose }) {
         </nav>
 
         <div className="p-3">
-          {type === 'user' && <div className="mb-3 rounded-xl border border-white/[0.07] bg-white/[0.025] p-4"><div className="flex items-center gap-2 text-xs font-medium text-white/80"><span className="material-symbols-outlined text-[17px] text-amber-400">verified</span> Premium member</div><p className="mt-2 text-[11px] leading-5 text-white/35">Priority access is active on your account.</p></div>}
+          {type === 'user' && (
+            isPremium ? (
+              <div className="mb-3 rounded-xl border border-primary/20 bg-primary/5 p-4 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-full blur-xl pointer-events-none"></div>
+                <div className="flex items-center gap-2 text-xs font-label-mono font-bold text-white relative z-10">
+                  <span className="material-symbols-outlined text-[17px] text-primary">workspace_premium</span> 
+                  Premium Member
+                </div>
+                <p className="mt-2 text-[11px] leading-relaxed text-on-surface-variant relative z-10">Priority access is active on your account.</p>
+              </div>
+            ) : (
+              <div className="mb-3 rounded-xl border border-white/5 bg-white/5 p-4 hover:border-white/10 transition-colors">
+                <div className="flex items-center gap-2 text-xs font-label-mono font-bold text-white">
+                  <span className="material-symbols-outlined text-[17px] text-white/40">explore</span> 
+                  Free Account
+                </div>
+                <p className="mt-2 text-[11px] leading-relaxed text-on-surface-variant mb-3">Upgrade to unlock early launch details.</p>
+                <Link to="/dashboard/user/premium" onClick={onClose} className="block w-full py-2 text-center rounded-lg bg-primary text-black text-[10px] font-label-mono font-bold tracking-wide hover:scale-105 transition-transform shadow-[0_0_10px_rgba(0,240,255,0.2)]">
+                  UPGRADE NOW
+                </Link>
+              </div>
+            )
+          )}
           {type === 'admin' && <Link to="/dashboard/user" onClick={onClose} className="sidebar-link"><span className="material-symbols-outlined text-[19px]">person</span>Switch to user</Link>}
           <button type="button" onClick={handleSignOut} className="sidebar-link w-full hover:!text-red-300"><span className="material-symbols-outlined text-[19px]">logout</span>Sign out</button>
         </div>

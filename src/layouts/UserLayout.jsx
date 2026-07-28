@@ -16,17 +16,18 @@ export default function UserLayout() {
   }, []);
 
   const displayName = profile?.full_name || profile?.email || (hasSupabaseConfig ? 'Account' : 'Jacob Miller');
+  const isPremium = profile?.access_tier === 'premium' || profile?.is_premium;
 
   return (
     <div className="relative flex min-h-screen overflow-x-hidden bg-background text-on-background">
-      <Sidebar type="user" open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar type="user" open={sidebarOpen} onClose={() => setSidebarOpen(false)} isPremium={isPremium} />
       <main className="relative flex min-h-screen min-w-0 flex-1 flex-col md:ml-[260px]">
         <header className="sticky top-0 z-30 flex h-20 items-center justify-between gap-4 border-b border-white/[0.07] bg-background/90 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <button type="button" onClick={() => setSidebarOpen(true)} className="header-icon-button md:hidden" aria-label="Open navigation"><span className="material-symbols-outlined text-[20px]">menu</span></button>
             <div className="relative hidden w-[min(34vw,420px)] sm:block">
               <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[19px] text-on-surface/30">search</span>
-              <input type="search" placeholder="Search launches, allocations, news..." className="dashboard-search" aria-label="Search workspace" />
+              <input type="search" placeholder="Search launches, allocations, news..." className="w-full bg-white/5 border border-white/10 rounded-lg py-2 pl-10 pr-12 text-sm text-white placeholder-white/40 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all" aria-label="Search workspace" />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 rounded border border-white/10 px-1.5 py-0.5 text-[9px] text-on-surface/25">⌘ K</span>
             </div>
           </div>

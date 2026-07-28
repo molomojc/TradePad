@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import useAuthStore from '../store/useAuthStore';
 
 /* ---------- Scroll-reveal wrapper ---------- */
 function Reveal({ children, className = '', delay = 0 }) {
@@ -45,55 +47,51 @@ function Chip({ children }) {
 
 export default function HowItWorks() {
   const [activeFaq, setActiveFaq] = useState(null);
+  const openAuthModal = useAuthStore(state => state.openAuthModal);
 
   const steps = [
     {
       num: '01',
-      title: 'Create Your Account',
+      title: 'Create your account',
       tagline: 'Create your free account in minutes.',
       icon: 'person_add',
       items: ['Register with your email', 'Verify your account', 'Access your personal dashboard'],
     },
     {
       num: '02',
-      title: 'Connect Your Wallet',
-      tagline: 'Securely connect your preferred Solana wallet.',
-      icon: 'account_balance_wallet',
-      chips: ['Phantom', 'Backpack', 'Solflare'],
-      note: 'No private key or seed phrase requested — your assets always remain under your control.',
+      title: 'Become Premium (optional)',
+      tagline: 'Premium members unlock upcoming launch information before it becomes available to free members.',
+      icon: 'workspace_premium',
       items: [],
     },
     {
       num: '03',
-      title: 'Explore the Upcoming Launch',
+      title: 'View the upcoming launch',
       tagline: 'Every two weeks, our team prepares a brand-new community launch.',
       icon: 'explore',
-      items: ['Countdown timer & launch date', 'Project overview & tokenomics', 'Supply & community updates'],
-      note: 'Premium members get early research and insights before public release.',
-    },
-    {
-      num: '04',
-      title: 'Join the Launch',
-      tagline: 'When registrations open, choose how much you want to participate with.',
-      icon: 'rocket_launch',
-      chips: ['0.25 SOL', '0.5 SOL', '1 SOL', 'Custom'],
-      note: 'Review estimated fees and slippage before you confirm.',
       items: [],
     },
     {
+      num: '04',
+      title: 'Watch the countdown',
+      tagline: 'Prepare for Launch Day',
+      icon: 'timer',
+      items: ['Launch countdown', 'Project overview', 'Launch notifications', 'Community participation'],
+    },
+    {
       num: '05',
-      title: 'Launch Day',
+      title: 'Launch day',
       tagline: 'When the countdown hits zero, the token officially launches.',
       icon: 'celebration',
-      items: ['Market cap & liquidity', 'Trading volume & holder count', 'Live chart & recent transactions'],
+      items: ['Launch goes live', 'Community begins trading', 'Watch the project grow'],
       badge: 'LIVE',
     },
     {
       num: '06',
-      title: 'Monitor Performance',
+      title: 'Explore previous launches',
       tagline: 'Track everything directly from your secure dashboard.',
       icon: 'monitoring',
-      items: ['Holdings & current value', 'Profit & loss (P&L)', 'Live alerts & notifications'],
+      items: ['Review previous launches', 'Track completed projects', 'Prepare for the next launch'],
     },
   ];
 
@@ -108,11 +106,11 @@ export default function HowItWorks() {
     },
     {
       q: 'How often do launches happen?',
-      a: 'New community launches take place every two weeks, each announced in advance with a live countdown visible to all members.',
+      a: 'TradePad launches a new project approximately every two weeks. Every launch includes a public countdown so members always know when the next opportunity is approaching.',
     },
     {
       q: 'Can anyone join?',
-      a: 'Yes. Anyone with a supported Solana wallet can create a free account and participate. Upgrading to Premium unlocks additional research and analytics.',
+      a: 'Anyone can create a free TradePad account. Premium membership unlocks early access to upcoming launches and exclusive launch information before it becomes public.',
     },
     {
       q: 'Is profit guaranteed?',
@@ -125,8 +123,6 @@ export default function HowItWorks() {
   return (
     <div className="px-6 md:px-margin-desktop py-24 min-h-screen text-left relative animate-in fade-in duration-500">
 
-      {/* Background glowing bubbles */}
- 
       {/* Intro Header */}
       <Reveal>
         <section className="max-w-3xl mb-24">
@@ -134,12 +130,11 @@ export default function HowItWorks() {
             PLATFORM WORKFLOW
           </span>
           <h1 className="font-display-lg text-4xl md:text-5xl text-white mt-6 mb-4 font-bold tracking-tight">
-            Welcome to Fair Launches
+            How TradePad Works
           </h1>
-          <p className="text-on-surface-variant font-body-lg leading-relaxed">
-            Unlike traditional memecoin trading where you discover projects after they've already pumped, our
-            platform gives members the opportunity to participate from the very beginning. Every launch follows a
-            transparent, audited process designed to provide fair access.
+          <p className="text-on-surface-variant font-body-lg leading-relaxed space-y-4 flex flex-col">
+            <span>TradePad is a launch platform built around transparency and trust.</span>
+            <span>Instead of chasing tokens after they've already launched, members know exactly when the next TradePad project is coming. Every launch follows the same process—from announcement to countdown to launch day—so everyone has a fair opportunity to participate.</span>
           </p>
         </section>
       </Reveal>
@@ -208,7 +203,7 @@ export default function HowItWorks() {
                         </div>
                       )}
 
-                      {step.items.length > 0 && (
+                      {step.items && step.items.length > 0 && (
                         <ul className="space-y-2 mb-4">
                           {step.items.map((item, itemIdx) => (
                             <li key={itemIdx} className="flex items-center gap-2.5 text-caption text-white">
@@ -246,21 +241,21 @@ export default function HowItWorks() {
               <span className="font-label-mono text-[11px] text-purple-400 tracking-wider uppercase block mb-3 font-bold">
                 // TIER UPGRADE
               </span>
-              <h3 className="font-display-lg text-2xl md:text-3xl text-white font-bold mb-4">Premium Membership</h3>
+              <h3 className="font-display-lg text-2xl md:text-3xl text-white font-bold mb-4">Why Go Premium?</h3>
               <p className="text-on-surface-variant text-[14px] leading-relaxed mb-8">
-                Unlock advanced telemetry features and detailed analytics reports designed for serious traders.
+                Premium membership gives you early access to upcoming launches before they become public. You'll know what is launching next, when it launches, and how many members are preparing for it.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  'Early launch information',
-                  'Advanced project research',
-                  'AI-powered market insights',
-                  'Wallet analytics',
-                  'Smart money tracking',
-                  'Premium community access',
-                  'Advanced notifications',
-                  'Exclusive reports',
+                  'Upcoming launch access',
+                  'Live countdown timer',
+                  'Project overview',
+                  'Token information',
+                  'Launch notifications',
+                  'Member participation count',
+                  'Everything in Free',
+                  'Priority support',
                 ].map((label, i) => (
                   <div key={i} className="flex items-center gap-3 text-caption text-white font-label-mono">
                     <span className="material-symbols-outlined text-[16px] text-purple-400">stars</span>
@@ -276,16 +271,20 @@ export default function HowItWorks() {
           <div className="glass-card rounded-[2.5rem] p-8 md:p-10 border-white/5 flex flex-col justify-between hover:border-white/10 transition-all duration-300 h-full">
             <div>
               <span className="font-label-mono text-[11px] text-primary tracking-wider uppercase block mb-3 font-bold">
-                // DATA CONVICTION
+                // OUR PROMISE
               </span>
               <h3 className="font-display-lg text-2xl md:text-3xl text-white font-bold mb-4">Transparency First</h3>
               <p className="text-on-surface-variant text-[14px] leading-relaxed mb-8">
-                Every single launch is permanently recorded on the blockchain and listed inside our public
-                dashboard. We believe trust is built through transparent data reporting.
+                Every project published on TradePad is launched by our own team. We do not allow public submissions, anonymous developers, or unverified launches.
               </p>
 
               <div className="space-y-3.5">
-                {['Previous launches log', 'Historical performance audits', 'Community consensus ratings', 'Full audit reports'].map(
+                {[
+                  'Verified TradePad launches',
+                  'Transparent roadmap',
+                  'Public launch schedule',
+                  'Trusted launch process'
+                ].map(
                   (label, i) => (
                     <div key={i} className="flex items-center gap-3 text-caption text-white font-label-mono">
                       <span className="material-symbols-outlined text-[18px] text-green-400">check_circle</span>
@@ -354,26 +353,25 @@ export default function HowItWorks() {
             <div className="absolute inset-0 scanline-overlay opacity-10 pointer-events-none"></div>
 
             <h2 className="font-display-lg text-white mb-4 text-3xl md:text-4xl font-bold tracking-tight">
-              Ready for the Next Launch?
+              Be Ready Before Everyone Else
             </h2>
             <p className="text-on-surface-variant max-w-xl mx-auto mb-10 text-[14px] leading-relaxed">
-              Join thousands of community members preparing for the next fair launch. Connect your wallet to access
-              the genesis whitelist.
+              Create your free account today or upgrade to Premium to unlock early access to upcoming launches, live countdowns, and exclusive launch information.
             </p>
 
             <div className="flex flex-wrap justify-center gap-4">
               <button
-                onClick={() => alert('Simulating free account registration!')}
+                onClick={() => openAuthModal('signup')}
                 className="bg-white text-black hover:bg-neutral-200 active:scale-95 transition-all px-8 py-3.5 rounded-full font-label-mono font-bold text-xs"
               >
-                Create Your Free Account
+                Create Free Account
               </button>
-              <button
-                onClick={() => alert('Redirecting to subscription portal...')}
+              <Link
+                to="/pricing"
                 className="bg-[#8b5cf6] text-white hover:bg-[#7c3aed] active:scale-95 transition-all px-8 py-3.5 rounded-full font-label-mono font-bold text-xs shadow-[0_4px_15px_rgba(139,92,246,0.25)]"
               >
-                Upgrade to Premium
-              </button>
+                Become Premium
+              </Link>
             </div>
           </div>
         </section>

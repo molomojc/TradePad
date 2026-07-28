@@ -64,13 +64,13 @@ export default {
         "margin-mobile": "20px"
       },
       fontFamily: {
-        "body-lg": ["Inter"],
-        "label-mono": ["JetBrains Mono"],
-        "display-lg": ["Inter"],
-        "headline-md": ["Inter"],
-        "caption": ["Inter"],
-        "headline-lg": ["Inter"],
-        "body-md": ["Inter"]
+        "body-lg": ["Outfit", "sans-serif"],
+        "body-md": ["Outfit", "sans-serif"],
+        "label-mono": ["JetBrains Mono", "monospace"],
+        "display-lg": ["Space Grotesk", "sans-serif"],
+        "headline-lg": ["Space Grotesk", "sans-serif"],
+        "headline-md": ["Space Grotesk", "sans-serif"],
+        "caption": ["Outfit", "sans-serif"]
       },
       fontSize: {
         "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
