@@ -13,7 +13,7 @@ export default function RiskDisclosure() {
         <p className="text-on-surface-variant font-mono text-xs">Last Updated: July 2026</p>
       </div>
 
-      <div className="glass-card p-8 md:p-12 rounded-[2rem] border-red-500/10 bg-gradient-to-b from-red-500/5 to-transparent space-y-8 text-on-surface-variant leading-relaxed text-sm relative overflow-hidden">
+      <div className="glass-card p-5 sm:p-8 md:p-12 rounded-2xl md:rounded-[2rem] border-red-500/10 bg-gradient-to-b from-red-500/5 to-transparent space-y-8 text-on-surface-variant leading-relaxed text-sm relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-[80px] pointer-events-none"></div>
 
         <section className="space-y-3">

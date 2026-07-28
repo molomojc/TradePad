@@ -320,7 +320,7 @@ export default function LaunchDetails() {
 
             {/* Premium Interactive Graph (Iframe or SVG fallback) */}
             {launch.pair_address || dexData?.pairAddress ? (
-              <div className="h-[450px] w-full rounded-2xl overflow-hidden border border-white/5 bg-black/40 relative">
+              <div className="h-[300px] sm:h-[400px] md:h-[450px] w-full rounded-2xl overflow-hidden border border-white/5 bg-black/40 relative">
                 <iframe 
                   title="dexscreener-chart"
                   src={`https://dexscreener.com/solana/${launch.pair_address || dexData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}

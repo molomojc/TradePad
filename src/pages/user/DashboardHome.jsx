@@ -210,13 +210,13 @@ export default function DashboardHome() {
                     <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
                       <div>
                         <p className="dashboard-label">{isLaunchDay ? 'Launching today' : 'Next launch in'}</p>
-                        <div className="mt-4 flex items-start gap-3">
+                        <div className="mt-4 flex items-start gap-2 sm:gap-3">
                           {[
                             ['Days', countdown.days], ['Hours', countdown.hrs], ['Minutes', countdown.min], ['Seconds', countdown.sec],
                           ].map(([label, value]) => (
                             <div key={label} className="min-w-0 flex-1 sm:flex-none">
-                              <div className="text-3xl md:text-4xl font-mono font-bold text-white">{value}</div>
-                              <div className="mt-2 text-center text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">{label}</div>
+                              <div className="text-2xl sm:text-3xl md:text-4xl font-mono font-bold text-white">{value}</div>
+                              <div className="mt-2 text-center text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">{label}</div>
                             </div>
                           ))}
                         </div>

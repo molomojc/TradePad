@@ -13,7 +13,7 @@ export default function DataPolicy() {
         <p className="text-on-surface-variant font-mono text-xs">Last Updated: July 2026</p>
       </div>
 
-      <div className="glass-card p-8 md:p-12 rounded-[2rem] border-white/5 space-y-8 text-on-surface-variant leading-relaxed text-sm">
+      <div className="glass-card p-5 sm:p-8 md:p-12 rounded-2xl md:rounded-[2rem] border-white/5 space-y-8 text-on-surface-variant leading-relaxed text-sm">
         <section className="space-y-3">
           <h2 className="text-xl text-white font-bold font-display">1. Information We Collect</h2>
           <p>

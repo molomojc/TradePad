@@ -17,9 +17,9 @@ export default function Documentation() {
         
         {/* Left Column: Side Navigation */}
         <div className="md:col-span-1 space-y-4">
-          <div className="glass-card p-6 rounded-2xl border-white/5 space-y-4 sticky top-24">
+          <div className="glass-card p-5 rounded-2xl border-white/5 space-y-4 md:sticky md:top-24">
             <h3 className="font-display font-bold text-white text-sm uppercase tracking-wider">Sections</h3>
-            <nav className="flex flex-col gap-2.5 text-xs">
+            <nav className="flex flex-row flex-wrap md:flex-col gap-2 md:gap-2.5 text-xs">
               <a href="#introduction" className="text-on-surface-variant hover:text-white transition-colors">Introduction</a>
               <a href="#how-it-works" className="text-on-surface-variant hover:text-white transition-colors">How it Works</a>
               <a href="#premium-benefits" className="text-on-surface-variant hover:text-white transition-colors">Premium Benefits</a>
