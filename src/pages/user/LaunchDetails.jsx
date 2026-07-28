@@ -27,8 +27,37 @@ export default function LaunchDetails() {
   const [activeTimelineStep, setActiveTimelineStep] = useState(4); // Default to DEX step for archive
   const [hasJoined, setHasJoined] = useState(false);
   const [joining, setJoining] = useState(false);
+  
+  const [dexData, setDexData] = useState(null);
+  const [dexLoading, setDexLoading] = useState(false);
 
   const isPremium = profile?.access_tier === 'premium' || profile?.is_premium;
+
+  useEffect(() => {
+    if (!launch?.mint_address) return;
+    
+    let active = true;
+    const fetchDexData = async () => {
+      if (!active) return;
+      try {
+        const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${launch.mint_address}`);
+        const json = await res.json();
+        if (active && json.pairs && json.pairs.length > 0) {
+          const sorted = json.pairs.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0));
+          setDexData(sorted[0]);
+        }
+      } catch (err) {
+        console.error('Error fetching DexScreener data:', err);
+      }
+    };
+
+    fetchDexData();
+    const interval = setInterval(fetchDexData, 10000);
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
+  }, [launch?.mint_address]);
 
   useEffect(() => {
     const load = async () => {
@@ -243,8 +272,8 @@ export default function LaunchDetails() {
     );
   }
 
-  // Redesigned Completed/Archived Launch Details View
-  const isPositiveChange = launch.price_change_24h >= 0;
+  const priceChange = dexData ? Number(dexData.priceChange?.h24 || 0) : Number(launch.price_change_24h || 0);
+  const isPositiveChange = priceChange >= 0;
 
   return (
     <PageTransition className="max-w-7xl mx-auto space-y-8 pb-16">
@@ -253,8 +282,12 @@ export default function LaunchDetails() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <span className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-mono text-[10px] font-bold tracking-wider uppercase">
-              ✓ Verified TradePad Launch
+            <span className={`px-3 py-1 rounded-full font-mono text-[10px] font-bold tracking-wider uppercase ${
+              launch.status === 'live' 
+                ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 animate-pulse'
+                : 'bg-primary/15 border border-primary/20 text-primary'
+            }`}>
+              {launch.status === 'live' ? '● Live Launch Active' : '✓ Verified TradePad Launch'}
             </span>
             <span className="text-on-surface-variant text-sm capitalize">{launch.chain}</span>
           </div>
@@ -263,8 +296,8 @@ export default function LaunchDetails() {
           </h1>
         </div>
         
-        <Link to="/dashboard/user/previous" className="bg-white/5 border border-white/10 text-white px-5 py-2.5 rounded-xl font-mono text-xs hover:bg-white/10 transition-colors">
-          ← Back to Archive
+        <Link to="/dashboard/user" className="bg-white/5 border border-white/10 text-white px-5 py-2.5 rounded-xl font-mono text-xs hover:bg-white/10 transition-colors">
+          ← Back to Overview
         </Link>
       </div>
 
@@ -273,7 +306,7 @@ export default function LaunchDetails() {
         {/* Left 2 Columns: Chart & Information */}
         <div className="lg:col-span-2 space-y-8">
           
-          {/* Large Interactive SVG Price Chart */}
+          {/* Large Interactive Price Chart */}
           <div className="glass-card p-6 md:p-8 rounded-[2rem] border-white/5 relative overflow-hidden">
             <div className="flex justify-between items-center mb-6">
               <div>
@@ -281,54 +314,123 @@ export default function LaunchDetails() {
                 <h3 className="text-lg font-bold text-white">Price History (24h)</h3>
               </div>
               <span className={`px-2.5 py-1 rounded font-mono text-xs font-bold ${isPositiveChange ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
-                {isPositiveChange ? '▲' : '▼'} {launch.price_change_24h}%
+                {isPositiveChange ? '▲' : '▼'} {priceChange}%
               </span>
             </div>
 
-            {/* Premium Interactive Graph (SVG) */}
-            <div className="h-64 w-full bg-black/20 rounded-2xl relative border border-white/5 flex items-end p-2 group cursor-crosshair">
-              {/* Grid Lines */}
-              <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none">
-                <div className="border-b border-white/[0.03] w-full h-px"></div>
-                <div className="border-b border-white/[0.03] w-full h-px"></div>
-                <div className="border-b border-white/[0.03] w-full h-px"></div>
-                <div className="border-b border-white/[0.03] w-full h-px"></div>
+            {/* Premium Interactive Graph (Iframe or SVG fallback) */}
+            {launch.pair_address || dexData?.pairAddress ? (
+              <div className="h-[450px] w-full rounded-2xl overflow-hidden border border-white/5 bg-black/40 relative">
+                <iframe 
+                  title="dexscreener-chart"
+                  src={`https://dexscreener.com/solana/${launch.pair_address || dexData.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
+                  className="w-full h-full border-none"
+                />
               </div>
-              
-              <svg className="w-full h-full text-primary drop-shadow-[0_0_15px_rgba(0,240,255,0.15)]" viewBox="0 0 500 200" fill="none">
-                <defs>
-                  <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.25" />
-                    <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M0,170 C50,140 80,180 120,130 C160,80 200,120 250,60 C300,10 340,90 380,40 C420,-10 460,30 500,10 L500,200 L0,200 Z"
-                  fill="url(#chartGrad)"
-                />
-                <path
-                  d="M0,170 C50,140 80,180 120,130 C160,80 200,120 250,60 C300,10 340,90 380,40 C420,-10 460,30 500,10"
-                  stroke="currentColor"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                />
+            ) : (
+              <>
+                <div className="h-64 w-full bg-black/20 rounded-2xl relative border border-white/5 flex items-end p-2 group cursor-crosshair">
+                  {/* Grid Lines */}
+                  <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none">
+                    <div className="border-b border-white/[0.03] w-full h-px"></div>
+                    <div className="border-b border-white/[0.03] w-full h-px"></div>
+                    <div className="border-b border-white/[0.03] w-full h-px"></div>
+                    <div className="border-b border-white/[0.03] w-full h-px"></div>
+                  </div>
+                  
+                  <svg className="w-full h-full text-primary drop-shadow-[0_0_15px_rgba(0,240,255,0.15)]" viewBox="0 0 500 200" fill="none">
+                    <defs>
+                      <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.25" />
+                        <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M0,170 C50,140 80,180 120,130 C160,80 200,120 250,60 C300,10 340,90 380,40 C420,-10 460,30 500,10 L500,200 L0,200 Z"
+                      fill="url(#chartGrad)"
+                    />
+                    <path
+                      d="M0,170 C50,140 80,180 120,130 C160,80 200,120 250,60 C300,10 340,90 380,40 C420,-10 460,30 500,10"
+                      stroke="currentColor"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                    />
+                    <circle cx="250" cy="60" r="5" className="fill-primary stroke-background stroke-2 hidden group-hover:block transition-all" />
+                  </svg>
+                  
+                  <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-surface border border-white/10 px-3 py-1.5 rounded-xl text-[11px] font-mono hidden group-hover:block text-white shadow-2xl">
+                    Price: {formatUsd(launch.price)} | Vol: {formatUsd(launch.volume_24h)}
+                  </div>
+                </div>
                 
-                {/* Simulated Hover dot indicator */}
-                <circle cx="250" cy="60" r="5" className="fill-primary stroke-background stroke-2 hidden group-hover:block transition-all" />
-              </svg>
-              
-              {/* Interactive Tooltip Simulation */}
-              <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-surface border border-white/10 px-3 py-1.5 rounded-xl text-[11px] font-mono hidden group-hover:block text-white shadow-2xl">
-                Price: {formatUsd(launch.price)} | Vol: {formatUsd(launch.volume_24h)}
+                <div className="flex justify-between items-center text-[10px] font-mono text-on-surface-variant/50 mt-3 px-1">
+                  <span>24h ago</span>
+                  <span>12h ago</span>
+                  <span>Live Price</span>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Live Transaction Metrics */}
+          {dexData?.txns && (
+            <div className="glass-card p-6 md:p-8 rounded-[2rem] border-white/5 space-y-6">
+              <div>
+                <p className="font-mono text-[10px] text-emerald-400 uppercase tracking-wider mb-1">Live Activity</p>
+                <h3 className="text-xl font-bold text-white font-display">DEX Transaction Metrics</h3>
+              </div>
+
+              {/* Buy vs Sell Progress Bar */}
+              {(() => {
+                const buys = Number(dexData.txns.h24?.buys || 0);
+                const sells = Number(dexData.txns.h24?.sells || 0);
+                const total = buys + sells;
+                const buyPct = total > 0 ? Math.round((buys / total) * 100) : 50;
+                const sellPct = 100 - buyPct;
+
+                return (
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs font-semibold">
+                      <span className="text-emerald-400">{buyPct}% Buys ({buys.toLocaleString()})</span>
+                      <span className="text-red-400">{sellPct}% Sells ({sells.toLocaleString()})</span>
+                    </div>
+                    <div className="h-3 w-full bg-red-500/20 rounded-full overflow-hidden flex">
+                      <div className="bg-emerald-400 h-full transition-all duration-500" style={{ width: `${buyPct}%` }}></div>
+                    </div>
+                    <p className="text-[10px] text-on-surface-variant font-mono uppercase tracking-wider">24H Transaction Ratio</p>
+                  </div>
+                );
+              })()}
+
+              {/* Transaction breakdown table */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { label: '5 Minutes', tx: dexData.txns.m5, vol: dexData.volume?.m5 },
+                  { label: '1 Hour', tx: dexData.txns.h1, vol: dexData.volume?.h1 },
+                  { label: '6 Hours', tx: dexData.txns.h6, vol: dexData.volume?.h6 },
+                  { label: '24 Hours', tx: dexData.txns.h24, vol: dexData.volume?.h24 },
+                ].map((col) => (
+                  <div key={col.label} className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                    <p className="font-mono text-[9px] text-on-surface-variant mb-2 uppercase">{col.label}</p>
+                    <div className="space-y-1.5 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-emerald-400 font-bold">Buys</span>
+                        <span className="text-white font-mono">{col.tx?.buys || 0}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-red-400 font-bold">Sells</span>
+                        <span className="text-white font-mono">{col.tx?.sells || 0}</span>
+                      </div>
+                      <div className="flex justify-between border-t border-white/5 pt-1.5 mt-1.5">
+                        <span className="text-on-surface-variant">Volume</span>
+                        <span className="text-white font-mono">{formatUsd(col.vol)}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-            
-            <div className="flex justify-between items-center text-[10px] font-mono text-on-surface-variant/50 mt-3 px-1">
-              <span>24h ago</span>
-              <span>12h ago</span>
-              <span>Live Price</span>
-            </div>
-          </div>
+          )}
 
           {/* About section */}
           <div className="glass-card p-8 rounded-[2rem] border-white/5 space-y-4">
@@ -391,24 +493,27 @@ export default function LaunchDetails() {
             
             <div className="space-y-4">
               <div className="flex justify-between items-center text-sm">
-                <span className="text-on-surface-variant">Current Price</span>
-                <span className="text-white font-bold font-mono">{formatUsd(launch.price)}</span>
+                <span className="text-on-surface-variant flex items-center gap-1.5">
+                  Current Price 
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
+                </span>
+                <span className="text-white font-bold font-mono">{formatUsd(dexData?.priceUsd || launch.price)}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-on-surface-variant">Market Cap</span>
-                <span className="text-white font-bold">{formatUsd(launch.market_cap)}</span>
+                <span className="text-white font-bold">{formatUsd(dexData?.fdv || dexData?.marketCap || launch.market_cap)}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-on-surface-variant">Liquidity</span>
-                <span className="text-white font-bold">{formatUsd(launch.liquidity)}</span>
+                <span className="text-white font-bold">{formatUsd(dexData?.liquidity?.usd || launch.liquidity)}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-on-surface-variant">24h Volume</span>
-                <span className="text-white font-bold">{formatUsd(launch.volume_24h)}</span>
+                <span className="text-white font-bold">{formatUsd(dexData?.volume?.h24 || launch.volume_24h)}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-on-surface-variant">FDV</span>
-                <span className="text-white font-bold">{formatUsd(launch.fdv)}</span>
+                <span className="text-white font-bold">{formatUsd(dexData?.fdv || launch.fdv)}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-on-surface-variant">Holders</span>

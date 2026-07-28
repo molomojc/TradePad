@@ -22,6 +22,7 @@ import Documentation from './pages/Documentation';
 
 // User Dashboard Pages
 import DashboardHome from './pages/user/DashboardHome';
+import LiveLaunches from './pages/user/LiveLaunches';
 import UpcomingLaunches from './pages/user/UpcomingLaunches';
 import PreviousLaunches from './pages/user/PreviousLaunches';
 import MyAllocations from './pages/user/MyAllocations';
@@ -71,6 +72,7 @@ function App() {
         {/* User Dashboard */}
         <Route path="/dashboard/user" element={<UserLayout />}>
           <Route index element={<ProtectedRoute><DashboardHome /></ProtectedRoute>} />
+          <Route path="live" element={<ProtectedRoute><LiveLaunches /></ProtectedRoute>} />
           <Route path="upcoming" element={<ProtectedRoute><UpcomingLaunches /></ProtectedRoute>} />
           <Route path="allocations" element={<ProtectedRoute><MyAllocations /></ProtectedRoute>} />
           <Route path="launch/:id" element={<ProtectedRoute><LaunchDetails /></ProtectedRoute>} />

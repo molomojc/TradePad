@@ -6,6 +6,7 @@ export default function Sidebar({ type = 'user', open = false, onClose, isPremiu
   const navigate = useNavigate();
   const userLinks = [
     { name: 'Overview', path: '/dashboard/user', icon: 'space_dashboard', end: true },
+    { name: 'Live launches', path: '/dashboard/user/live', icon: 'sensors' },
     { name: 'Upcoming launches', path: '/dashboard/user/upcoming', icon: 'rocket_launch' },
     { name: 'Previous launches', path: '/dashboard/user/previous', icon: 'history' },
     { name: 'My allocations', path: '/dashboard/user/allocations', icon: 'account_balance_wallet' },
