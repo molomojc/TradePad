@@ -24,8 +24,12 @@ export async function createCheckoutSession({ planSlug, successUrl, cancelUrl, u
   return payload;
 }
 
-export function getPaymentSuccessUrl() {
-  return `${window.location.origin}/payment/success`;
+export function getPaymentSuccessUrl(planSlug = '') {
+  const url = new URL(`${window.location.origin}/payment/success`);
+  if (planSlug) {
+    url.searchParams.set('plan', planSlug);
+  }
+  return url.toString();
 }
 
 export function getPaymentCancelUrl() {

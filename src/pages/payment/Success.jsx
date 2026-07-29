@@ -6,6 +6,7 @@ import { ensureProfileRow, fetchCurrentUserProfile, hasSupabaseConfig } from '..
 export default function PaymentSuccess() {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
+  const planSlug = searchParams.get('plan');
   const [statusMessage, setStatusMessage] = useState('Confirming your account status...');
 
   useEffect(() => {
@@ -21,17 +22,34 @@ export default function PaymentSuccess() {
         return;
       }
 
-      const { error } = await ensureProfileRow(session.user, {
+      const isFounding = planSlug === 'founding';
+
+      const updateData = {
         email: session.user.email,
         full_name: profile?.full_name || session.user.user_metadata?.full_name || session.user.email,
         username: profile?.username || session.user.user_metadata?.username || session.user.email?.split('@')[0],
         access_tier: 'premium',
         is_premium: true,
-      });
+      };
+
+      if (isFounding) {
+        updateData.is_founding_member = true;
+      }
+
+      const { error } = await ensureProfileRow(session.user, updateData);
 
       if (error) {
         setStatusMessage('Payment received. We could not update the profile row automatically, but the order is recorded.');
         return;
+      }
+
+      if (isFounding && !profile?.is_founding_member) {
+        try {
+          const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+          await fetch(`${apiBaseUrl}/api/claim-founding`, { method: 'POST' });
+        } catch (err) {
+          console.error('Failed to increment founding limit:', err);
+        }
       }
 
       setStatusMessage('Your profile has been upgraded to premium.');

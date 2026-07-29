@@ -124,7 +124,7 @@ export default function Premium() {
 
     const { url, sessionUrl, checkoutUrl } = await createCheckoutSession({
       planSlug: plan.slug,
-      successUrl: getPaymentSuccessUrl(),
+      successUrl: getPaymentSuccessUrl(plan.slug),
       cancelUrl: getPaymentCancelUrl(),
       userId: session?.user?.id,
       userEmail: session?.user?.email,

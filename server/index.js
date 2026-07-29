@@ -623,6 +623,31 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  if (req.method === 'POST' && req.url === '/api/claim-founding') {
+    try {
+      if (!supabaseAdmin) return sendJson(res, 500, { message: 'No admin client' });
+      const { data: currentSettings } = await supabaseAdmin
+        .from('platform_settings')
+        .select('value')
+        .eq('key', 'founding_offer')
+        .single();
+        
+      if (currentSettings?.value) {
+        const newValue = { 
+          ...currentSettings.value, 
+          claimed: (currentSettings.value.claimed || 0) + 1 
+        };
+        await supabaseAdmin
+          .from('platform_settings')
+          .update({ value: newValue })
+          .eq('key', 'founding_offer');
+      }
+      return sendJson(res, 200, { success: true });
+    } catch (e) {
+      return sendJson(res, 500, { message: e.message });
+    }
+  }
+
   return sendJson(res, 404, { message: 'Not found' });
 });
 
