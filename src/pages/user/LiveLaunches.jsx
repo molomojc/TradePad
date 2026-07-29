@@ -41,7 +41,7 @@ function LiveLaunchCard({ launch, isPremium, watchlist, toggleWatchlist }) {
     <motion.div 
       variants={itemVariants} 
       whileHover={{ scale: 1.02, y: -4 }}
-      className={`glass-card p-6 rounded-2xl border-outline-variant shadow-lg flex flex-col justify-between relative group bg-[#0a0a0a]/40 overflow-hidden ${showTeaser ? 'hover:border-amber-500/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.15)]' : 'hover:border-emerald-500/30 hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]'}`}
+      className={`glass-card p-6 rounded-2xl border-outline-variant shadow-lg flex flex-col justify-between relative group bg-surface overflow-hidden ${showTeaser ? 'hover:border-amber-500/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.15)]' : 'hover:border-emerald-500/30 hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]'}`}
     >
       <button
         onClick={(event) => toggleWatchlist(event, launch)}
@@ -196,7 +196,7 @@ export default function LiveLaunches() {
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="glass-card p-12 rounded-[2rem] border-outline-variant text-center bg-[#0a0a0a]/40">
+        <div className="glass-card p-12 rounded-[2rem] border-outline-variant text-center ">
           <span className="material-symbols-outlined text-5xl text-on-surface-variant/40 mb-4">history_toggle_off</span>
           <h3 className="text-xl text-on-surface font-bold mb-2">No launches active right now</h3>
           <p className="text-on-surface-variant max-w-sm mx-auto mb-6 text-sm">

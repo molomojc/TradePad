@@ -25,7 +25,7 @@ const CATEGORY_STYLES = {
 };
 
 function categoryClass(category) {
-  return CATEGORY_STYLES[(category || '').toLowerCase()] || 'bg-white/10 text-on-surface-variant';
+  return CATEGORY_STYLES[(category || '').toLowerCase()] || 'bg-surface-variant text-on-surface-variant';
 }
 
 function excerpt(post) {
@@ -113,7 +113,7 @@ export default function News() {
                   as={CardTag}
                   {...cardProps}
                   accent={post.featured ? 'neon-red' : 'primary'}
-                  className={`p-8 rounded-[2rem] block cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-neon-red/10 bg-[#0a0a0a]/50 border border-white/5 hover:border-neon-red/30 group relative overflow-hidden ${post.featured ? 'border-neon-red/20' : ''}`}
+                  className={`p-8 rounded-[2rem] block cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-neon-red/10 bg-surface border border-outline-variant hover:border-neon-red/30 group relative overflow-hidden ${post.featured ? 'border-neon-red/20' : ''}`}
                 >
                   <div className="absolute top-0 right-0 w-32 h-32 bg-neon-red/5 rounded-full blur-[50px] group-hover:bg-neon-red/10 transition-colors pointer-events-none"></div>
                   <div className="flex items-center gap-2 mb-4 relative z-10">
@@ -147,8 +147,8 @@ export default function News() {
         <Panel className="p-6">
           <div className="text-center py-24 relative overflow-hidden group">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/5 rounded-full blur-[80px] group-hover:bg-primary/10 transition-colors"></div>
-            <span className="material-symbols-outlined text-5xl text-white/20 mb-4 animate-pulse relative z-10 block">podcasts</span>
-            <h3 className="text-xl text-white font-bold mb-2 relative z-10">Quiet on the Radar</h3>
+            <span className="material-symbols-outlined text-5xl text-on-surface/20 mb-4 animate-pulse relative z-10 block">podcasts</span>
+            <h3 className="text-xl text-on-surface font-bold mb-2 relative z-10">Quiet on the Radar</h3>
             <p className="text-on-surface-variant text-sm relative z-10">Our scouts are out looking for the latest alpha. Check back soon!</p>
           </div>
         </Panel>

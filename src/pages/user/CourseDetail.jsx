@@ -124,8 +124,8 @@ export default function CourseDetail() {
   if (!course) {
     return (
       <PageTransition className="max-w-3xl mx-auto py-12 text-center">
-        <span className="material-symbols-outlined text-5xl text-white/20 mb-4">error</span>
-        <h3 className="text-xl text-white font-bold mb-2">Lecture Not Found</h3>
+        <span className="material-symbols-outlined text-5xl text-on-surface/20 mb-4">error</span>
+        <h3 className="text-xl text-on-surface font-bold mb-2">Lecture Not Found</h3>
         <p className="text-on-surface-variant mb-6 text-sm">The course you are looking for might have been removed or updated.</p>
         <Link to="/dashboard/user/courses" className="secondary-button text-xs">Back to Academy</Link>
       </PageTransition>
@@ -140,7 +140,7 @@ export default function CourseDetail() {
     <PageTransition className="max-w-7xl mx-auto space-y-6 pb-12">
       
       {/* Back link */}
-      <Link to="/dashboard/user/courses" className="inline-flex items-center text-xs font-mono text-on-surface-variant hover:text-white transition-colors gap-1.5">
+      <Link to="/dashboard/user/courses" className="inline-flex items-center text-xs font-mono text-on-surface-variant hover:text-on-surface transition-colors gap-1.5">
         <span className="material-symbols-outlined text-[16px]">arrow_back</span> Back to Academy Directory
       </Link>
 
@@ -149,7 +149,7 @@ export default function CourseDetail() {
         {/* Left Column: Player & Overview */}
         <div className="space-y-6">
           {/* Stunning Video Player Wrapper */}
-          <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 bg-[#060607] relative shadow-2xl">
+          <div className="aspect-video w-full rounded-2xl overflow-hidden border border-outline-variant bg-[#060607] relative shadow-2xl">
             {course.video_url ? (
               isIframeVideo ? (
                 <iframe 
@@ -169,24 +169,24 @@ export default function CourseDetail() {
               )
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                <span className="material-symbols-outlined text-5xl text-white/20 mb-4">play_circle</span>
-                <p className="text-white font-bold">No video stream linked for this course</p>
+                <span className="material-symbols-outlined text-5xl text-on-surface/20 mb-4">play_circle</span>
+                <p className="text-on-surface font-bold">No video stream linked for this course</p>
               </div>
             )}
           </div>
 
           {/* Details details */}
-          <div className="glass-card p-6 md:p-8 rounded-3xl border-white/5 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-white/5 pb-6">
+          <div className="glass-card p-6 md:p-8 rounded-3xl border-outline-variant space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-outline-variant pb-6">
               <div>
                 <div className="flex items-center gap-2 flex-wrap mb-2">
-                  <span className="bg-white/5 text-on-surface-variant px-2 py-0.5 rounded font-mono text-[10px] uppercase">{course.duration}</span>
-                  <span className="bg-white/5 text-on-surface-variant px-2 py-0.5 rounded font-mono text-[10px] uppercase">Solana</span>
+                  <span className="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded font-mono text-[10px] uppercase">{course.duration}</span>
+                  <span className="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded font-mono text-[10px] uppercase">Solana</span>
                   {course.access_tier === 'premium' && (
                     <span className="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-mono text-[10px] uppercase font-bold">Premium</span>
                   )}
                 </div>
-                <h1 className="text-2xl md:text-3xl font-display font-bold text-white leading-tight">{course.title}</h1>
+                <h1 className="text-2xl md:text-3xl font-display font-bold text-on-surface leading-tight">{course.title}</h1>
                 <p className="text-xs text-on-surface-variant mt-2 font-mono">Instructor: {course.instructor}</p>
               </div>
 
@@ -197,7 +197,7 @@ export default function CourseDetail() {
                 className={`px-5 py-2.5 rounded-xl font-mono font-bold text-xs flex items-center gap-2 border transition-all shrink-0 ${
                   completed 
                     ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
-                    : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                    : 'bg-surface-variant border-outline-variant text-on-surface hover:bg-surface-variant'
                 }`}
               >
                 <span className="material-symbols-outlined text-[18px]">
@@ -208,7 +208,7 @@ export default function CourseDetail() {
             </div>
 
             <div className="space-y-4">
-              <h2 className="text-lg font-bold text-white font-display">Course Description</h2>
+              <h2 className="text-lg font-bold text-on-surface font-display">Course Description</h2>
               <p className="text-on-surface-variant text-sm leading-relaxed max-w-3xl">{course.description}</p>
             </div>
           </div>
@@ -216,8 +216,8 @@ export default function CourseDetail() {
 
         {/* Right Column: Other Lectures Sidebar */}
         <div className="space-y-4">
-          <div className="glass-card p-6 rounded-2xl border-white/5 space-y-4">
-            <h3 className="font-display font-bold text-white text-sm uppercase tracking-wider border-b border-white/5 pb-3">Lessons Directory</h3>
+          <div className="glass-card p-6 rounded-2xl border-outline-variant space-y-4">
+            <h3 className="font-display font-bold text-on-surface text-sm uppercase tracking-wider border-b border-outline-variant pb-3">Lessons Directory</h3>
             <nav className="flex flex-col gap-2">
               {coursesList.map((item) => {
                 const isActive = item.id === id;
@@ -228,7 +228,7 @@ export default function CourseDetail() {
                     className={`flex items-start gap-3 p-3 rounded-xl border transition-all text-left ${
                       isActive 
                         ? 'bg-primary/10 border-primary/20 text-primary font-bold shadow-inner' 
-                        : 'border-transparent hover:bg-white/5 hover:text-white text-on-surface-variant'
+                        : 'border-transparent hover:bg-surface-variant hover:text-on-surface text-on-surface-variant'
                     }`}
                   >
                     <span className="material-symbols-outlined text-[19px] mt-0.5 shrink-0">

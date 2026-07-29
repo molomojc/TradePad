@@ -138,7 +138,7 @@ export default function Settings() {
     <PageTransition className="max-w-5xl mx-auto pb-10 space-y-8">
 
       <div>
-        <h1 className="text-3xl font-bold text-white">
+        <h1 className="text-3xl font-bold text-on-surface">
           Account Settings
         </h1>
 
@@ -149,9 +149,9 @@ export default function Settings() {
 
       {/* Profile */}
 
-      <div className="glass-card rounded-3xl p-8">
+      <div className="glass-card rounded-3xl p-6 sm:p-8 border border-outline-variant dark:bg-[#0a0a0a]/50">
 
-        <h2 className="text-xl font-bold text-white mb-8">
+        <h2 className="text-xl font-bold text-on-surface mb-8">
           Profile Information
         </h2>
 
@@ -167,7 +167,7 @@ export default function Settings() {
     )}`
   }
   alt="Profile"
-  className="w-32 h-32 rounded-full border border-white/10 object-cover"
+  className="w-32 h-32 rounded-full border border-outline-variant object-cover"
 />
 
 <input
@@ -203,7 +203,7 @@ export default function Settings() {
                     first_name: e.target.value,
                   })
                 }
-                className="w-full mt-2 bg-white/5 rounded-xl border border-white/10 p-3 text-white"
+                className="w-full mt-2 bg-surface-variant rounded-xl border border-outline-variant p-3 text-on-surface focus:outline-none focus:border-primary/50 transition-colors"
               />
             </div>
 
@@ -220,7 +220,7 @@ export default function Settings() {
                     last_name: e.target.value,
                   })
                 }
-                className="w-full mt-2 bg-white/5 rounded-xl border border-white/10 p-3 text-white"
+                className="w-full mt-2 bg-surface-variant rounded-xl border border-outline-variant p-3 text-on-surface focus:outline-none focus:border-primary/50 transition-colors"
               />
             </div>
 
@@ -237,7 +237,7 @@ export default function Settings() {
                     username: e.target.value,
                   })
                 }
-                className="w-full mt-2 bg-white/5 rounded-xl border border-white/10 p-3 text-white"
+                className="w-full mt-2 bg-surface-variant rounded-xl border border-outline-variant p-3 text-on-surface focus:outline-none focus:border-primary/50 transition-colors"
               />
             </div>
 
@@ -267,7 +267,7 @@ export default function Settings() {
               <input
                 disabled
                 value={profile?.email || ''}
-                className="w-full mt-2 bg-white/5 rounded-xl border border-white/10 p-3 text-gray-400"
+                className="w-full mt-2 bg-surface-variant/50 rounded-xl border border-outline-variant p-3 text-on-surface-variant cursor-not-allowed"
               />
 
             </div>
@@ -292,10 +292,10 @@ export default function Settings() {
 
       {/* Membership */}
 
-      <div className="glass-card rounded-3xl p-8">
+      <div className="glass-card rounded-3xl p-6 sm:p-8 border border-outline-variant dark:bg-[#0a0a0a]/50">
 
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold text-on-surface">
             Membership
           </h2>
           {profile?.access_tier === 'premium' && (
@@ -316,7 +316,7 @@ export default function Settings() {
               Current Plan
             </p>
 
-            <h3 className="text-white text-xl font-bold mt-2">
+            <h3 className="text-on-surface text-xl font-bold mt-2">
               {profile?.access_tier === 'premium'
                 ? 'Premium'
                 : 'Free'}
@@ -330,7 +330,7 @@ export default function Settings() {
               Account Type
             </p>
 
-            <h3 className="text-white text-xl font-bold mt-2 capitalize">
+            <h3 className="text-on-surface text-xl font-bold mt-2 capitalize">
               {profile?.role || 'User'}
             </h3>
 
@@ -342,7 +342,7 @@ export default function Settings() {
               Member Since
             </p>
 
-            <h3 className="text-white mt-2">
+            <h3 className="text-on-surface mt-2">
               {profile?.created_at
                 ? new Date(profile.created_at).toLocaleDateString()
                 : '-'}
@@ -368,13 +368,13 @@ export default function Settings() {
 
       {/* Security */}
 
-      <div className="glass-card rounded-3xl p-8">
+      <div className="glass-card rounded-3xl p-6 sm:p-8 border border-outline-variant dark:bg-[#0a0a0a]/50">
 
-        <h2 className="text-xl font-bold text-white mb-6">
+        <h2 className="text-xl font-bold text-on-surface mb-6">
           Security
         </h2>
 
-        <button className="bg-white/5 border border-white/10 px-6 py-3 rounded-xl text-white">
+        <button className="bg-surface-variant border border-outline-variant px-6 py-3 rounded-xl text-on-surface hover:bg-surface-variant/80 transition-colors">
           Change Password
         </button>
 
@@ -382,7 +382,7 @@ export default function Settings() {
 
       {/* Danger Zone */}
 
-      <div className="glass-card rounded-3xl border border-red-500/20 p-8">
+      <div className="glass-card rounded-3xl border border-red-500/20 p-6 sm:p-8 dark:bg-[#0a0a0a]/50">
 
         <h2 className="text-red-400 text-xl font-bold">
           Danger Zone
@@ -401,8 +401,8 @@ export default function Settings() {
       {/* Cancel Modal */}
       {showCancelModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="glass-card rounded-2xl p-6 md:p-8 max-w-md w-full border border-outline-variant shadow-2xl">
-            <h3 className="text-xl font-bold text-white mb-2">Cancel Premium Membership</h3>
+          <div className="glass-card rounded-2xl p-6 md:p-8 max-w-md w-full border border-outline-variant shadow-2xl dark:bg-[#0a0a0a]">
+            <h3 className="text-xl font-bold text-on-surface mb-2">Cancel Premium Membership</h3>
             <p className="text-sm text-on-surface-variant mb-6">
               We're sorry to see you go! Your premium features will remain active until the end of your current billing cycle. 
               Please let us know why you are cancelling so we can improve.
@@ -412,7 +412,7 @@ export default function Settings() {
               value={cancelReason}
               onChange={(e) => setCancelReason(e.target.value)}
               placeholder="Reason for cancellation (optional)..."
-              className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white h-24 resize-none mb-6 focus:border-primary/50 outline-none"
+              className="w-full bg-surface-variant border border-outline-variant rounded-xl p-3 text-sm text-on-surface h-24 resize-none mb-6 focus:border-primary/50 outline-none"
             ></textarea>
             
             <div className="flex items-center justify-end gap-3">

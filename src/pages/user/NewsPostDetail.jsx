@@ -12,7 +12,7 @@ const CATEGORY_STYLES = {
 };
 
 function categoryClass(category) {
-  return CATEGORY_STYLES[(category || '').toLowerCase()] || 'bg-white/10 text-on-surface-variant';
+  return CATEGORY_STYLES[(category || '').toLowerCase()] || 'bg-surface-variant text-on-surface-variant';
 }
 
 function formatDate(dateStr) {
@@ -71,7 +71,7 @@ function renderBody(body) {
         inList = false;
       }
       elements.push(
-        <h1 key={index} className="text-3xl font-display-lg font-bold text-white mt-8 mb-4">
+        <h1 key={index} className="text-3xl font-display-lg font-bold text-on-surface mt-8 mb-4">
           {trimmed.substring(2)}
         </h1>
       );
@@ -89,7 +89,7 @@ function renderBody(body) {
         inList = false;
       }
       elements.push(
-        <h2 key={index} className="text-2xl font-bold text-white mt-6 mb-3">
+        <h2 key={index} className="text-2xl font-bold text-on-surface mt-6 mb-3">
           {trimmed.substring(3)}
         </h2>
       );
@@ -107,7 +107,7 @@ function renderBody(body) {
         inList = false;
       }
       elements.push(
-        <h3 key={index} className="text-xl font-bold text-white mt-4 mb-2">
+        <h3 key={index} className="text-xl font-bold text-on-surface mt-4 mb-2">
           {trimmed.substring(4)}
         </h3>
       );
@@ -125,7 +125,7 @@ function renderBody(body) {
         inList = false;
       }
       elements.push(
-        <h4 key={index} className="text-lg font-bold text-white mt-3 mb-1">
+        <h4 key={index} className="text-lg font-bold text-on-surface mt-3 mb-1">
           {trimmed.substring(5)}
         </h4>
       );
@@ -201,7 +201,7 @@ function renderBody(body) {
     
     // Check for horizontal rules
     if (trimmed === '---' || trimmed === '***' || trimmed === '___') {
-      elements.push(<hr key={index} className="border-white/10 my-6" />);
+      elements.push(<hr key={index} className="border-outline-variant my-6" />);
       return;
     }
     
@@ -238,7 +238,7 @@ function renderInlineContent(text) {
     // Check for bold **text**
     const boldMatch = remaining.match(/^\*\*(.+?)\*\*/);
     if (boldMatch) {
-      parts.push(<strong key={index} className="text-white font-bold">{boldMatch[1]}</strong>);
+      parts.push(<strong key={index} className="text-on-surface font-bold">{boldMatch[1]}</strong>);
       remaining = remaining.substring(boldMatch[0].length);
       index++;
       continue;
@@ -276,7 +276,7 @@ function renderInlineContent(text) {
     const codeMatch = remaining.match(/^`(.+?)`/);
     if (codeMatch) {
       parts.push(
-        <code key={index} className="bg-white/5 px-1.5 py-0.5 rounded text-sm font-mono text-primary">
+        <code key={index} className="bg-surface-variant px-1.5 py-0.5 rounded text-sm font-mono text-primary">
           {codeMatch[1]}
         </code>
       );
@@ -402,8 +402,8 @@ function NewsPostDetail() {
     return (
       <PageTransition className="max-w-4xl mx-auto pb-10">
         <Panel className="p-8 text-center">
-          <span className="material-symbols-outlined text-5xl text-white/20 mb-4 block">article</span>
-          <h3 className="text-xl text-white font-bold mb-2">Post not found</h3>
+          <span className="material-symbols-outlined text-5xl text-on-surface/20 mb-4 block">article</span>
+          <h3 className="text-xl text-on-surface font-bold mb-2">Post not found</h3>
           <p className="text-on-surface-variant text-sm mb-6">
             {error || "The article you're looking for doesn't exist or has been removed."}
           </p>
@@ -431,7 +431,7 @@ function NewsPostDetail() {
         {/* Back button */}
         <button
           onClick={() => navigate('/dashboard/user/news')}
-          className="flex items-center gap-2 text-on-surface-variant hover:text-white text-sm font-label-mono mb-6 transition-colors group"
+          className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface text-sm font-label-mono mb-6 transition-colors group"
         >
           <span className="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
           Back to News
@@ -451,12 +451,12 @@ function NewsPostDetail() {
           </div>
 
           {/* Title */}
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-display-lg font-bold text-white mb-4 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-display-lg font-bold text-on-surface mb-4 leading-tight">
             {post.title}
           </h1>
 
           {/* Meta info */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-on-surface-variant mb-6 pb-6 border-b border-white/10">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-on-surface-variant mb-6 pb-6 border-b border-outline-variant">
             <span className="flex items-center gap-1.5">
               <span className="material-symbols-outlined text-[16px]">schedule</span>
               {formatDate(post.published_at)}
@@ -467,7 +467,7 @@ function NewsPostDetail() {
             </span>
             {hasAuthor && (
               <>
-                <span className="w-1 h-1 rounded-full bg-white/20"></span>
+                <span className="w-1 h-1 rounded-full bg-surface-variant"></span>
                 <span className="flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-[16px]">person</span>
                   {post.author.full_name || post.author.username}
@@ -478,14 +478,14 @@ function NewsPostDetail() {
               <img 
                 src={post.author.avatar_url} 
                 alt={post.author.full_name || post.author.username}
-                className="w-6 h-6 rounded-full border border-white/10"
+                className="w-6 h-6 rounded-full border border-outline-variant"
               />
             )}
           </div>
 
           {/* Summary */}
           {post.summary && (
-            <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6">
+            <div className="bg-surface-variant border border-outline-variant rounded-lg p-4 mb-6">
               <p className="text-on-surface-variant text-sm leading-relaxed italic">
                 {post.summary}
               </p>
@@ -507,7 +507,7 @@ function NewsPostDetail() {
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
           <div className="mt-8">
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-bold text-on-surface mb-4 flex items-center gap-2">
               <span className="material-symbols-outlined text-[20px]">related_articles</span>
               Related Articles
             </h3>
@@ -516,12 +516,12 @@ function NewsPostDetail() {
                 <button
                   key={related.id}
                   onClick={() => navigate(`/dashboard/user/news/${related.slug}`)}
-                  className="text-left p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-primary/30 transition-all group"
+                  className="text-left p-4 bg-surface-variant border border-outline-variant rounded-lg hover:bg-surface-variant hover:border-primary/30 transition-all group"
                 >
                   <span className={`text-[9px] font-label-mono uppercase px-2 py-0.5 rounded ${categoryClass(related.category)} inline-block mb-2`}>
                     {related.category}
                   </span>
-                  <h4 className="text-sm font-bold text-white group-hover:text-primary transition-colors">
+                  <h4 className="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">
                     {related.title}
                   </h4>
                   <p className="text-on-surface-variant text-xs mt-1 line-clamp-2">

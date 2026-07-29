@@ -147,22 +147,22 @@ export default function MyAllocations() {
             className="space-y-4"
           >
             {allocations.map(item => (
-              <motion.div key={item.id} variants={itemVariants} className="glass-card p-8 rounded-[2rem] border-white/5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-primary/10 bg-[#0a0a0a]/40 group relative overflow-hidden">
+              <motion.div key={item.id} variants={itemVariants} className="glass-card p-8 rounded-[2rem] border-outline-variant hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-primary/10 group relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-[50px] group-hover:bg-primary/10 transition-colors pointer-events-none"></div>
                 <div className="flex flex-col md:flex-row gap-6 items-center justify-between relative z-10">
                   
                   {/* Project Info */}
                   <div className="flex items-center gap-4 w-full md:w-auto">
                     {item.logo_url ? (
-                      <img src={item.logo_url} alt={item.name} className="w-12 h-12 rounded-xl object-cover shadow-lg border border-white/10 shrink-0" />
+                      <img src={item.logo_url} alt={item.name} className="w-12 h-12 rounded-xl object-cover shadow-lg border border-outline-variant shrink-0" />
                     ) : (
-                      <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-lg font-bold text-white shadow-lg border border-white/5 shrink-0">
+                      <div className="w-12 h-12 rounded-xl bg-surface-variant flex items-center justify-center text-lg font-bold text-on-surface shadow-lg border border-outline-variant shrink-0">
                         {item.icon}
                       </div>
                     )}
                     <div>
-                      <h3 className="font-display text-lg text-white font-bold">{item.name}</h3>
-                      <span className="bg-white/5 text-on-surface-variant px-2 py-0.5 rounded font-mono text-[10px] uppercase mt-1 inline-block">{item.chain}</span>
+                      <h3 className="font-display text-lg text-on-surface font-bold">{item.name}</h3>
+                      <span className="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded font-mono text-[10px] uppercase mt-1 inline-block">{item.chain}</span>
                     </div>
                   </div>
 
@@ -170,11 +170,11 @@ export default function MyAllocations() {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full md:w-auto md:flex-1 md:justify-end">
                     <div>
                       <p className="font-mono text-[10px] text-on-surface-variant mb-1">INVESTED</p>
-                      <p className="text-white font-bold">{formatUsd(item.invested)}</p>
+                      <p className="text-on-surface font-bold">{formatUsd(item.invested)}</p>
                     </div>
                     <div>
                       <p className="font-mono text-[10px] text-on-surface-variant mb-1">ALLOCATION</p>
-                      <p className="text-white font-bold text-sm">{formatNumber(item.allocatedTokens)} {item.symbol}</p>
+                      <p className="text-on-surface font-bold text-sm">{formatNumber(item.allocatedTokens)} {item.symbol}</p>
                     </div>
                     <div className="col-span-2 md:col-span-1">
                       <p className="font-mono text-[10px] text-on-surface-variant mb-1">STATUS</p>
@@ -182,14 +182,14 @@ export default function MyAllocations() {
                         item.status === 'Claimable' ? 'bg-green-400/20 text-green-400' :
                         item.status === 'Vesting' ? 'bg-blue-400/20 text-blue-400' :
                         item.status === 'Live Pool' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                        item.status === 'Joined Launch' ? 'bg-primary/20 text-primary' : 'bg-white/10 text-on-surface-variant'
+                        item.status === 'Joined Launch' ? 'bg-primary/20 text-primary' : 'bg-surface-variant text-on-surface-variant'
                       }`}>
                         {item.status}
                       </span>
                     </div>
                     <div className="col-span-2 md:col-span-1">
                       <p className="font-mono text-[10px] text-on-surface-variant mb-1">NEXT CLAIM</p>
-                      <p className={`font-bold text-sm ${item.status === 'Live Pool' ? 'text-emerald-400' : item.status === 'Claimable' ? 'text-primary' : 'text-white'}`}>{item.nextClaim}</p>
+                      <p className={`font-bold text-sm ${item.status === 'Live Pool' ? 'text-emerald-400' : item.status === 'Claimable' ? 'text-primary' : 'text-on-surface'}`}>{item.nextClaim}</p>
                     </div>
                   </div>
 
@@ -210,7 +210,7 @@ export default function MyAllocations() {
                         className={`w-full md:w-32 py-3 rounded-xl font-mono font-bold text-xs transition-all ${
                           item.status === 'Claimable' 
                             ? 'bg-neon-red text-white shadow-[0_0_15px_rgba(255,46,46,0.2)] hover:shadow-[0_0_25px_rgba(255,46,46,0.5)]' 
-                            : 'bg-white/5 text-on-surface-variant cursor-not-allowed border border-white/5'
+                            : 'bg-surface-variant text-on-surface-variant cursor-not-allowed border border-outline-variant'
                         }`}
                       >
                         {item.status === 'Joined Launch' ? 'Awaiting Pool' : (item.status === 'Claimable' ? 'Claim Tokens' : 'Locked')}
@@ -221,12 +221,12 @@ export default function MyAllocations() {
                 </div>
 
                 {/* Progress Bar */}
-                <div className="mt-6 pt-4 border-t border-white/5">
+                <div className="mt-6 pt-4 border-t border-outline-variant">
                   <div className="flex justify-between font-mono text-[10px] text-on-surface-variant mb-2">
                     <span>Vesting Progress</span>
                     <span>{item.progress}%</span>
                   </div>
-                  <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
                       animate={{ width: `${item.progress}%` }}
@@ -241,14 +241,14 @@ export default function MyAllocations() {
           </motion.div>
 
           {allocations.length === 0 && (
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card p-12 border-white/5 rounded-3xl text-center relative overflow-hidden group">
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card p-12 border-outline-variant rounded-3xl text-center relative overflow-hidden group">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 rounded-full blur-[80px] group-hover:bg-primary/20 transition-colors"></div>
               <span className="material-symbols-outlined text-6xl text-primary/50 mb-4 block relative z-10 animate-bounce">rocket_launch</span>
-              <h3 className="text-3xl font-display font-bold text-white mb-2 relative z-10">Your Portfolio is Empty</h3>
+              <h3 className="text-3xl font-display font-bold text-on-surface mb-2 relative z-10">Your Portfolio is Empty</h3>
               <p className="text-on-surface-variant max-w-sm mx-auto mb-6 relative z-10">
                 You haven't participated in any launches yet. Explore upcoming projects and secure your first allocation!
               </p>
-              <Link to="/dashboard/user/upcoming" className="inline-block bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-mono text-sm transition-colors border border-white/10 relative z-10">
+              <Link to="/dashboard/user/upcoming" className="inline-block bg-surface-variant hover:bg-surface-variant text-on-surface px-6 py-3 rounded-xl font-mono text-sm transition-colors border border-outline-variant relative z-10">
                 Explore Launches
               </Link>
             </motion.div>

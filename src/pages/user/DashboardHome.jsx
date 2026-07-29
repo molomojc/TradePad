@@ -278,7 +278,7 @@ export default function DashboardHome() {
 
             {nextLaunch ? (
               <div className="p-6 relative z-10">
-                <div className="launch-panel relative overflow-hidden rounded-2xl border border-outline-variant p-6 bg-white/5 shadow-inner">
+                <div className="launch-panel relative overflow-hidden rounded-2xl border border-outline-variant p-6 bg-surface-variant shadow-inner">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[50px] pointer-events-none"></div>
                   
                   <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">

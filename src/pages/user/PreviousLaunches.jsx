@@ -135,50 +135,50 @@ export default function PreviousLaunches() {
       {/* Header & Search */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-4xl font-display font-bold text-white tracking-tight mb-2">Previous Launches</h1>
+          <h1 className="text-4xl font-display font-bold text-on-surface tracking-tight mb-2">Previous Launches</h1>
           <p className="text-on-surface-variant text-sm">Explore our public portfolio and proof of work. Every TradePad project is vetted and launched live.</p>
         </div>
         
-        <div className="flex items-center bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 gap-2 focus-within:border-primary/50 transition-all w-full lg:w-80 shadow-md">
+        <div className="flex items-center bg-surface-variant border border-outline-variant rounded-xl px-4 py-2.5 gap-2 focus-within:border-primary/50 transition-all w-full lg:w-80 shadow-md">
           <span className="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search by name or symbol..."
-            className="bg-transparent border-none focus:ring-0 p-0 text-[13px] text-white placeholder:text-on-surface-variant/50 outline-none w-full"
+            className="bg-transparent border-none focus:ring-0 p-0 text-[13px] text-on-surface placeholder:text-on-surface-variant/50 outline-none w-full"
           />
         </div>
       </div>
 
       {/* Aggregate Statistics Banner */}
       {!loading && (
-        <section className="grid grid-cols-2 md:grid-cols-5 gap-4 bg-white/5 border border-white/10 rounded-3xl p-6 shadow-inner relative overflow-hidden">
+        <section className="grid grid-cols-2 md:grid-cols-5 gap-4 bg-surface-variant border border-outline-variant rounded-3xl p-6 shadow-inner relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[400px] h-[200px] bg-primary/5 rounded-full blur-[80px] pointer-events-none"></div>
           
-          <div className="border-r border-white/5 pr-4">
+          <div className="border-r border-outline-variant pr-4">
             <p className="font-mono text-[9px] text-on-surface-variant uppercase tracking-wider mb-2">Launches</p>
-            <p className="text-2xl font-bold text-white">{stats.projectsCount}</p>
+            <p className="text-2xl font-bold text-on-surface">{stats.projectsCount}</p>
             <p className="text-[10px] text-on-surface-variant/60 mt-1">100% Vetted by Team</p>
           </div>
-          <div className="border-r border-white/5 px-2 md:px-4">
+          <div className="border-r border-outline-variant px-2 md:px-4">
             <p className="font-mono text-[9px] text-on-surface-variant uppercase tracking-wider mb-2">Combined MC</p>
             <p className="text-2xl font-bold text-primary">{formatUsd(stats.combinedMc)}</p>
             <p className="text-[10px] text-on-surface-variant/60 mt-1">Live Asset Value</p>
           </div>
-          <div className="border-r border-white/5 px-2 md:px-4">
+          <div className="border-r border-outline-variant px-2 md:px-4">
             <p className="font-mono text-[9px] text-on-surface-variant uppercase tracking-wider mb-2">Success Rate</p>
-            <p className="text-2xl font-bold text-white">{stats.successRate}</p>
+            <p className="text-2xl font-bold text-on-surface">{stats.successRate}</p>
             <p className="text-[10px] text-on-surface-variant/60 mt-1">Positive ROI launches</p>
           </div>
-          <div className="border-r border-white/5 px-2 md:px-4">
+          <div className="border-r border-outline-variant px-2 md:px-4">
             <p className="font-mono text-[9px] text-on-surface-variant uppercase tracking-wider mb-2">Total Holders</p>
-            <p className="text-2xl font-bold text-white">{formatNumber(stats.totalHolders)}</p>
+            <p className="text-2xl font-bold text-on-surface">{formatNumber(stats.totalHolders)}</p>
             <p className="text-[10px] text-on-surface-variant/60 mt-1">Unique Wallets</p>
           </div>
           <div className="px-2 md:px-4">
             <p className="font-mono text-[9px] text-on-surface-variant uppercase tracking-wider mb-2">Total Volume</p>
-            <p className="text-2xl font-bold text-white">{formatUsd(stats.totalVolume)}</p>
+            <p className="text-2xl font-bold text-on-surface">{formatUsd(stats.totalVolume)}</p>
             <p className="text-[10px] text-on-surface-variant/60 mt-1">24h Swapped</p>
           </div>
         </section>
@@ -204,23 +204,23 @@ export default function PreviousLaunches() {
                 : 'Recent';
 
               return (
-                <motion.div key={launch.id} variants={itemVariants} className="glass-card rounded-3xl border-white/5 p-6 hover:border-primary/25 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
+                <motion.div key={launch.id} variants={itemVariants} className="glass-card rounded-3xl border-outline-variant p-6 hover:border-primary/25 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
                   <div className="absolute top-0 right-0 w-28 h-28 bg-primary/5 rounded-full blur-[40px] pointer-events-none group-hover:bg-primary/10 transition-colors"></div>
                   
                   <div>
                     {/* Header */}
-                    <div className="flex items-center gap-4 border-b border-white/5 pb-4 mb-4">
+                    <div className="flex items-center gap-4 border-b border-outline-variant pb-4 mb-4">
                       {launch.logo_url ? (
-                        <img src={launch.logo_url} alt={launch.name} className="w-12 h-12 rounded-xl object-cover shadow-lg border border-white/10 shrink-0" />
+                        <img src={launch.logo_url} alt={launch.name} className="w-12 h-12 rounded-xl object-cover shadow-lg border border-outline-variant shrink-0" />
                       ) : (
-                        <div className="w-12 h-12 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center font-bold text-white text-sm shrink-0">
+                        <div className="w-12 h-12 rounded-xl border border-outline-variant bg-surface-variant flex items-center justify-center font-bold text-on-surface text-sm shrink-0">
                           {(launch.symbol || 'L').slice(0, 2).toUpperCase()}
                         </div>
                       )}
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="font-display text-base text-white font-bold leading-tight">{launch.name}</h3>
-                          <span className="font-mono text-[10px] text-on-surface-variant bg-white/5 px-1.5 py-0.5 rounded">${launch.symbol}</span>
+                          <h3 className="font-display text-base text-on-surface font-bold leading-tight">{launch.name}</h3>
+                          <span className="font-mono text-[10px] text-on-surface-variant bg-surface-variant px-1.5 py-0.5 rounded">${launch.symbol}</span>
                         </div>
                         <div className="flex items-center gap-2 mt-1">
                           <span className="text-[9px] font-mono text-primary uppercase font-bold tracking-wider">{launch.chain || 'SOLANA'}</span>
@@ -231,7 +231,7 @@ export default function PreviousLaunches() {
                     </div>
 
                     {/* SVG Sparkline Mini Chart */}
-                    <div className="py-2 border-b border-white/5 mb-4 relative">
+                    <div className="py-2 border-b border-outline-variant mb-4 relative">
                       <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent blur-sm pointer-events-none"></div>
                       <svg className={`w-full h-12 ${isPositive ? 'text-emerald-400' : 'text-red-400'}`} viewBox="0 0 100 30" fill="none" stroke="currentColor" strokeWidth="1.8">
                         <path d={getSparklinePath(isPositive)} strokeLinecap="round" strokeLinejoin="round" />
@@ -239,10 +239,10 @@ export default function PreviousLaunches() {
                     </div>
 
                     {/* Stats Grid */}
-                    <div className="grid grid-cols-2 gap-y-4 gap-x-2 border-b border-white/5 pb-4 mb-4">
+                    <div className="grid grid-cols-2 gap-y-4 gap-x-2 border-b border-outline-variant pb-4 mb-4">
                       <div>
                         <p className="font-mono text-[9px] text-on-surface-variant tracking-wider uppercase mb-1">Price</p>
-                        <p className="text-sm font-bold text-white font-mono">{formatUsd(launch.price)}</p>
+                        <p className="text-sm font-bold text-on-surface font-mono">{formatUsd(launch.price)}</p>
                       </div>
                       <div>
                         <p className="font-mono text-[9px] text-on-surface-variant tracking-wider uppercase mb-1">24h Change</p>
@@ -252,26 +252,26 @@ export default function PreviousLaunches() {
                       </div>
                       <div>
                         <p className="font-mono text-[9px] text-on-surface-variant tracking-wider uppercase mb-1">Market Cap</p>
-                        <p className="text-sm font-bold text-white">{formatUsd(launch.market_cap)}</p>
+                        <p className="text-sm font-bold text-on-surface">{formatUsd(launch.market_cap)}</p>
                       </div>
                       <div>
                         <p className="font-mono text-[9px] text-on-surface-variant tracking-wider uppercase mb-1">Liquidity</p>
-                        <p className="text-sm font-bold text-white">{formatUsd(launch.liquidity)}</p>
+                        <p className="text-sm font-bold text-on-surface">{formatUsd(launch.liquidity)}</p>
                       </div>
                       <div>
                         <p className="font-mono text-[9px] text-on-surface-variant tracking-wider uppercase mb-1">24h Volume</p>
-                        <p className="text-sm font-bold text-white">{formatUsd(launch.volume_24h)}</p>
+                        <p className="text-sm font-bold text-on-surface">{formatUsd(launch.volume_24h)}</p>
                       </div>
                       <div>
                         <p className="font-mono text-[9px] text-on-surface-variant tracking-wider uppercase mb-1">Holders</p>
-                        <p className="text-sm font-bold text-white">{formatNumber(launch.holders)}</p>
+                        <p className="text-sm font-bold text-on-surface">{formatNumber(launch.holders)}</p>
                       </div>
                     </div>
 
                     {/* Launch Date */}
-                    <div className="flex justify-between items-center text-xs border-b border-white/5 pb-4 mb-4">
+                    <div className="flex justify-between items-center text-xs border-b border-outline-variant pb-4 mb-4">
                       <span className="text-on-surface-variant">Launch Date</span>
-                      <span className="text-white font-bold font-mono">{dateStr}</span>
+                      <span className="text-on-surface font-bold font-mono">{dateStr}</span>
                     </div>
 
                     {/* Launch Badges */}
@@ -303,11 +303,11 @@ export default function PreviousLaunches() {
           {filtered.length === 0 && (
             <motion.div 
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} 
-              className="text-center py-24 glass-card rounded-3xl border-white/5 relative overflow-hidden group"
+              className="text-center py-24 glass-card rounded-3xl border-outline-variant relative overflow-hidden group"
             >
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/5 rounded-full blur-[80px]"></div>
-              <span className="material-symbols-outlined text-6xl mb-4 text-white/20 relative z-10 group-hover:-rotate-12 transition-transform duration-500">history_toggle_off</span>
-              <h3 className="text-2xl font-bold text-white mb-2 relative z-10">No Launches Found</h3>
+              <span className="material-symbols-outlined text-6xl mb-4 text-on-surface/20 relative z-10 group-hover:-rotate-12 transition-transform duration-500">history_toggle_off</span>
+              <h3 className="text-2xl font-bold text-on-surface mb-2 relative z-10">No Launches Found</h3>
               <p className="text-on-surface-variant relative z-10 max-w-sm mx-auto">No past coins matched your search parameters.</p>
             </motion.div>
           )}
