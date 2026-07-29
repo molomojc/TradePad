@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PageTransition from '../../components/PageTransition';
 import { fetchCurrentAccess, hasSupabaseConfig, supabase } from '../../lib/supabase';
 import { useRef } from 'react';
-
-
+import { toast } from 'sonner';
 
 export default function Settings() {
   const [profile, setProfile] = useState(null);
@@ -11,6 +10,9 @@ export default function Settings() {
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelReason, setCancelReason] = useState('');
+  const [isCanceling, setIsCanceling] = useState(false);
 
   useEffect(() => {
     loadProfile();
@@ -97,6 +99,31 @@ export default function Settings() {
     }
 
     setSaving(false);
+  }
+
+  async function handleCancelMembership() {
+    if (!profile) return;
+    setIsCanceling(true);
+
+    try {
+      const { error } = await supabase
+        .from('membership_cancellations')
+        .insert({
+          profile_id: profile.id,
+          reason: cancelReason,
+          status: 'pending'
+        });
+
+      if (error) throw error;
+      
+      toast.success('Your cancellation request has been submitted and will be processed shortly.');
+      setShowCancelModal(false);
+      setCancelReason('');
+    } catch (err) {
+      toast.error(err.message || 'Failed to submit cancellation request.');
+    } finally {
+      setIsCanceling(false);
+    }
   }
 
   if (loading) {
@@ -267,9 +294,19 @@ export default function Settings() {
 
       <div className="glass-card rounded-3xl p-8">
 
-        <h2 className="text-xl font-bold text-white mb-6">
-          Membership
-        </h2>
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+          <h2 className="text-xl font-bold text-white">
+            Membership
+          </h2>
+          {profile?.access_tier === 'premium' && (
+            <button 
+              onClick={() => setShowCancelModal(true)}
+              className="px-4 py-2 text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-lg border border-red-500/20 transition-colors"
+            >
+              Cancel Membership
+            </button>
+          )}
+        </div>
 
         <div className="grid md:grid-cols-2 gap-6">
 
@@ -360,6 +397,43 @@ export default function Settings() {
         </button>
 
       </div>
+
+      {/* Cancel Modal */}
+      {showCancelModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="glass-card rounded-2xl p-6 md:p-8 max-w-md w-full border border-outline-variant shadow-2xl">
+            <h3 className="text-xl font-bold text-white mb-2">Cancel Premium Membership</h3>
+            <p className="text-sm text-on-surface-variant mb-6">
+              We're sorry to see you go! Your premium features will remain active until the end of your current billing cycle. 
+              Please let us know why you are cancelling so we can improve.
+            </p>
+            
+            <textarea
+              value={cancelReason}
+              onChange={(e) => setCancelReason(e.target.value)}
+              placeholder="Reason for cancellation (optional)..."
+              className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white h-24 resize-none mb-6 focus:border-primary/50 outline-none"
+            ></textarea>
+            
+            <div className="flex items-center justify-end gap-3">
+              <button 
+                onClick={() => setShowCancelModal(false)}
+                disabled={isCanceling}
+                className="px-5 py-2 rounded-xl text-sm font-semibold text-on-surface-variant hover:text-white transition-colors"
+              >
+                Keep Membership
+              </button>
+              <button 
+                onClick={handleCancelMembership}
+                disabled={isCanceling}
+                className="px-5 py-2 rounded-xl text-sm font-semibold bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 transition-colors disabled:opacity-50"
+              >
+                {isCanceling ? 'Submitting...' : 'Confirm Cancellation'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </PageTransition>
   );

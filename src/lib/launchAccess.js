@@ -1,8 +1,29 @@
 import { hasSupabaseConfig, supabase } from './supabase';
 
+export function parseDateSafe(dateStr) {
+  if (!dateStr) return null;
+  let formatted = String(dateStr).trim();
+  if (!formatted.endsWith('Z') && !formatted.includes('+') && !formatted.includes('-')) {
+    formatted = formatted.replace(' ', 'T');
+    const parts = formatted.split('T');
+    if (parts.length === 2) {
+      const timeParts = parts[1].split(':');
+      if (timeParts.length === 2) {
+        formatted = formatted + ':00';
+      }
+    } else {
+      formatted = formatted + 'T00:00:00';
+    }
+    formatted = formatted + 'Z';
+  }
+  return new Date(formatted);
+}
+
 export function formatCountdown(targetDate) {
   if (!targetDate) return 'TBA';
-  const target = new Date(targetDate).getTime();
+  const parsed = parseDateSafe(targetDate);
+  if (!parsed) return '00:00:00';
+  const target = parsed.getTime();
   const diff = target - Date.now();
   if (Number.isNaN(target) || diff <= 0) return '00:00:00';
 

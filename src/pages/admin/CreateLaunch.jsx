@@ -2,6 +2,44 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { hasSupabaseConfig, supabase } from '../../lib/supabase';
 
+const formatUtcToLocalDatetime = (utcString) => {
+  if (!utcString) return '';
+  let formattedString = utcString;
+  if (!formattedString.endsWith('Z') && !formattedString.includes('+') && !formattedString.includes('-')) {
+    formattedString = formattedString + 'Z';
+  }
+  const date = new Date(formattedString);
+  if (Number.isNaN(date.getTime())) return '';
+  
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
+const parseLocalDatetimeToUtcIso = (dateTimeStr) => {
+  if (!dateTimeStr) return null;
+  const parts = dateTimeStr.split('T');
+  if (parts.length !== 2) {
+    const d = new Date(dateTimeStr);
+    return Number.isNaN(d.getTime()) ? null : d.toISOString();
+  }
+  const dateParts = parts[0].split('-');
+  const timeParts = parts[1].split(':');
+  
+  const year = parseInt(dateParts[0], 10);
+  const month = parseInt(dateParts[1], 10) - 1;
+  const day = parseInt(dateParts[2], 10);
+  const hours = parseInt(timeParts[0], 10);
+  const minutes = parseInt(timeParts[1], 10);
+  
+  const localDate = new Date(year, month, day, hours, minutes);
+  if (Number.isNaN(localDate.getTime())) return null;
+  return localDate.toISOString();
+};
+
 const emptyMilestones = [
   { title: 'Whitelist / waitlist', details: '', milestone_order: 1, milestone_type: 'setup' },
   { title: 'Liquidity setup', details: '', milestone_order: 2, milestone_type: 'launch' },
@@ -132,7 +170,7 @@ export default function CreateLaunch() {
           status: launch.status || 'upcoming',
           risk_level: launch.risk_level || 'medium',
           access_tier: launch.access_tier || 'free',
-          launch_at: launch.launch_at ? launch.launch_at.substring(0, 16) : '',
+          launch_at: formatUtcToLocalDatetime(launch.launch_at),
           market_cap: launch.market_cap || '',
           liquidity: launch.liquidity || '',
           total_supply: launch.total_supply || '',
@@ -236,7 +274,7 @@ export default function CreateLaunch() {
             status: publish ? 'upcoming' : form.status,
             risk_level: form.risk_level,
             access_tier: form.access_tier,
-            launch_at: form.launch_at || null,
+            launch_at: parseLocalDatetimeToUtcIso(form.launch_at),
             market_cap: form.market_cap ? Number(form.market_cap) : null,
             liquidity: form.liquidity ? Number(form.liquidity) : null,
             total_supply: form.total_supply ? Number(form.total_supply) : null,
@@ -282,7 +320,7 @@ export default function CreateLaunch() {
             status: publish ? 'upcoming' : form.status,
             risk_level: form.risk_level,
             access_tier: form.access_tier,
-            launch_at: form.launch_at || null,
+            launch_at: parseLocalDatetimeToUtcIso(form.launch_at),
             market_cap: form.market_cap ? Number(form.market_cap) : null,
             liquidity: form.liquidity ? Number(form.liquidity) : null,
             total_supply: form.total_supply ? Number(form.total_supply) : null,

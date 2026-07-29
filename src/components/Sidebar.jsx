@@ -34,16 +34,16 @@ export default function Sidebar({ type = 'user', open = false, onClose, isPremiu
   return (
     <>
       <button type="button" aria-label="Close navigation" onClick={onClose} className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm transition-opacity md:hidden ${open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`} />
-      <aside className={`fixed left-0 top-0 z-50 flex h-[100dvh] w-[260px] flex-col border-r border-white/[0.07] bg-[#0c0c0d] transition-transform duration-300 md:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex h-20 items-center justify-between border-b border-white/[0.07] px-6">
+      <aside data-tour="sidebar" className={`fixed left-0 top-0 z-50 flex h-[100dvh] w-[260px] flex-col border-r border-outline-variant bg-surface transition-transform duration-300 md:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex h-20 items-center justify-between border-b border-outline-variant px-6">
           <Link to={type === 'admin' ? '/dashboard/admin' : '/dashboard/user'} onClick={onClose} className="flex min-w-0 items-center">
             <img src="/HeaderIcon.png" alt="MemLaunch" className="h-10 w-auto max-w-[190px] object-contain object-left" />
           </Link>
-          <button type="button" onClick={onClose} className="text-white/50 md:hidden" aria-label="Close sidebar"><span className="material-symbols-outlined">close</span></button>
+          <button type="button" onClick={onClose} className="text-on-surface-variant md:hidden" aria-label="Close sidebar"><span className="material-symbols-outlined">close</span></button>
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 py-6">
-          <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/25">Workspace</p>
+          <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-on-surface-variant/40">Workspace</p>
           <div className="space-y-1">
             {links.map((link) => (
               <NavLink key={link.name} to={link.path} end={link.end} onClick={onClose} className={({ isActive }) => `sidebar-link ${isActive ? 'sidebar-link-active' : ''}`}>
@@ -53,7 +53,7 @@ export default function Sidebar({ type = 'user', open = false, onClose, isPremiu
           </div>
 
           {type === 'user' && <>
-            <p className="px-3 pb-2 pt-7 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/25">Account</p>
+            <p className="px-3 pb-2 pt-7 text-[10px] font-semibold uppercase tracking-[0.16em] text-on-surface-variant/40">Account</p>
             <div className="space-y-1">
               <NavLink to="/dashboard/user/premium" onClick={onClose} className={({ isActive }) => `sidebar-link ${isActive ? 'sidebar-link-active' : ''}`}><span className="material-symbols-outlined text-[19px] text-amber-400">workspace_premium</span><span>Premium</span></NavLink>
               <NavLink to="/dashboard/user/settings" onClick={onClose} className={({ isActive }) => `sidebar-link ${isActive ? 'sidebar-link-active' : ''}`}><span className="material-symbols-outlined text-[19px]">settings</span><span>Settings</span></NavLink>
@@ -66,16 +66,16 @@ export default function Sidebar({ type = 'user', open = false, onClose, isPremiu
             isPremium ? (
               <div className="mb-3 rounded-xl border border-primary/20 bg-primary/5 p-4 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-full blur-xl pointer-events-none"></div>
-                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-white relative z-10">
+                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-on-surface relative z-10">
                   <span className="material-symbols-outlined text-[17px] text-primary">workspace_premium</span> 
                   Premium Member
                 </div>
                 <p className="mt-2 text-[11px] leading-relaxed text-on-surface-variant relative z-10">Priority access is active on your account.</p>
               </div>
             ) : (
-              <div className="mb-3 rounded-xl border border-white/5 bg-white/5 p-4 hover:border-white/10 transition-colors">
-                <div className="flex items-center gap-2 text-xs font-mono font-bold text-white">
-                  <span className="material-symbols-outlined text-[17px] text-white/40">explore</span> 
+              <div className="mb-3 rounded-xl border border-outline-variant bg-surface-container-high p-4 hover:border-outline/20 transition-colors">
+                <div className="flex items-center gap-2 text-xs font-mono font-bold text-on-surface">
+                  <span className="material-symbols-outlined text-[17px] text-on-surface-variant/60">explore</span> 
                   Free Account
                 </div>
                 <p className="mt-2 text-[11px] leading-relaxed text-on-surface-variant mb-3">Upgrade to unlock early launch details.</p>

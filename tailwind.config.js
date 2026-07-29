@@ -27,6 +27,7 @@ export default {
         "surface-container-low": "var(--color-surface-container-low)",
         "on-secondary-fixed": "#1c1b1b",
         "on-surface": "var(--color-on-surface)",
+        "on-surface-variant": "var(--color-on-surface-variant)",
         "secondary-fixed": "#e5e2e1",
         "outline-variant": "var(--color-outline-variant)",
         "surface-container-high": "var(--color-surface-container-high)",
