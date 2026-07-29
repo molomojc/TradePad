@@ -15,22 +15,10 @@ const tourSteps = [
     placement: 'bottom'
   },
   {
-    target: '[data-tour="theme"]',
-    title: 'Theme Customization',
-    description: 'Toggle between custom cyber-dark space views and high-contrast daylight mode depending on your trading environment.',
+    target: '[data-tour="header-actions"]',
+    title: 'Quick Actions & Profile',
+    description: 'Toggle your theme, access help, check notifications, and manage your account settings from here.',
     placement: 'bottom'
-  },
-  {
-    target: '[data-tour="tour-btn"]',
-    title: 'Interactive Helper',
-    description: 'Click this help button at any time to restart this onboarding walkthrough.',
-    placement: 'bottom'
-  },
-  {
-    target: '[data-tour="profile"]',
-    title: 'Trading Profile',
-    description: 'Monitor your account details, copy your wallet index, or verify if your Premium Tier is active.',
-    placement: 'left'
   },
   {
     target: '[data-tour="main-content"]',
