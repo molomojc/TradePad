@@ -55,7 +55,7 @@ export default function DashboardHome() {
             access_tier: premiumAccess ? 'premium' : currentProfile?.access_tier || 'free', 
             is_premium: premiumAccess 
           });
-          setUserData({ name: currentProfile?.full_name || 'User' });
+          setUserData({ name: [currentProfile?.first_name, currentProfile?.last_name].filter(Boolean).join(' ') || 'User' });
           setLiveLaunch(live?.[0] || null);
           setNextLaunch(upcoming?.[0] || null);
           setPreviousLaunch(completed?.[0] || null);
@@ -90,7 +90,7 @@ export default function DashboardHome() {
   const launchDate = nextLaunch?.launch_at ? parseDateSafe(nextLaunch.launch_at) : null;
   const isLaunchDay = launchDate ? new Date().toDateString() === launchDate.toDateString() : false;
   const launchName = nextLaunch?.title || nextLaunch?.name || 'Next launch';
-  const firstName = userData?.name?.split(' ')[0] || 'there';
+  const fullName = userData?.name || 'there';
 
   const liveLaunchTime = liveLaunch?.launch_at ? parseDateSafe(liveLaunch.launch_at).getTime() : 0;
   const [liveSecondsRemaining, setLiveSecondsRemaining] = useState(0);
@@ -141,7 +141,7 @@ export default function DashboardHome() {
           <div className="mb-2 flex items-center gap-2 text-xs font-mono text-on-surface-variant uppercase tracking-wider">
             <span>Workspace</span><span>/</span><span className="text-on-surface">Overview</span>
           </div>
-          <h1 className="text-3xl font-display font-bold text-on-surface sm:text-4xl mt-2 mb-2">Good evening, {firstName}</h1>
+          <h1 className="text-3xl font-display font-bold text-on-surface sm:text-4xl mt-2 mb-2">Welcome back, {fullName}</h1>
           <p className="text-on-surface-variant max-w-md">Discover the next generation of premium, vetted community memecoin launches.</p>
         </div>
         <div className="flex items-center gap-2 self-start rounded-full border border-outline-variant bg-surface px-4 py-2 text-xs font-mono text-on-surface sm:self-auto shadow-lg">

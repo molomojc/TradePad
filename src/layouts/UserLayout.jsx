@@ -31,7 +31,8 @@ export default function UserLayout() {
     };
   }, []);
 
-  const displayName = profile?.full_name || profile?.email || (hasSupabaseConfig ? 'Account' : 'Jacob Miller');
+  const fullName = profile ? [profile.first_name, profile.last_name].filter(Boolean).join(' ') : '';
+  const displayName = fullName || profile?.email || (hasSupabaseConfig ? 'Account' : 'Jacob Miller');
   const isPremium = profile?.access_tier === 'premium' || profile?.is_premium;
 
   return (
