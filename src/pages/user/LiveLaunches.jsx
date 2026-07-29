@@ -109,7 +109,7 @@ function LiveLaunchCard({ launch, isPremium, watchlist, toggleWatchlist }) {
             Unlock Now
           </Link>
         ) : (
-          <Link to={`/dashboard/user/launch/${launch.id}`} className="w-full block text-center bg-emerald-500 text-black py-3 rounded-xl font-mono text-xs font-bold transition-colors shadow-[0_0_15px_rgba(52,211,153,0.2)] hover:bg-emerald-600">
+          <Link to={`/dashboard/user/launch/${btoa(launch.id)}`} className="w-full block text-center bg-emerald-500 text-black py-3 rounded-xl font-mono text-xs font-bold transition-colors shadow-[0_0_15px_rgba(52,211,153,0.2)] hover:bg-emerald-600">
             Enter Launchroom
           </Link>
         )}

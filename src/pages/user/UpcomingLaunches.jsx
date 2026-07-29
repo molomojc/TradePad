@@ -201,7 +201,7 @@ export default function UpcomingLaunches() {
                     </div>
                   </div>
 
-                  <Link to={`/dashboard/user/launch/${launch.id}`} className="w-full block text-center bg-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-mono text-xs transition-colors border border-white/10 relative overflow-hidden group-hover:border-primary/30">
+                  <Link to={`/dashboard/user/launch/${btoa(launch.id)}`} className="w-full block text-center bg-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-mono text-xs transition-colors border border-white/10 relative overflow-hidden group-hover:border-primary/30">
                     <span className="relative z-10">Join the Next Launch</span>
                   </Link>
                 </div>

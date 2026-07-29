@@ -197,7 +197,7 @@ export default function MyAllocations() {
                   <div className="w-full md:w-auto shrink-0">
                     {item.status === 'Live Pool' ? (
                       <Link 
-                        to={`/dashboard/user/launch/${item.launchId}`}
+                        to={`/dashboard/user/launch/${btoa(item.launchId)}`}
                         className="w-full md:w-32 py-3 rounded-xl font-mono font-bold text-xs text-center block bg-emerald-500 text-black hover:bg-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all hover:scale-105"
                       >
                         Participate Live

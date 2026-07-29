@@ -292,8 +292,8 @@ export default function PreviousLaunches() {
                     </div>
                   </div>
 
-                  <Link to={`/dashboard/user/launch/${launch.id}`} className="w-full flex justify-center items-center gap-2 bg-primary text-black py-3 rounded-xl font-mono font-bold text-xs hover:opacity-95 transition-opacity mt-auto shadow-[0_0_15px_rgba(0,240,255,0.15)]">
-                    View Launch <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  <Link to={`/dashboard/user/launch/${btoa(launch.id)}`} className="w-full flex justify-center items-center gap-2 bg-primary text-black py-3 rounded-xl font-mono font-bold text-xs hover:opacity-95 transition-opacity mt-auto shadow-[0_0_15px_rgba(0,240,255,0.15)]">
+                    Audit Proof of Work <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                   </Link>
                 </motion.div>
               );

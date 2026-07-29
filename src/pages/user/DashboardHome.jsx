@@ -176,7 +176,7 @@ export default function DashboardHome() {
                     Unlock Now <span className="material-symbols-outlined text-[16px]">lock</span>
                   </Link>
                 ) : (
-                  <Link to={`/dashboard/user/launch/${liveLaunch.id}`} className="secondary-button shrink-0 relative z-10 text-xs">Participate Live <span className="material-symbols-outlined text-[16px]">arrow_outward</span></Link>
+                  <Link to={`/dashboard/user/launch/${btoa(liveLaunch.id)}`} className="secondary-button shrink-0 relative z-10 text-xs">Participate Live <span className="material-symbols-outlined text-[16px]">arrow_outward</span></Link>
                 )}
               </div>
 
@@ -243,7 +243,7 @@ export default function DashboardHome() {
                       <span className="material-symbols-outlined text-[18px] text-emerald-400 animate-pulse">check_circle</span> 
                       Pool participation is active.
                     </p>
-                    <Link to={`/dashboard/user/launch/${liveLaunch.id}`} className="primary-button text-xs bg-emerald-400 hover:bg-emerald-500 text-black shadow-[0_0_15px_rgba(52,211,153,0.3)]">
+                    <Link to={`/dashboard/user/launch/${btoa(liveLaunch.id)}`} className="primary-button text-xs bg-emerald-400 hover:bg-emerald-500 text-black shadow-[0_0_15px_rgba(52,211,153,0.3)]">
                       Participate Live <span className="material-symbols-outlined text-[17px]">arrow_forward</span>
                     </Link>
                   </div>
@@ -385,7 +385,7 @@ export default function DashboardHome() {
                   </div>
                 </div>
 
-                <Link to={`/dashboard/user/launch/${previousLaunch.id}`} className="secondary-button text-xs w-full mt-6 text-center">
+                <Link to={`/dashboard/user/launch/${btoa(previousLaunch.id)}`} className="secondary-button text-xs w-full mt-6 text-center">
                   Audit Proof of Work <span className="material-symbols-outlined text-[17px]">arrow_forward</span>
                 </Link>
               </div>

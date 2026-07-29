@@ -20,7 +20,18 @@ function formatNumber(val) {
 }
 
 export default function LaunchDetails() {
-  const { id } = useParams();
+  const { id: encodedId } = useParams();
+  
+  let id = encodedId;
+  try {
+    id = atob(encodedId);
+    if (/[^\x20-\x7E]/.test(id)) {
+      id = encodedId;
+    }
+  } catch (e) {
+    id = encodedId;
+  }
+
   const [launch, setLaunch] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -273,18 +284,11 @@ export default function LaunchDetails() {
             </div>
 
             <h1 className="text-4xl md:text-5xl font-display font-bold text-white mt-2 flex items-center gap-4">
-              {isPremium && launch.logo_url ? (
-                <img src={launch.logo_url} alt={launch.name} className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl object-cover border border-white/10 shadow-lg shrink-0" />
-              ) : (
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white shrink-0">
-                  🔒
-                </div>
-              )}
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white shrink-0">
+                🔒
+              </div>
               <div>
-                {isPremium ? launch.name : '•••••••••••••'} 
-                {isPremium && (
-                  <span className="text-xl text-on-surface-variant font-mono font-normal ml-1">${launch.symbol}</span>
-                )}
+                {isPremium ? (launch.teaser_label || 'Next Launch') : '•••••••••••••'} 
               </div>
             </h1>
 
