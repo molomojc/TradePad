@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/useAuthStore';
-import { supabase, hasSupabaseConfig } from '../lib/supabase'; // Adjust import path as needed
+import { supabase, hasSupabaseConfig, getPlatformSettings } from '../lib/supabase'; // Adjust import path as needed
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Home({ setActiveTab }) {
   const navigate = useNavigate();
@@ -11,6 +12,8 @@ export default function Home({ setActiveTab }) {
   const [loading, setLoading] = useState(true);
   const [totalLaunches, setTotalLaunches] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
+  const [foundingOffer, setFoundingOffer] = useState(null);
+  const [showOfferPopup, setShowOfferPopup] = useState(false);
   const videoRef = useRef(null);
 
   // Trigger login modal if user was redirected from a protected route
@@ -46,6 +49,15 @@ export default function Home({ setActiveTab }) {
 
         if (countError) throw countError;
         setTotalLaunches(count || 0);
+
+        if (hasSupabaseConfig) {
+          const offer = await getPlatformSettings('founding_offer');
+          setFoundingOffer(offer);
+          const dismissed = localStorage.getItem('dismissedFoundingOffer');
+          if (offer?.active && offer?.claimed < offer?.limit && dismissed !== 'true') {
+            setShowOfferPopup(true);
+          }
+        }
       } catch (error) {
         console.error('Error fetching platform data:', error);
         // Set fallback stats
@@ -87,6 +99,11 @@ export default function Home({ setActiveTab }) {
       if (videoRef.current) videoRef.current.muted = next;
       return next;
     });
+  };
+
+  const dismissPopup = () => {
+    setShowOfferPopup(false);
+    localStorage.setItem('dismissedFoundingOffer', 'true');
   };
 
   // Static feature blocks
@@ -154,6 +171,69 @@ export default function Home({ setActiveTab }) {
 
   return (
     <div className="animate-in fade-in duration-500 relative px-6 md:px-margin-desktop py-12 overflow-hidden">
+      <AnimatePresence>
+        {showOfferPopup && foundingOffer && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={dismissPopup}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-lg bg-surface border border-outline-variant rounded-3xl p-8 shadow-2xl overflow-hidden group"
+            >
+              <div className="absolute top-0 right-0 w-64 h-64 bg-neon-red/10 rounded-full blur-[80px] pointer-events-none group-hover:bg-neon-red/20 transition-colors duration-500"></div>
+              
+              <button onClick={dismissPopup} className="absolute top-4 right-4 text-on-surface-variant hover:text-on-surface transition-colors z-10">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="material-symbols-outlined text-4xl text-neon-red">celebration</span>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neon-red bg-neon-red/10 border border-neon-red/30 px-3 py-1 rounded-full">
+                    {foundingOffer.limit - foundingOffer.claimed} of {foundingOffer.limit} Spots Left
+                  </span>
+                </div>
+
+                <h3 className="text-3xl font-display font-bold text-on-surface mb-2">Founding Member Offer</h3>
+                <p className="text-on-surface-variant mb-6 leading-relaxed">
+                  Join the first wave of TradePad premium members. Secure your spot now to lock in <strong className="text-on-surface">50% off for life</strong> ($9.99/mo instead of $19.99/mo) and gain early access to beta features.
+                </p>
+
+                <div className="space-y-3 mb-8">
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-emerald-400 text-sm">check_circle</span>
+                    <span className="text-sm text-on-surface">Exclusive Founding Member badge</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-emerald-400 text-sm">check_circle</span>
+                    <span className="text-sm text-on-surface">Priority support</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-emerald-400 text-sm">check_circle</span>
+                    <span className="text-sm text-on-surface">Access to beta tools before public release</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button onClick={() => { dismissPopup(); navigate('/pricing'); }} className="flex-1 bg-neon-red text-white py-3 rounded-xl font-mono text-sm font-bold shadow-[0_0_15px_rgba(255,46,46,0.2)] hover:shadow-[0_0_25px_rgba(255,46,46,0.5)] transition-all flex items-center justify-center gap-2">
+                    Claim Offer <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  </button>
+                  <button onClick={dismissPopup} className="flex-1 border border-outline-variant bg-surface hover:bg-surface-variant text-on-surface py-3 rounded-xl font-mono text-sm font-bold transition-all">
+                    Maybe Later
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* HERO SECTION */}
       <section

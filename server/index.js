@@ -54,6 +54,13 @@ const plans = {
     amount: 19900,
     currency: 'usd',
   },
+  founding: {
+    slug: 'founding',
+    name: 'Founding Member',
+    variantId: normalizeVariantId(process.env.LEMON_SQUEEZY_FOUNDING_VARIANT_ID || process.env.LEMON_SQUEEZY_FOUDNIG_VARIANT_ID || ''),
+    amount: 999,
+    currency: 'usd',
+  },
 };
 
 function sendJson(res, statusCode, body) {
@@ -109,14 +116,50 @@ async function markProfilePremium(profileId, sourcePayload = {}) {
     return { error: new Error('Supabase admin client not configured') };
   }
 
+  const planSlug = sourcePayload?.meta?.custom_data?.planSlug || '';
+  const isFounding = planSlug === 'founding';
+
+  // Check if they are already a founding member to prevent double-counting
+  const { data: currentProfile } = await supabaseAdmin
+    .from('profiles')
+    .select('is_founding_member')
+    .eq('id', profileId)
+    .single();
+
   const timestamp = new Date().toISOString();
+  const updateData = {
+    access_tier: 'premium',
+    is_premium: true,
+    updated_at: timestamp,
+  };
+  
+  if (isFounding) {
+    updateData.is_founding_member = true;
+    
+    // Auto-increment the founding offer claimed count if they weren't already one
+    if (!currentProfile?.is_founding_member) {
+      const { data: settingsData } = await supabaseAdmin
+        .from('platform_settings')
+        .select('value')
+        .eq('key', 'founding_offer')
+        .single();
+        
+      if (settingsData?.value) {
+        const newValue = { 
+          ...settingsData.value, 
+          claimed: (settingsData.value.claimed || 0) + 1 
+        };
+        await supabaseAdmin
+          .from('platform_settings')
+          .update({ value: newValue })
+          .eq('key', 'founding_offer');
+      }
+    }
+  }
+
   const result = await supabaseAdmin
     .from('profiles')
-    .update({
-      access_tier: 'premium',
-      is_premium: true,
-      updated_at: timestamp,
-    })
+    .update(updateData)
     .eq('id', profileId)
     .select()
     .maybeSingle();
@@ -166,14 +209,22 @@ async function setProfilePremiumOnCheckout(profileId, plan, checkoutId, checkout
     return { error: new Error('Supabase admin client not configured') };
   }
 
+  const isFounding = plan?.slug === 'founding';
+
   const timestamp = new Date().toISOString();
+  const updateData = {
+    access_tier: 'premium',
+    is_premium: true,
+    updated_at: timestamp,
+  };
+  
+  if (isFounding) {
+    updateData.is_founding_member = true;
+  }
+
   const profileResult = await supabaseAdmin
     .from('profiles')
-    .update({
-      access_tier: 'premium',
-      is_premium: true,
-      updated_at: timestamp,
-    })
+    .update(updateData)
     .eq('id', profileId)
     .select()
     .maybeSingle();

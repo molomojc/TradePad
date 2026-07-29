@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageTransition from '../../components/PageTransition';
-import { fetchCurrentAccess, hasSupabaseConfig, supabase } from '../../lib/supabase';
+import { fetchCurrentAccess, hasSupabaseConfig, supabase, getPlatformSettings } from '../../lib/supabase';
 import { fetchLaunches, parseDateSafe } from '../../lib/launchAccess';
 import Skeleton from '../../components/Skeleton';
 import { motion } from 'framer-motion';
@@ -36,18 +36,20 @@ export default function DashboardHome() {
   const [nextLaunch, setNextLaunch] = useState(null);
   const [previousLaunch, setPreviousLaunch] = useState(null);
   const [news, setNews] = useState([]);
-  const isPremium = profile?.access_tier === 'premium' || profile?.is_premium;
+  const [foundingOffer, setFoundingOffer] = useState(null);
+  const isPremium = profile?.access_tier === 'premium' || profile?.is_premium || profile?.is_founding_member;
 
   useEffect(() => {
     const load = async () => {
       setLoading(true);
       try {
         if (hasSupabaseConfig && supabase) {
-          const [{ profile: currentProfile, isPremium: premiumAccess }, { data: live }, { data: upcoming }, { data: completed }] = await Promise.all([
+          const [{ profile: currentProfile, isPremium: premiumAccess }, { data: live }, { data: upcoming }, { data: completed }, offer] = await Promise.all([
             fetchCurrentAccess(),
             fetchLaunches({ status: 'live', limit: 1 }),
             fetchLaunches({ status: 'upcoming', limit: 1 }),
             supabase.from('launches').select('*').in('status', ['closed', 'archived']).order('launch_at', { ascending: false }).limit(1),
+            getPlatformSettings('founding_offer'),
           ]);
           
           setProfile({ 
@@ -66,8 +68,8 @@ export default function DashboardHome() {
             .not('published_at', 'is', null)
             .order('published_at', { ascending: false })
             .limit(3);
-            
           setNews(data?.length ? data : []);
+          setFoundingOffer(offer);
         } else {
           setUserData(null);
           setProfile(null);
@@ -136,6 +138,22 @@ export default function DashboardHome() {
 
   return (
     <PageTransition className="mx-auto w-full max-w-[1440px] space-y-6 pb-10">
+      {!isPremium && foundingOffer?.active && foundingOffer?.claimed < foundingOffer?.limit && (
+        <div className="bg-neon-red/10 border border-neon-red/30 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-neon-red/5 rounded-full blur-[80px] pointer-events-none group-hover:bg-neon-red/10 transition-colors duration-500"></div>
+          <div className="flex items-center gap-3 relative z-10">
+            <span className="material-symbols-outlined text-neon-red text-3xl">celebration</span>
+            <div>
+              <h3 className="text-on-surface font-bold text-lg">🎉 You qualify for the Founding Member offer!</h3>
+              <p className="text-on-surface-variant text-sm">Get 50% off for life and exclusive early access. Only {foundingOffer.limit - foundingOffer.claimed} of {foundingOffer.limit} spots remaining.</p>
+            </div>
+          </div>
+          <Link to="/dashboard/user/premium" className="shrink-0 bg-neon-red text-white px-6 py-2.5 rounded-xl font-mono text-sm font-bold shadow-[0_0_15px_rgba(255,46,46,0.2)] hover:shadow-[0_0_25px_rgba(255,46,46,0.4)] transition-all relative z-10">
+            Claim Offer
+          </Link>
+        </div>
+      )}
+
       <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-8">
         <div>
           <div className="mb-2 flex items-center gap-2 text-xs font-mono text-on-surface-variant uppercase tracking-wider">

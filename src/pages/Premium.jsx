@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createCheckoutSession, getPaymentCancelUrl, getPaymentSuccessUrl } from '../lib/payments';
 import PageTransition from '../components/PageTransition';
-import { fetchCurrentUserProfile, hasSupabaseConfig } from '../lib/supabase';
+import { fetchCurrentUserProfile, hasSupabaseConfig, getPlatformSettings } from '../lib/supabase';
 import useAuthStore from '../store/useAuthStore';
 
 const PLANS = [
@@ -79,6 +79,7 @@ export default function Premium() {
   const [profile, setProfile] = useState(null);
   const [session, setSession] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
+  const [foundingOffer, setFoundingOffer] = useState(null);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -90,6 +91,12 @@ export default function Premium() {
       } else {
         setProfile(currentProfile || { access_tier: 'free', is_premium: false });
       }
+
+      if (hasSupabaseConfig) {
+        const offer = await getPlatformSettings('founding_offer');
+        setFoundingOffer(offer);
+      }
+
       setLoadingProfile(false);
     };
 
@@ -141,12 +148,39 @@ export default function Premium() {
           <p>Upgrade to Premium to unlock upcoming launches before they're announced publicly, including countdown timers, project information, launch notifications, and exclusive member-only access.</p>
         </div>
 
+
         <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 text-left mb-10 ${!isAuthenticated ? 'opacity-90' : ''}`}>
-          {PLANS.map((plan) => (
-            <div key={plan.name} className={`glass-card rounded-[2rem] p-8 border ${plan.accent} relative overflow-hidden flex flex-col`}>
-              <div className="flex items-center justify-between gap-4 mb-4">
+          {PLANS.map((basePlan) => {
+            const isFoundingActive = foundingOffer?.active && foundingOffer?.claimed < foundingOffer?.limit;
+            const plan = (basePlan.slug === 'premium' && isFoundingActive) 
+              ? {
+                  ...basePlan,
+                  name: 'Founding Member',
+                  slug: 'founding',
+                  price: '$9.99',
+                  badge: 'Limited Founding Offer',
+                  features: [
+                    '50% off for life ($9.99/mo instead of $19.99/mo)',
+                    'Exclusive Founding Member badge',
+                    'Early access to every TradePad feature',
+                    'Priority support',
+                    'Access to beta tools before public release',
+                    'Everything in Free'
+                  ]
+                } 
+              : basePlan;
+            
+            return (
+            <div key={plan.name} className={`glass-card rounded-[2rem] p-8 border ${plan.accent} relative overflow-hidden flex flex-col ${plan.slug === 'founding' ? 'shadow-[0_0_30px_rgba(255,46,46,0.1)] border-neon-red/30' : ''}`}>
+              {plan.slug === 'founding' && foundingOffer && (
+                <div className="absolute top-0 right-0 left-0 bg-neon-red/10 border-b border-neon-red/20 px-4 py-1.5 text-center flex items-center justify-center gap-2">
+                   <span className="material-symbols-outlined text-[12px] text-neon-red">celebration</span>
+                   <span className="text-[10px] font-mono text-neon-red font-bold uppercase tracking-wider">{foundingOffer.limit - foundingOffer.claimed} of {foundingOffer.limit} memberships remaining</span>
+                </div>
+              )}
+              <div className={`flex items-center justify-between gap-4 mb-4 ${plan.slug === 'founding' ? 'mt-6' : ''}`}>
                 <span className="font-label-mono text-[11px] text-on-surface-variant uppercase tracking-wider">{plan.badge}</span>
-                <span className="text-[10px] font-label-mono px-2.5 py-1 rounded-full border text-on-surface-variant border-white/10 bg-white/5">
+                <span className={`text-[10px] font-label-mono px-2.5 py-1 rounded-full border ${plan.slug === 'founding' ? 'text-neon-red border-neon-red/30 bg-neon-red/10' : 'text-on-surface-variant border-white/10 bg-white/5'}`}>
                   {plan.name}
                 </span>
               </div>
@@ -183,7 +217,8 @@ export default function Premium() {
                 </button>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="glass-card rounded-3xl p-10 mt-12 mb-16 text-left relative overflow-hidden">

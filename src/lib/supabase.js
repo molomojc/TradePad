@@ -54,6 +54,7 @@ export async function ensureProfileRow(user, overrides = {}) {
     avatar_url: overrides.avatar_url ?? null,
     bio: overrides.bio ?? null,
     is_premium: Boolean(overrides.is_premium),
+    is_founding_member: Boolean(overrides.is_founding_member),
     premium_expires_at: overrides.premium_expires_at ?? null,
     updated_at: new Date().toISOString(),
   };
@@ -71,15 +72,16 @@ export async function ensureProfileRow(user, overrides = {}) {
 }
 
 export async function fetchCurrentAccess() {
-  if (!supabase) return { profile: null, session: null, isPremium: false, accessTier: 'free' };
+  if (!supabase) return { profile: null, session: null, isPremium: false, accessTier: 'free', isFoundingMember: false };
 
   const { profile, session } = await fetchCurrentUserProfile();
-  const isPremium = profile?.access_tier === 'premium' || profile?.is_premium || profile?.role === 'admin';
+  const isPremium = profile?.access_tier === 'premium' || profile?.is_premium || profile?.role === 'admin' || profile?.is_founding_member;
 
   return {
     profile,
     session,
     isPremium,
+    isFoundingMember: profile?.is_founding_member || false,
     accessTier: profile?.access_tier || 'free',
   };
 }
@@ -101,10 +103,18 @@ export async function fetchSubscriptionStatus() {
     .limit(1)
     .maybeSingle();
 
-  return {
-    subscription,
-    isActive: Boolean(subscription),
-  };
+  return { subscription: subscription ?? null, isActive: !!subscription };
+}
+
+export async function getPlatformSettings(key) {
+  if (!supabase) return null;
+  const { data } = await supabase
+    .from('platform_settings')
+    .select('value')
+    .eq('key', key)
+    .maybeSingle();
+  
+  return data?.value ?? null;
 }
 
 export async function signInWithOAuth(provider) {

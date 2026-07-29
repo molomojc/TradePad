@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PageTransition from '../../components/PageTransition';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { fetchCurrentAccess } from '../../lib/supabase';
+
 export default function PremiumPage() {
   const WHY_PREMIUM = [
     { icon: 'analytics', title: 'AI Scoring', description: 'Advanced sentiment and contract analysis algorithms.' },
@@ -9,17 +11,27 @@ export default function PremiumPage() {
     { icon: 'shield_locked', title: 'Guaranteed Spots', description: 'Skip the queue on heavily oversubscribed public rounds.' },
   ];
   const [subscription, setSubscription] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Simulate API fetch
     const fetchSub = async () => {
       setLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 700));
+      const { profile, isPremium } = await fetchCurrentAccess();
+      setProfile(profile);
       
-      // Simulate no active subscription for demonstration
-      setSubscription(null);
+      // Simulate subscription from profile access if they are premium
+      if (isPremium) {
+        setSubscription({
+          status: 'active',
+          plans: {
+            name: profile?.is_founding_member ? 'Founding Member' : 'Pro Tier'
+          }
+        });
+      } else {
+        setSubscription(null);
+      }
       
       setLoading(false);
     };
@@ -43,12 +55,21 @@ export default function PremiumPage() {
       </div>
       
       {subscription ? (
-        <div className="p-6 sm:p-10 rounded-[2rem] glass-card border border-outline-variant space-y-4">
-          <div className="flex items-center gap-3 text-primary mb-4">
-            <span className="material-symbols-outlined text-3xl">workspace_premium</span>
+        <div className={`p-6 sm:p-10 rounded-[2rem] glass-card border space-y-4 ${profile?.is_founding_member ? 'border-neon-red/30 shadow-[0_0_30px_rgba(255,46,46,0.1)]' : 'border-outline-variant'}`}>
+          <div className={`flex items-center gap-3 mb-4 ${profile?.is_founding_member ? 'text-neon-red' : 'text-primary'}`}>
+            <span className="material-symbols-outlined text-3xl">
+              {profile?.is_founding_member ? 'workspace_premium' : 'verified'}
+            </span>
             <h2 className="text-2xl font-bold text-on-surface">Active</h2>
           </div>
-          <p className="text-on-surface font-bold text-lg">Current plan: {subscription.plans?.name || 'Pro Tier'}</p>
+          <div className="flex items-center gap-3">
+            <p className="text-on-surface font-bold text-lg">Current plan: {subscription.plans?.name || 'Pro Tier'}</p>
+            {profile?.is_founding_member && (
+              <span className="bg-neon-red/10 border border-neon-red/20 text-neon-red px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                Founder Status
+              </span>
+            )}
+          </div>
           <p className="text-on-surface-variant">Status: {subscription.status}</p>
         </div>
       ) : (
