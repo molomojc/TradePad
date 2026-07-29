@@ -179,7 +179,7 @@ export default function Home({ setActiveTab }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={dismissPopup}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-surface-dark/60 backdrop-blur-sm"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -237,7 +237,7 @@ export default function Home({ setActiveTab }) {
 
       {/* HERO SECTION */}
       <section
-        className="relative py-20 md:py-28 px-6 md:px-12 rounded-[2rem] text-left border border-white/10 overflow-hidden bg-cover bg-center mb-16 shadow-2xl animate-in slide-in-from-bottom-6 duration-700"
+        className="relative py-20 md:py-28 px-6 md:px-12 rounded-[2rem] text-left border border-outline-variant overflow-hidden bg-cover bg-center mb-16 shadow-2xl animate-in slide-in-from-bottom-6 duration-700"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(5, 5, 8, 0.97), rgba(5, 5, 8, 0.72)), url("/hero_background.png")`,
         }}
@@ -251,7 +251,7 @@ export default function Home({ setActiveTab }) {
               THE NEXT LAUNCH STARTS HERE
             </span>
 
-            <h1 className="font-display text-4xl md:text-6xl font-bold mt-8 mb-6 text-white leading-tight tracking-tight animate-in fade-in slide-in-from-bottom-3 duration-700">
+            <h1 className="font-display text-4xl md:text-6xl font-bold mt-8 mb-6 text-on-surface leading-tight tracking-tight animate-in fade-in slide-in-from-bottom-3 duration-700">
               Premium, vetted
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-purple-400">
@@ -277,7 +277,7 @@ export default function Home({ setActiveTab }) {
               </button>
               <Link
                 to="/pricing"
-                className="bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all px-8 py-3.5 rounded-full font-mono font-bold text-sm text-white backdrop-blur-md inline-block"
+                className="bg-surface-variant border border-outline-variant hover:bg-surface-variant active:scale-95 transition-all px-8 py-3.5 rounded-full font-mono font-bold text-sm text-on-surface backdrop-blur-md inline-block"
               >
                 Become Premium
               </Link>
@@ -294,7 +294,7 @@ export default function Home({ setActiveTab }) {
 
       {/* Centered video preview card */}
       <section className="py-4 animate-in fade-in slide-in-from-bottom-5 duration-700 delay-300">
-        <div className="glass-card rounded-[2rem] border-white/10 overflow-hidden relative shadow-2xl">
+        <div className="glass-card rounded-[2rem] border-outline-variant overflow-hidden relative shadow-2xl">
           <video
             ref={videoRef}
             src="/video.mp4"
@@ -307,14 +307,14 @@ export default function Home({ setActiveTab }) {
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none"></div>
 
-          <span className="absolute top-5 left-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 font-mono text-[10px] text-white tracking-wider uppercase">
+          <span className="absolute top-5 left-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-dark/20 backdrop-blur-md border border-outline-variant font-mono text-[10px] text-on-surface tracking-wider uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
             HOW TRADEPAD WORKS
           </span>
 
           <button
             onClick={toggleMute}
-            className="absolute bottom-5 right-5 w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-black/70 active:scale-95 transition-all"
+            className="absolute bottom-5 right-5 w-10 h-10 rounded-full bg-surface-dark/20 backdrop-blur-md border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-dark/70 active:scale-95 transition-all"
             aria-label={isMuted ? 'Unmute video' : 'Mute video'}
           >
             <span className="material-symbols-outlined text-[18px]">
@@ -329,15 +329,15 @@ export default function Home({ setActiveTab }) {
         {FEATURE_BLOCKS.map((block, index) => (
           <div
             key={block.title}
-            className="glass-card rounded-3xl p-8 border-white/10 relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 group"
+            className="glass-card rounded-3xl p-8 border-outline-variant relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 group"
             style={{ animationDelay: `${index * 120}ms` }}
           >
             <div className={`absolute inset-0 bg-gradient-to-br ${block.accent} pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-500`}></div>
             <div className="relative z-10">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6 border border-white/10">
+              <div className="w-12 h-12 rounded-2xl bg-surface-variant flex items-center justify-center mb-6 border border-outline-variant">
                 <span className="material-symbols-outlined text-primary text-2xl">{block.icon}</span>
               </div>
-              <h3 className="text-white font-bold text-xl mb-3">{block.title}</h3>
+              <h3 className="text-on-surface font-bold text-xl mb-3">{block.title}</h3>
               <p className="text-on-surface-variant text-[14px] leading-relaxed">{block.description}</p>
             </div>
           </div>
@@ -347,7 +347,7 @@ export default function Home({ setActiveTab }) {
       {/* Why Choose TradePad Grid */}
       <section className="py-12 mb-10">
         <div className="flex items-center gap-4 mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-white font-display">
+          <h2 className="text-2xl md:text-3xl font-bold text-on-surface font-display">
             Why members choose TradePad
           </h2>
           <div className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent"></div>
@@ -355,11 +355,11 @@ export default function Home({ setActiveTab }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {whyChooseCards.map((card, idx) => (
-            <div key={idx} className="glass-card p-8 rounded-3xl border-white/10 flex flex-col items-start hover:-translate-y-1 transition-transform duration-300">
+            <div key={idx} className="glass-card p-8 rounded-3xl border-outline-variant flex flex-col items-start hover:-translate-y-1 transition-transform duration-300">
               <span className="material-symbols-outlined text-3xl text-primary mb-4 bg-primary/10 p-3 rounded-2xl border border-primary/20">
                 {card.icon}
               </span>
-              <h3 className="text-white font-bold text-lg mb-2">{card.title}</h3>
+              <h3 className="text-on-surface font-bold text-lg mb-2">{card.title}</h3>
               <p className="text-on-surface-variant text-sm leading-relaxed">{card.desc}</p>
             </div>
           ))}
@@ -368,10 +368,10 @@ export default function Home({ setActiveTab }) {
 
       {/* How it Works - Free vs Premium */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-4 mb-10">
-        <div className="glass-card rounded-[2rem] p-8 md:p-12 border-white/10 overflow-hidden relative animate-in fade-in slide-in-from-left-6 duration-700">
-          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5 blur-3xl"></div>
+        <div className="glass-card rounded-[2rem] p-8 md:p-12 border-outline-variant overflow-hidden relative animate-in fade-in slide-in-from-left-6 duration-700">
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-surface-variant blur-3xl"></div>
           
-          <h3 className="text-3xl font-display font-bold text-white mb-4">
+          <h3 className="text-3xl font-display font-bold text-on-surface mb-4">
             Explore the Platform
           </h3>
           <p className="text-on-surface-variant leading-relaxed mb-8 max-w-md">
@@ -379,8 +379,8 @@ export default function Home({ setActiveTab }) {
           </p>
           <div className="space-y-4">
             {freeTierItems.map((item) => (
-              <div key={item} className="flex items-center gap-4 text-white text-sm font-medium">
-                <span className="material-symbols-outlined text-white/40 text-[20px]">check_circle</span>
+              <div key={item} className="flex items-center gap-4 text-on-surface text-sm font-medium">
+                <span className="material-symbols-outlined text-on-surface/40 text-[20px]">check_circle</span>
                 {item}
               </div>
             ))}
@@ -393,7 +393,7 @@ export default function Home({ setActiveTab }) {
             PREMIUM ACCESS
           </span>
           
-          <h3 className="text-3xl font-display font-bold text-white mb-4 max-w-[85%] mt-8 lg:mt-0">
+          <h3 className="text-3xl font-display font-bold text-on-surface mb-4 max-w-[85%] mt-8 lg:mt-0">
             Know what's launching next
           </h3>
           <p className="text-on-surface-variant leading-relaxed mb-8 max-w-md">
@@ -401,7 +401,7 @@ export default function Home({ setActiveTab }) {
           </p>
           <div className="space-y-4">
             {premiumItems.map((item) => (
-              <div key={item} className="flex items-center gap-4 text-white text-sm font-medium">
+              <div key={item} className="flex items-center gap-4 text-on-surface text-sm font-medium">
                 <span className="material-symbols-outlined text-primary text-[20px] drop-shadow-[0_0_8px_rgba(0,240,255,0.4)]">star</span>
                 {item}
               </div>
@@ -412,21 +412,21 @@ export default function Home({ setActiveTab }) {
 
       {/* Trust Badge Section */}
       <section className="py-6 mt-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
-        <div className="glass-card rounded-3xl p-8 border-white/10 text-center relative overflow-hidden">
+        <div className="glass-card rounded-3xl p-8 border-outline-variant text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5"></div>
           <div className="relative z-10">
             <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 mb-6">
               <div className="flex items-center gap-3">
                 <span className="material-symbols-outlined text-primary text-[28px]">verified</span>
-                <span className="text-white font-bold text-lg">Verified Projects</span>
+                <span className="text-on-surface font-bold text-lg">Verified Projects</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="material-symbols-outlined text-primary text-[28px]">visibility</span>
-                <span className="text-white font-bold text-lg">Transparent Launch Process</span>
+                <span className="text-on-surface font-bold text-lg">Transparent Launch Process</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="material-symbols-outlined text-primary text-[28px]">handshake</span>
-                <span className="text-white font-bold text-lg">Built for Long-Term Members</span>
+                <span className="text-on-surface font-bold text-lg">Built for Long-Term Members</span>
               </div>
             </div>
             <p className="text-on-surface-variant text-sm max-w-2xl mx-auto leading-relaxed">

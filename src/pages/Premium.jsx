@@ -11,7 +11,7 @@ const PLANS = [
     slug: 'free',
     price: '$0',
     interval: 'Forever',
-    accent: 'border-white/10',
+    accent: 'border-outline-variant',
     badge: 'Free Membership',
     features: [
       'Browse previous launches',
@@ -140,7 +140,7 @@ export default function Premium() {
         <span className="inline-flex items-center gap-2 font-label-mono text-purple-300 bg-purple-500/10 px-3 py-1 rounded-full text-caption border border-purple-500/20 tracking-wider">
           MEMBERSHIP PLANS
         </span>
-        <h1 className="font-display-lg text-4xl md:text-6xl text-white font-bold tracking-tight mt-6 mb-4">
+        <h1 className="font-display-lg text-4xl md:text-6xl text-on-surface font-bold tracking-tight mt-6 mb-4">
           Choose the membership<br/>that's right for you.
         </h1>
         <div className="text-on-surface-variant font-body-lg leading-relaxed max-w-3xl mx-auto mb-14 space-y-4">
@@ -180,24 +180,24 @@ export default function Premium() {
               )}
               <div className={`flex items-center justify-between gap-4 mb-4 ${plan.slug === 'founding' ? 'mt-6' : ''}`}>
                 <span className="font-label-mono text-[11px] text-on-surface-variant uppercase tracking-wider">{plan.badge}</span>
-                <span className={`text-[10px] font-label-mono px-2.5 py-1 rounded-full border ${plan.slug === 'founding' ? 'text-neon-red border-neon-red/30 bg-neon-red/10' : 'text-on-surface-variant border-white/10 bg-white/5'}`}>
+                <span className={`text-[10px] font-label-mono px-2.5 py-1 rounded-full border ${plan.slug === 'founding' ? 'text-neon-red border-neon-red/30 bg-neon-red/10' : 'text-on-surface-variant border-outline-variant bg-surface-variant'}`}>
                   {plan.name}
                 </span>
               </div>
               <div className="flex items-end gap-2 mb-6">
-                <h2 className="text-5xl font-bold font-display-lg text-white">{plan.price}</h2>
+                <h2 className="text-5xl font-bold font-display-lg text-on-surface">{plan.price}</h2>
                 <span className="text-on-surface-variant font-label-mono text-caption mb-2">{plan.interval}</span>
               </div>
               <div className="space-y-4 mb-8 flex-1">
                 {plan.features.map((feature) => (
-                  <div key={feature} className="flex items-start gap-3 text-[14px] text-white">
+                  <div key={feature} className="flex items-start gap-3 text-[14px] text-on-surface">
                     <span className="material-symbols-outlined text-[18px] text-green-400 shrink-0">check_circle</span>
                     <span className="leading-snug">{feature}</span>
                   </div>
                 ))}
               </div>
               {plan.slug === 'free' ? (
-                <Link to="/" className="block w-full text-center py-4 rounded-xl font-label-mono font-bold text-[13px] border border-white/10 hover:bg-white/5 text-white">
+                <Link to="/" className="block w-full text-center py-4 rounded-xl font-label-mono font-bold text-[13px] border border-outline-variant hover:bg-surface-variant text-on-surface">
                   {plan.cta}
                 </Link>
               ) : (
@@ -207,10 +207,10 @@ export default function Premium() {
                   onClick={() => handleCheckout(plan)}
                   className={`w-full py-4 rounded-xl font-label-mono font-bold text-[13px] transition-all text-center active:scale-95 ${
                     isPremium 
-                      ? 'bg-white/5 text-on-surface-variant cursor-not-allowed border border-white/10'
+                      ? 'bg-surface-variant text-on-surface-variant cursor-not-allowed border border-outline-variant'
                       : plan.featured
                         ? 'bg-primary text-black hover:opacity-90'
-                        : 'border border-white/10 hover:bg-white/5 text-white'
+                        : 'border border-outline-variant hover:bg-surface-variant text-on-surface'
                   }`}
                 >
                   {isPremium ? '✓ Your Current Plan' : plan.cta}
@@ -223,7 +223,7 @@ export default function Premium() {
 
         <div className="glass-card rounded-3xl p-10 mt-12 mb-16 text-left relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] pointer-events-none"></div>
-          <h2 className="text-3xl font-bold font-display-lg text-white mb-6 relative z-10">
+          <h2 className="text-3xl font-bold font-display-lg text-on-surface mb-6 relative z-10">
             Why Upgrade?
           </h2>
           <p className="text-on-surface-variant leading-relaxed mb-8 max-w-4xl relative z-10">
@@ -231,16 +231,16 @@ export default function Premium() {
           </p>
           
           <div className="grid md:grid-cols-2 gap-10 relative z-10">
-            <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
-              <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-white/50 text-[20px]">explore</span>
+            <div className="bg-surface-variant p-6 rounded-2xl border border-outline-variant">
+              <h3 className="text-on-surface font-bold mb-4 flex items-center gap-2">
+                <span className="material-symbols-outlined text-on-surface/50 text-[20px]">explore</span>
                 Free Members
               </h3>
               <ul className="space-y-3 text-on-surface-variant text-sm">
-                <li className="flex items-center gap-2"><span className="text-white/40">✔</span> Browse completed launches</li>
-                <li className="flex items-center gap-2"><span className="text-white/40">✔</span> View previous projects</li>
-                <li className="flex items-center gap-2"><span className="text-white/40">✔</span> Read platform announcements</li>
-                <li className="flex items-center gap-2"><span className="text-white/40">✔</span> Upgrade anytime</li>
+                <li className="flex items-center gap-2"><span className="text-on-surface/40">✔</span> Browse completed launches</li>
+                <li className="flex items-center gap-2"><span className="text-on-surface/40">✔</span> View previous projects</li>
+                <li className="flex items-center gap-2"><span className="text-on-surface/40">✔</span> Read platform announcements</li>
+                <li className="flex items-center gap-2"><span className="text-on-surface/40">✔</span> Upgrade anytime</li>
               </ul>
             </div>
             
@@ -250,7 +250,7 @@ export default function Premium() {
                 <span className="material-symbols-outlined text-[20px]">workspace_premium</span>
                 Premium Members
               </h3>
-              <ul className="space-y-3 text-white text-sm relative z-10">
+              <ul className="space-y-3 text-on-surface text-sm relative z-10">
                 <li className="flex items-center gap-2"><span className="text-primary">★</span> Upcoming launch access</li>
                 <li className="flex items-center gap-2"><span className="text-primary">★</span> Live countdown timer</li>
                 <li className="flex items-center gap-2"><span className="text-primary">★</span> Member participation count</li>
@@ -266,10 +266,10 @@ export default function Premium() {
           {BENEFITS.map((benefit, index) => (
             <div
               key={benefit.title}
-              className="glass-card rounded-3xl p-6 border-white/10 animate-in fade-in slide-in-from-bottom-4 duration-500"
+              className="glass-card rounded-3xl p-6 border-outline-variant animate-in fade-in slide-in-from-bottom-4 duration-500"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <h3 className="text-white font-bold text-lg mb-3">{benefit.title}</h3>
+              <h3 className="text-on-surface font-bold text-lg mb-3">{benefit.title}</h3>
               <p className="text-on-surface-variant text-[14px] leading-relaxed">{benefit.description}</p>
             </div>
           ))}
