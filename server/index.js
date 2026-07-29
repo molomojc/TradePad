@@ -209,32 +209,9 @@ async function setProfilePremiumOnCheckout(profileId, plan, checkoutId, checkout
     return { error: new Error('Supabase admin client not configured') };
   }
 
-  const isFounding = plan?.slug === 'founding';
-
-  const timestamp = new Date().toISOString();
-  const updateData = {
-    access_tier: 'premium',
-    is_premium: true,
-    updated_at: timestamp,
-  };
-  
-  if (isFounding) {
-    updateData.is_founding_member = true;
-  }
-
-  const profileResult = await supabaseAdmin
-    .from('profiles')
-    .update(updateData)
-    .eq('id', profileId)
-    .select()
-    .maybeSingle();
-
-  if (profileResult.error) {
-    return { error: profileResult.error };
-  }
-
+  // Only record the pending payment, do NOT upgrade the profile yet!
   await recordPendingPayment(profileId, plan, checkoutId, checkoutUrl, userEmail);
-  return { profile: profileResult.data, error: null };
+  return { error: null };
 }
 
 async function handleCreateCheckoutSession(req, res) {
