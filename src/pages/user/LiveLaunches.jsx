@@ -124,13 +124,19 @@ export default function LiveLaunches() {
               </button>
 
               <div>
-                <div className="flex justify-between items-start mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-lg border border-white/5 text-white font-bold">
-                    {(launch.symbol || 'L').slice(0, 2).toUpperCase()}
+                <div className="flex items-center gap-4 mb-4">
+                  {launch.logo_url ? (
+                    <img src={launch.logo_url} alt={launch.name} className="w-12 h-12 rounded-xl object-cover shadow-lg border border-white/10" />
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-lg border border-white/5 text-white font-bold">
+                      {(launch.symbol || 'L').slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="font-display text-base text-white font-bold leading-tight truncate max-w-[150px]">{launch.name}</h3>
+                    <p className="text-xs text-on-surface-variant font-mono">${launch.symbol}</p>
                   </div>
                 </div>
-
-                <h3 className="font-display text-xl text-white font-bold mb-1">{launch.name}</h3>
                 <div className="flex flex-wrap items-center gap-2 mb-6">
                   <span className="px-2.5 py-0.5 rounded-full font-mono text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse uppercase tracking-wider">
                     {launch.status} Now

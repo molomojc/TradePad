@@ -209,20 +209,24 @@ export default function PreviousLaunches() {
                   
                   <div>
                     {/* Header */}
-                    <div className="flex justify-between items-start border-b border-white/5 pb-4 mb-4">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-display text-xl text-white font-bold">{launch.name}</h3>
-                          <span className="font-mono text-xs text-on-surface-variant bg-white/5 px-2 py-0.5 rounded">${launch.symbol}</span>
+                    <div className="flex items-center gap-4 border-b border-white/5 pb-4 mb-4">
+                      {launch.logo_url ? (
+                        <img src={launch.logo_url} alt={launch.name} className="w-12 h-12 rounded-xl object-cover shadow-lg border border-white/10 shrink-0" />
+                      ) : (
+                        <div className="w-12 h-12 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center font-bold text-white text-sm shrink-0">
+                          {(launch.symbol || 'L').slice(0, 2).toUpperCase()}
                         </div>
-                        <div className="flex items-center gap-2 mt-1.5">
+                      )}
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-display text-base text-white font-bold leading-tight">{launch.name}</h3>
+                          <span className="font-mono text-[10px] text-on-surface-variant bg-white/5 px-1.5 py-0.5 rounded">${launch.symbol}</span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
                           <span className="text-[9px] font-mono text-primary uppercase font-bold tracking-wider">{launch.chain || 'SOLANA'}</span>
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                           <span className="text-[9px] font-mono text-emerald-400 uppercase font-bold tracking-wider">LIVE</span>
                         </div>
-                      </div>
-                      <div className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center font-bold text-white text-sm">
-                        {(launch.symbol || 'L').slice(0, 2).toUpperCase()}
                       </div>
                     </div>
 

@@ -271,9 +271,13 @@ export default function DashboardHome() {
             {previousLaunch ? (
               <div className="flex h-full flex-col justify-between">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-lg font-bold text-white shadow-inner">
-                    {(previousLaunch.symbol || 'L').slice(0, 2).toUpperCase()}
-                  </div>
+                  {previousLaunch.logo_url ? (
+                    <img src={previousLaunch.logo_url} alt={previousLaunch.name} className="h-16 w-16 shrink-0 rounded-2xl object-cover border border-white/10 shadow-inner" />
+                  ) : (
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-lg font-bold text-white shadow-inner">
+                      {(previousLaunch.symbol || 'L').slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       <h3 className="truncate text-xl font-bold text-white">{previousLaunch.name || previousLaunch.title}</h3>

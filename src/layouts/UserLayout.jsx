@@ -50,8 +50,21 @@ export default function UserLayout() {
             <button type="button" className="header-icon-button relative" aria-label="Notifications"><span className="material-symbols-outlined text-[19px]">notifications</span><span className="absolute right-2.5 top-2 h-1.5 w-1.5 rounded-full bg-neon-red ring-2 ring-background" /></button>
             <div className="mx-1 hidden h-6 w-px bg-white/[0.08] sm:block" />
             <button type="button" className="flex items-center gap-3 rounded-lg p-1.5 text-left transition-colors hover:bg-white/[0.04]">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#3a3a3c] to-[#1a1a1c] text-xs font-semibold text-white ring-1 ring-white/10">{displayName.charAt(0).toUpperCase()}</div>
-              <div className="hidden max-w-36 sm:block"><p className="truncate text-xs font-semibold text-on-surface/85">{displayName}</p><p className="mt-0.5 text-[10px] text-on-surface/35">Premium account</p></div>
+              {profile?.avatar_url ? (
+                <img 
+                  src={profile.avatar_url} 
+                  alt="Profile Avatar" 
+                  className="h-8 w-8 rounded-lg object-cover ring-1 ring-white/10 shrink-0" 
+                />
+              ) : (
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#3a3a3c] to-[#1a1a1c] text-xs font-semibold text-white ring-1 ring-white/10 shrink-0">
+                  {displayName.charAt(0).toUpperCase()}
+                </div>
+              )}
+              <div className="hidden max-w-36 sm:block">
+                <p className="truncate text-xs font-semibold text-on-surface/85">{displayName}</p>
+                <p className="mt-0.5 text-[10px] text-on-surface/35">{isPremium ? 'Premium account' : 'Free account'}</p>
+              </div>
               <span className="material-symbols-outlined hidden text-[16px] text-on-surface/30 sm:block">expand_more</span>
             </button>
           </div>

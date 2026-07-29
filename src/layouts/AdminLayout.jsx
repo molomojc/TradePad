@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import useTheme from '../hooks/useTheme';
+import { fetchCurrentUserProfile } from '../lib/supabase';
 
 export default function AdminLayout() {
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [profile, setProfile] = useState(null);
   const { isLight, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    fetchCurrentUserProfile().then(({ profile: nextProfile }) => {
+      setProfile(nextProfile);
+    });
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-on-background flex overflow-x-hidden">
@@ -44,10 +52,20 @@ export default function AdminLayout() {
               notifications
             </button>
             <div className="flex items-center gap-3 pl-4 border-l border-white/10">
-              <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/50 flex items-center justify-center font-bold text-red-500 text-sm">
-                A
-              </div>
-              <span className="font-label-mono text-sm text-white hidden md:block">SuperAdmin</span>
+              {profile?.avatar_url ? (
+                <img 
+                  src={profile.avatar_url} 
+                  alt="Admin Avatar" 
+                  className="w-8 h-8 rounded-full object-cover border border-red-500/30" 
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/50 flex items-center justify-center font-bold text-red-500 text-sm">
+                  {profile?.full_name ? profile.full_name.charAt(0).toUpperCase() : 'A'}
+                </div>
+              )}
+              <span className="font-mono text-sm text-white hidden md:block">
+                {profile?.full_name || 'SuperAdmin'}
+              </span>
             </div>
           </div>
         </header>

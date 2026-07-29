@@ -10,11 +10,13 @@ export default function Sidebar({ type = 'user', open = false, onClose, isPremiu
     { name: 'Upcoming launches', path: '/dashboard/user/upcoming', icon: 'rocket_launch' },
     { name: 'Previous launches', path: '/dashboard/user/previous', icon: 'history' },
     { name: 'My allocations', path: '/dashboard/user/allocations', icon: 'account_balance_wallet' },
+    { name: 'Courses', path: '/dashboard/user/courses', icon: 'school' },
     { name: 'News & research', path: '/dashboard/user/news', icon: 'newspaper' },
   ];
   const adminLinks = [
     { name: 'Overview', path: '/dashboard/admin', icon: 'space_dashboard', end: true },
     { name: 'Launches', path: '/dashboard/admin/launches', icon: 'rocket_launch' },
+    { name: 'Courses', path: '/dashboard/admin/courses', icon: 'school' },
     { name: 'Premium', path: '/dashboard/admin/premium', icon: 'workspace_premium' },
     { name: 'Users', path: '/dashboard/admin/users', icon: 'group' },
     { name: 'Promote users', path: '/dashboard/admin/users/promote', icon: 'admin_panel_settings' },

@@ -151,13 +151,24 @@ export default function UpcomingLaunches() {
                 </button>
 
                 <div>
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-lg border border-white/5">
-                      {launch.symbol?.[0] || '•'}
+                  <div className="flex items-center gap-4 mb-4">
+                    {launch.logo_url && !launch.is_teaser ? (
+                      <img src={launch.logo_url} alt={launch.name} className="w-12 h-12 rounded-xl object-cover shadow-lg border border-white/10" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-lg border border-white/5 text-white font-bold">
+                        {(launch.is_teaser ? '?' : launch.symbol?.[0]) || '•'}
+                      </div>
+                    )}
+                    <div>
+                      <h3 className="font-display text-base text-white font-bold leading-tight truncate max-w-[150px]">
+                        {launch.is_teaser ? 'Next Launch' : launch.name}
+                      </h3>
+                      <p className="text-xs text-on-surface-variant font-mono">
+                        {launch.is_teaser ? '$????' : `$${launch.symbol}`}
+                      </p>
                     </div>
                   </div>
 
-                  <h3 className="font-display text-xl text-white font-bold mb-1">Next Launch</h3>
                   <div className="flex flex-wrap items-center gap-2 mb-6">
                     <span className="px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-primary/20 text-primary">
                       {launch.status}

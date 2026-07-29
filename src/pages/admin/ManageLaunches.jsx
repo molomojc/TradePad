@@ -110,11 +110,17 @@ export default function ManageLaunches() {
                   Featured
                 </label>
                 <div className="flex items-center gap-2">
+                  <Link
+                    to={`/dashboard/admin/launches/edit/${launch.id}`}
+                    className="px-3 py-2 rounded-xl bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-colors text-xs font-mono font-bold"
+                  >
+                    Edit
+                  </Link>
                   <button
                     type="button"
                     onClick={() => updateLaunch(launch.id, { status: launch.status === 'live' ? 'upcoming' : 'live' })}
                     disabled={savingId === launch.id}
-                    className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-label-mono"
+                    className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-mono font-bold"
                   >
                     Toggle Live
                   </button>

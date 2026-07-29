@@ -47,19 +47,24 @@ export default function MyAllocations() {
             if (pError) throw pError;
 
             if (participations) {
-              list.push(...participations.map(item => ({
-                id: `participation-${item.id}`,
-                name: item.launches?.name || 'Unknown Launch',
-                symbol: item.launches?.symbol || 'TOKEN',
-                chain: item.launches?.chain || 'solana',
-                invested: 0,
-                allocatedTokens: 0,
-                status: 'Joined Launch',
-                progress: 0,
-                claimableVal: 0,
-                nextClaim: 'Awaiting Launch',
-                icon: (item.launches?.symbol || '•').slice(0, 2).toUpperCase()
-              })));
+              list.push(...participations.map(item => {
+                const isLive = item.launches?.status === 'live';
+                return {
+                  id: `participation-${item.id}`,
+                  launchId: item.launches?.id,
+                  name: item.launches?.name || 'Unknown Launch',
+                  symbol: item.launches?.symbol || 'TOKEN',
+                  chain: item.launches?.chain || 'solana',
+                  invested: 0,
+                  allocatedTokens: 0,
+                  status: isLive ? 'Live Pool' : 'Joined Launch',
+                  progress: 0,
+                  claimableVal: 0,
+                  nextClaim: isLive ? 'Active Pool' : 'Awaiting Launch',
+                  logo_url: item.launches?.logo_url,
+                  icon: (item.launches?.symbol || '•').slice(0, 2).toUpperCase()
+                };
+              }));
             }
           } catch (e) {
             console.error('Error fetching launch participations:', e);
@@ -84,6 +89,7 @@ export default function MyAllocations() {
 
                 return {
                   id: `allocation-${item.id}`,
+                  launchId: item.launches?.id,
                   name: item.launches?.name || 'Unknown Launch',
                   symbol: item.launches?.symbol || 'TOKEN',
                   chain: item.launches?.chain || 'solana',
@@ -93,6 +99,7 @@ export default function MyAllocations() {
                   progress,
                   claimableVal,
                   nextClaim: progress >= 100 ? 'Fully Vested' : 'Immediate',
+                  logo_url: item.launches?.logo_url,
                   icon: (item.launches?.symbol || '•').slice(0, 2).toUpperCase()
                 };
               }));
@@ -146,12 +153,16 @@ export default function MyAllocations() {
                   
                   {/* Project Info */}
                   <div className="flex items-center gap-4 w-full md:w-auto">
-                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-xl shadow-lg border border-white/5 shrink-0">
-                      {item.icon}
-                    </div>
+                    {item.logo_url ? (
+                      <img src={item.logo_url} alt={item.name} className="w-12 h-12 rounded-xl object-cover shadow-lg border border-white/10 shrink-0" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-lg font-bold text-white shadow-lg border border-white/5 shrink-0">
+                        {item.icon}
+                      </div>
+                    )}
                     <div>
                       <h3 className="font-display text-lg text-white font-bold">{item.name}</h3>
-                      <span className="bg-white/5 text-on-surface-variant px-2 py-0.5 rounded font-mono text-[10px] uppercase">{item.chain}</span>
+                      <span className="bg-white/5 text-on-surface-variant px-2 py-0.5 rounded font-mono text-[10px] uppercase mt-1 inline-block">{item.chain}</span>
                     </div>
                   </div>
 
@@ -170,6 +181,7 @@ export default function MyAllocations() {
                       <span className={`px-2 py-1 rounded font-mono text-[10px] font-bold ${
                         item.status === 'Claimable' ? 'bg-green-400/20 text-green-400' :
                         item.status === 'Vesting' ? 'bg-blue-400/20 text-blue-400' :
+                        item.status === 'Live Pool' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
                         item.status === 'Joined Launch' ? 'bg-primary/20 text-primary' : 'bg-white/10 text-on-surface-variant'
                       }`}>
                         {item.status}
@@ -177,24 +189,33 @@ export default function MyAllocations() {
                     </div>
                     <div className="col-span-2 md:col-span-1">
                       <p className="font-mono text-[10px] text-on-surface-variant mb-1">NEXT CLAIM</p>
-                      <p className={`font-bold text-sm ${item.status === 'Claimable' ? 'text-primary' : 'text-white'}`}>{item.nextClaim}</p>
+                      <p className={`font-bold text-sm ${item.status === 'Live Pool' ? 'text-emerald-400' : item.status === 'Claimable' ? 'text-primary' : 'text-white'}`}>{item.nextClaim}</p>
                     </div>
                   </div>
 
                   {/* Action */}
                   <div className="w-full md:w-auto shrink-0">
-                    <motion.button 
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      disabled={item.status !== 'Claimable'}
-                      className={`w-full md:w-32 py-3 rounded-xl font-mono font-bold text-xs transition-all ${
-                        item.status === 'Claimable' 
-                          ? 'bg-neon-red text-white shadow-[0_0_15px_rgba(255,46,46,0.2)] hover:shadow-[0_0_25px_rgba(255,46,46,0.5)]' 
-                          : 'bg-white/5 text-on-surface-variant cursor-not-allowed border border-white/5'
-                      }`}
-                    >
-                      {item.status === 'Joined Launch' ? 'Awaiting Pool' : (item.status === 'Claimable' ? 'Claim Tokens' : 'Locked')}
-                    </motion.button>
+                    {item.status === 'Live Pool' ? (
+                      <Link 
+                        to={`/dashboard/user/launch/${item.launchId}`}
+                        className="w-full md:w-32 py-3 rounded-xl font-mono font-bold text-xs text-center block bg-emerald-500 text-black hover:bg-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all hover:scale-105"
+                      >
+                        Participate Live
+                      </Link>
+                    ) : (
+                      <motion.button 
+                        whileHover={item.status === 'Claimable' ? { scale: 1.05 } : {}}
+                        whileTap={item.status === 'Claimable' ? { scale: 0.95 } : {}}
+                        disabled={item.status !== 'Claimable'}
+                        className={`w-full md:w-32 py-3 rounded-xl font-mono font-bold text-xs transition-all ${
+                          item.status === 'Claimable' 
+                            ? 'bg-neon-red text-white shadow-[0_0_15px_rgba(255,46,46,0.2)] hover:shadow-[0_0_25px_rgba(255,46,46,0.5)]' 
+                            : 'bg-white/5 text-on-surface-variant cursor-not-allowed border border-white/5'
+                        }`}
+                      >
+                        {item.status === 'Joined Launch' ? 'Awaiting Pool' : (item.status === 'Claimable' ? 'Claim Tokens' : 'Locked')}
+                      </motion.button>
+                    )}
                   </div>
 
                 </div>

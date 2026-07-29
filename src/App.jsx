@@ -34,6 +34,12 @@ import PaymentSuccess from './pages/payment/Success';
 import PaymentCancelled from './pages/payment/Cancelled';
 import NewsPostDetail from './pages/user/NewsPostDetail'; // adjust path
 
+// Courses Pages
+import Courses from './pages/user/Courses';
+import CourseDetail from './pages/user/CourseDetail';
+import ManageCourses from './pages/admin/ManageCourses';
+import CreateCourse from './pages/admin/CreateCourse';
+
 
 
 // Admin Dashboard Pages
@@ -80,6 +86,8 @@ function App() {
           <Route path="premium" element={<ProtectedRoute><PremiumPage /></ProtectedRoute>} />
           <Route path="news" element={<ProtectedRoute><News /></ProtectedRoute>} />
           <Route path="news/:slug" element={<ProtectedRoute><NewsPostDetail /></ProtectedRoute>} />
+          <Route path="courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+          <Route path="courses/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
           <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         </Route>
 
@@ -88,6 +96,10 @@ function App() {
           <Route index element={<ProtectedRoute requireRole="admin"><AdminHome /></ProtectedRoute>} />
           <Route path="launches" element={<ProtectedRoute requireRole="admin"><ManageLaunches /></ProtectedRoute>} />
           <Route path="launches/create" element={<ProtectedRoute requireRole="admin"><CreateLaunch /></ProtectedRoute>} />
+          <Route path="launches/edit/:id" element={<ProtectedRoute requireRole="admin"><CreateLaunch /></ProtectedRoute>} />
+          <Route path="courses" element={<ProtectedRoute requireRole="admin"><ManageCourses /></ProtectedRoute>} />
+          <Route path="courses/create" element={<ProtectedRoute requireRole="admin"><CreateCourse /></ProtectedRoute>} />
+          <Route path="courses/edit/:id" element={<ProtectedRoute requireRole="admin"><CreateCourse /></ProtectedRoute>} />
           <Route path="users" element={<ProtectedRoute requireRole="admin"><ManageUsers /></ProtectedRoute>} />
           <Route path="users/promote" element={<ProtectedRoute requireRole="admin"><PromoteUser /></ProtectedRoute>} />
           <Route path="premium" element={<ProtectedRoute requireRole="admin"><ManagePremium /></ProtectedRoute>} />

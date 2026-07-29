@@ -220,7 +220,10 @@ export default function LaunchDetails() {
               <span className="bg-red-400/20 text-red-400 px-2.5 py-1 rounded-full font-mono text-[10px] uppercase">{launch.risk_level}</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-display font-bold text-white mt-2">
+            <h1 className="text-4xl md:text-5xl font-display font-bold text-white mt-2 flex items-center gap-3">
+              {launch.logo_url && (
+                <img src={launch.logo_url} alt={launch.name} className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl object-cover border border-white/10 shadow-lg shrink-0" />
+              )}
               {launch.name}
             </h1>
             <p className="text-on-surface-variant text-base leading-relaxed max-w-2xl">
@@ -292,7 +295,12 @@ export default function LaunchDetails() {
             <span className="text-on-surface-variant text-sm capitalize">{launch.chain}</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-display font-bold text-white flex items-center gap-3">
-            {launch.name} <span className="text-xl text-on-surface-variant font-mono font-normal">${launch.symbol}</span>
+            {launch.logo_url && (
+              <img src={launch.logo_url} alt={launch.name} className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl object-cover border border-white/10 shadow-lg shrink-0" />
+            )}
+            <div>
+              {launch.name} <span className="text-xl text-on-surface-variant font-mono font-normal ml-1">${launch.symbol}</span>
+            </div>
           </h1>
         </div>
         
