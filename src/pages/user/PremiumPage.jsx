@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PageTransition from '../../components/PageTransition';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 export default function PremiumPage() {
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Simulate API fetch
@@ -76,11 +78,12 @@ export default function PremiumPage() {
           </div>
 
           <motion.button 
+            onClick={() => navigate('/pricing')}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="bg-primary text-black px-10 py-4 rounded-full font-label-mono font-bold text-sm shadow-[0_0_20px_rgba(198,198,198,0.2)] relative z-10"
           >
-            Start 7-Day Free Trial
+            View Pricing
           </motion.button>
         </div>
       )}
